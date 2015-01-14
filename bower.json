@@ -1,16 +1,16 @@
 {
   "name": "ember-bootstrap-table",
   "version": "0.0.1",
+  "main": "dist/ember-bootstrap-table.js",
   "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
     "test"
   ],
-  "devDependencies": {
-    "bootstrap": "3.3.1",
+  "dependencies": {
+    "bootstrap": "~3.x.x",
     "fontawesome": "*",
-    "ember": "~1.9.1",
-    "qunit": "~1.16.0"
+    "ember": "*"
   }
 }
