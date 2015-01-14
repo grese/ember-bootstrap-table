@@ -8,7 +8,7 @@ An ember table component to help create dynamic bootstrap tables in ember.
 
 ## Installation:
 * This component is available as a bower dependency:  `bower install --save ember-bootstrap-table`
-* Alternatively, you can just download it as a zip file and manually include the 'dist' folder in your project.
+* Alternatively, you can just download it as a zip file and manually include the contents of the 'dist' folder in your project.
 
 ## Usage:
 #### Files:
