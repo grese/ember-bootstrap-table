@@ -69,6 +69,7 @@ rows: function(){
 {{table-component
   rows=rows
   columns=columns
+  showHeader=true
   sortable=false
   hoverable=true
   condensed=false
