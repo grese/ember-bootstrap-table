@@ -74,14 +74,14 @@
 	    var getCellContent = column.get('getCellContent') ? column.get('getCellContent') : null,
 	        cellContent = '';
 	    if(!getCellContent && !column.get('cellValuePath')){
-	        Em.Logger.warn("<WARNING>: All column definitions require either the \'cellValuePath\' property or \'getCellContent\' function to be defined.");
+	        Ember.Logger.warn("<WARNING>: All column definitions require either the \'cellValuePath\' property or \'getCellContent\' function to be defined.");
 	    }
 	    if(getCellContent){
 	        cellContent = getCellContent(row);
 	    }else{
 	        cellContent = row.get(column.get('cellValuePath'));
 	    }
-	    return new Em.Handlebars.SafeString("<td>"+cellContent+"</td>");
+	    return new Ember.Handlebars.SafeString("<td>"+cellContent+"</td>");
 	});
 
 	// A handlebars helper to manage the sorting icons in table headers...
@@ -92,7 +92,7 @@
 	    }else if(column.get('cellValuePath') === sortProperty && !isAscending){
 	        iconClass = 'fa fa-sort-desc';
 	    }
-	    return new Em.Handlebars.SafeString("<i class='"+iconClass+"'></i>");
+	    return new Ember.Handlebars.SafeString("<i class='"+iconClass+"'></i>");
 	});
 
 	Ember.TableComponent = TableComponent;

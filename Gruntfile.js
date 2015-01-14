@@ -31,9 +31,7 @@ module.exports = function(grunt) {
     },
 
     jshint: {
-      files: [        
-        'build/<%= pkg.name.replace(".js", "") %>.js'
-      ],
+      files: [],
       options: {
         globals: {
           console: true,
@@ -55,9 +53,6 @@ module.exports = function(grunt) {
         }
       },
       'build/templates.js': ["src/**/*.hbs"]
-    },
-    qunit: {
-      all: ['tests/*.html']
     }
 
   });
@@ -68,8 +63,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-ember-templates');
-  grunt.loadNpmTasks('grunt-contrib-qunit');
 
   grunt.registerTask('default', ['concat', 'jshint', 'uglify', 'emberTemplates']);
-  grunt.registerTask('test', ['qunit']);
 };
