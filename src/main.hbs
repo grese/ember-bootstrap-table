@@ -1,0 +1,44 @@
+<div {{bind-attr class="responsive:table-responsive"}}>
+    <table {{bind-attr class=":table :table-component hoverable:table-hoverable striped:table-striped bordered:table-bordered condensed:table-condensed"}}>
+        <thead>
+        <tr>
+            {{#each col in _columns}}
+                <th class="table-component-header" {{bind-attr width=col.columnWidth}}>
+                    {{#if col.headerCellCustomViewClass}}
+                        {{view col.headerCellCustomViewClass config=col}}
+                    {{else}}
+                        {{#if col.sortable}}
+                            <button {{action 'sortTable' col.cellValuePath}} class="table-component-header-sortable-btn">
+                                <div class="table-component-header-name">
+                                    <span>
+                                        {{col.headerCellName}}
+                                        &nbsp;
+                                        {{tableComponentSortIcon col sortProperty sortAscending}}
+                                    </span>
+                                </div>
+                                <div class="table-component-header-info">{{col.headerCellInfo}}</div>
+                            </button>
+                        {{else}}
+                            <div class="table-component-header-name">{{col.headerCellName}}</div>
+                            <div class="table-component-header-info">{{col.headerCellInfo}}</div>
+                        {{/if}}
+                    {{/if}}
+                </th>
+            {{/each}}
+        </tr>
+        </thead>
+        <tbody>
+        {{#each row in _rows}}
+            <tr>
+                {{#each col in _columns}}
+                    {{#if col.cellCustomViewClass}}
+                        {{view col.cellCustomViewClass row=row config=col}}
+                    {{else}}
+                        {{tableComponentCell row col}}
+                    {{/if}}
+                {{/each}}
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
