@@ -43,21 +43,21 @@ import CustomCell from 'app/views/custom-cell-view';
 export default Ember.Controller.extend({
   columns: function(){
     return [
-      {
+      Ember.Object.create({
         headerCellName: 'Col 1',
         getCellContent: function(row){
           return row.get('someValue') + '%';
         },
         columnWidth: 50
-      },
-      {
+      }),
+      Ember.Object.create({
         headerCellCustomViewClass: CustomHeaderCell,
         cellValuePath: 'someOtherValue', // will return row.get('someOtherValue');
-      },
-      {
+      }),
+      Ember.Object.create({
         headerCellName: 'Col 3',
         cellCustomViewClass: CustomCell // will create an instance of CustomCell and pass 'row' property to it
-      }
+      })
     ];
   }.property(),
   rows: function(){
