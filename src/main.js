@@ -28,6 +28,7 @@
 			this._super();
     	},
 		layoutName: 'table-component-template-main',
+		showHeader: true,
 		hoverable: true,
     	striped: false,
     	condensed: false,
