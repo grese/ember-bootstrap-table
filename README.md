@@ -39,29 +39,31 @@ Here are the options for configuring columns:
 ```javascript
 import CustomHeaderCell from 'app/views/custom-header-view';
 import CustomCell from 'app/views/custom-cell-view';
-...
-columns: function(){
-  return [
-    {
-      headerCellName: 'Col 1',
-      getCellContent: function(row){
-        return row.get('someValue') + '%';
+
+export default Ember.Controller.extend({
+  columns: function(){
+    return [
+      {
+        headerCellName: 'Col 1',
+        getCellContent: function(row){
+          return row.get('someValue') + '%';
+        },
+        columnWidth: 50
       },
-      columnWidth: 50
-    },
-    {
-      headerCellCustomViewClass: CustomHeaderCell,
-      cellValuePath: 'someOtherValue', // will return row.get('someOtherValue');
-    },
-    {
-      headerCellName: 'Col 3',
-      cellCustomViewClass: CustomCell // will create an instance of CustomCell and pass 'row' property to it
-    }
-  ];
-}.property(),
-rows: function(){
-  return this.get('model') || [];
-}.property('model.[]')
+      {
+        headerCellCustomViewClass: CustomHeaderCell,
+        cellValuePath: 'someOtherValue', // will return row.get('someOtherValue');
+      },
+      {
+        headerCellName: 'Col 3',
+        cellCustomViewClass: CustomCell // will create an instance of CustomCell and pass 'row' property to it
+      }
+    ];
+  }.property(),
+  rows: function(){
+    return this.get('model') || [];
+  }.property('model.[]')
+});
 ```
 
 #### Example:
