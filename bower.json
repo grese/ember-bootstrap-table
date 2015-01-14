@@ -1,7 +1,15 @@
 {
   "name": "ember-bootstrap-table",
   "version": "0.0.1",
-  "main": "dist/ember-bootstrap-table.js",
+  "description": "An ember table component to help create dynamic bootstrap tables in ember.",
+  "homepage": "https://github.com/grese/ember-bootstrap-table",
+  "main": [
+        "dist/ember-botstrap-table.min.js",
+        "dist/ember-botstrap-table.css"
+  ],
+  "authors": [
+      "grese <johngrese@yahoo.com>"
+  ],
   "ignore": [
     "**/.*",
     "node_modules",
@@ -11,8 +19,9 @@
     "Gruntfile.js"
   ],
   "dependencies": {
-    "bootstrap": "~3.x.x",
+    "bootstrap": ">=3.0",
     "fontawesome": "*",
     "ember": "*"
-  }
+  },
+  "license": "MIT"
 }
