@@ -7,8 +7,7 @@ An ember table component to help create dynamic bootstrap tables in ember.
 * fontawesome (just for icons)
 
 ## Installation:
-* This component is available as a bower dependency:
-** `bower install --save ember-bootstrap-table`
+* This component is available as a bower dependency:  `bower install --save ember-bootstrap-table`
 * Alternatively, you can just download it as a zip file and manually include the package in your project.
 
 ## Usage:
