@@ -29,7 +29,7 @@ Here are the options for configuring columns:
 * getCellContent: (null || function) // (Defines a function to return value for cell - Only used if customCellViewClass is null)
 * columnWidth: (null || int) // (Defines a fixed width for the column)
 
-** Example Column Configs:
+**Example Column Configs:**
 ```javascript
 import CustomHeaderCell from 'app/views/custom-header-view';
 import CustomCell from 'app/views/custom-cell-view';
