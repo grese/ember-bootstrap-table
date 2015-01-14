@@ -3,7 +3,13 @@ module.exports = function(grunt) {
   grunt.initConfig({
 
     pkg: grunt.file.readJSON('package.json'),
-
+    copy: {
+      css: {
+        files: [
+          {src: ['src/*.css'], dest: 'dist/<%= pkg.name.replace(".css", "") %>.css'}
+        ]
+      }
+    },
     concat: {
       options: {
         separator: "\n\n"
@@ -63,6 +69,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-ember-templates');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
-  grunt.registerTask('default', ['concat', 'jshint', 'uglify', 'emberTemplates']);
+  grunt.registerTask('default', ['concat', 'jshint', 'uglify', 'emberTemplates', 'copy:css']);
 };
