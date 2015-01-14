@@ -4,7 +4,7 @@
   "description": "An Ember Component for creating dynamic bootstrap tables.",
   "repository": {
     "type": "git",
-    "url": "git://github.com/grese/ember-bootstrap-table"
+    "url": "git://github.com/grese/ember-bootstrap-table.git"
   },
   "keywords": ["ember", "emberjs", "bootstrap", "ember-table", "table", "component"],
   "author": "John Grese",

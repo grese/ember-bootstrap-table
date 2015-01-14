@@ -6,7 +6,9 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "test"
+    "test",
+    "package.json",
+    "Gruntfile.js"
   ],
   "dependencies": {
     "bootstrap": "~3.x.x",
