@@ -35,33 +35,37 @@ Here are the options for configuring columns:
 * getCellContent: (null || function) *// (Defines a function to return value for cell - Only used if customCellViewClass is null)*
 * columnWidth: (null || int) *// (Defines a fixed width for the column)*
 
+*(All column configs must have cellCustomViewClass, cellValuePath, or getCellContent defined)*
+
 **Example Column Configs:**
 ```javascript
 import CustomHeaderCell from 'app/views/custom-header-view';
 import CustomCell from 'app/views/custom-cell-view';
-...
-columns: function(){
-  return [
-    {
-      headerCellName: 'Col 1',
-      getCellContent: function(row){
-        return row.get('someValue') + '%';
-      },
-      columnWidth: 50
-    },
-    {
-      headerCellCustomViewClass: CustomHeaderCell,
-      cellValuePath: 'someOtherValue', // will return row.get('someOtherValue');
-    },
-    {
-      headerCellName: 'Col 3',
-      cellCustomViewClass: CustomCell // will create an instance of CustomCell and pass 'row' property to it
-    }
-  ];
-}.property(),
-rows: function(){
-  return this.get('model') || [];
-}.property('model.[]')
+
+export default Ember.Controller.extend({
+  columns: function(){
+    return [
+      Ember.Object.create({
+        headerCellName: 'Col 1',
+        getCellContent: function(row){
+          return row.get('someValue') + '%';
+        },
+        columnWidth: 50
+      }),
+      Ember.Object.create({
+        headerCellCustomViewClass: CustomHeaderCell,
+        cellValuePath: 'someOtherValue', // will return row.get('someOtherValue');
+      }),
+      Ember.Object.create({
+        headerCellName: 'Col 3',
+        cellCustomViewClass: CustomCell // will create an instance of CustomCell and pass 'row' property to it
+      })
+    ];
+  }.property(),
+  rows: function(){
+    return this.get('model') || [];
+  }.property('model.[]')
+});
 ```
 
 #### Example:
