@@ -7,9 +7,15 @@ An ember table component to help create dynamic bootstrap tables in ember.
 * fontawesome (just for icons)
 
 ## Usage:
+#### Files:
+You'll need to include the following files in your project:
+* dist/ember-bootstrap-table.min.js
+* dist/ember-bootstrap-table.css
+
 #### Parameters:
 * columns: [] *// *REQUIRED (array of column configs)*
 * rows: [] *// (array of rows)*
+* showHeader: (true || false) *// (Shows/hides the table header)*
 * hoverable: (true || false) *// (Adds hover states to row background)*
 * striped: (true || false) *// (Stripes the table)*
 * condensed: (true || false) *// (Condenses table rows)*
