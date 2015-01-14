@@ -35,6 +35,8 @@ Here are the options for configuring columns:
 * getCellContent: (null || function) *// (Defines a function to return value for cell - Only used if customCellViewClass is null)*
 * columnWidth: (null || int) *// (Defines a fixed width for the column)*
 
+*(All column configs must have cellCustomViewClass, cellValuePath, or getCellContent defined)*
+
 **Example Column Configs:**
 ```javascript
 import CustomHeaderCell from 'app/views/custom-header-view';
