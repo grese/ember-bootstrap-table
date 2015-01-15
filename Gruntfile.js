@@ -1,12 +1,11 @@
 module.exports = function(grunt) {
 
   grunt.initConfig({
-
     pkg: grunt.file.readJSON('package.json'),
     copy: {
       css: {
         files: [
-          {src: ['src/*.css'], dest: 'dist/<%= pkg.name.replace(".css", "") %>.css'}
+          {src: ['src/stylesheets/*.css'], dest: 'dist/<%= pkg.name.replace(".css", "") %>.css'}
         ]
       }
     },
@@ -16,9 +15,9 @@ module.exports = function(grunt) {
       },
       build: {
         src: [
-          'src/main.js'
+          'src/javascript/**/*.js'
         ],
-        dest: 'build/main.js'
+        dest: 'build/javascript.js'
       },
       dist: {
         src: [
@@ -27,7 +26,20 @@ module.exports = function(grunt) {
         dest: 'dist/<%= pkg.name.replace(".js", "") %>.js'
       }
     },
-
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js'  
+      }
+    },
+    jshint: {
+      files: [
+        'src/**/*.js',
+        'tests/spec/**/*.js'
+      ],
+      options: {
+        jshintrc: '.jshintrc',        
+      }
+    },
     uglify: {
       dist: {
         files: {
@@ -35,41 +47,29 @@ module.exports = function(grunt) {
         }
       }
     },
-
-    jshint: {
-      files: [],
-      options: {
-        globals: {
-          console: true,
-          module: true,
-          document: true
-        },
-        jshintrc: '.jshintrc',        
-      }
-    },
-
-    watch: {
-      files: ['<%= jshint.files %>'],
-      tasks: ['concat', 'jshint']
-    },
     emberTemplates: {
       options: {
         templateName: function(sourceFile) {
-          return 'table-component-template-'+sourceFile.replace(/src\//, '');
+          var template = sourceFile.replace('src/templates/', '').replace('/', '-');
+          return 'ember-bootstrap-table-template-' + template;
         }
       },
       'build/templates.js': ["src/**/*.hbs"]
-    }
-
+    },
+    clean: ['build', 'dist']
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-qunit');
-  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-ember-templates');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-karma');
 
-  grunt.registerTask('default', ['concat', 'jshint', 'uglify', 'emberTemplates', 'copy:css']);
+  // default task just builds & dists the package.
+  grunt.registerTask('default', ['jshint', 'clean', 'emberTemplates', 'concat:build', 'uglify', 'concat:dist', 'copy:css']);
+  // test task builds, tests, and then dists the package.
+  grunt.registerTask('test', ['jshint', 'clean', 'emberTemplates', 'concat:build', 'karma', 'uglify', 'concat:dist', 'copy:css']);
 };
