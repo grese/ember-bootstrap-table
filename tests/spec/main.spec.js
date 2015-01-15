@@ -41,6 +41,136 @@ test('should render an empty table if no columns are provided.', function() {
 	});
 });
 
+test('should set .table-responsive class on the tables containing div if responsive is true', function() {
+	var component = this.subject({
+			responsive: true,
+			columns: []
+		}),
+		$component = this.append(),
+		isResponsive = false;
+	Em.run(function(){
+		isResponsive = $component.find('div.table-responsive').length > 0;
+		equal(isResponsive, true, 'The table should be responsive');
+	});
+});
+
+test('should NOT set .table-responsive class on the tables containing div if responsive is false', function() {
+	var component = this.subject({
+			responsive: false,
+			columns: []
+		}),
+		$component = this.append(),
+		nonResponsive = false;
+	Em.run(function(){
+		nonResponsive = $component.find('div.table-responsive').length === 0;
+		equal(nonResponsive, true, 'The table should not be responsive');
+	});
+});
+
+test('should set .table-hoverable class on the table tag if hoverable is true', function() {
+	var component = this.subject({
+			hoverable: true,
+			columns: []
+		}),
+		$component = this.append(),
+		isHoverable = false;
+	Em.run(function(){
+		isHoverable = $component.find('table.table.table-component.table-hoverable').length > 0;
+		equal(isHoverable, true, 'The table should be hoverable');
+	});
+});
+
+test('should NOT set .table-hoverable class on the table tag if hoverable is false', function() {
+	var component = this.subject({
+			hoverable: false,
+			columns: []
+		}),
+		$component = this.append(),
+		nonHoverable = false;
+	Em.run(function(){
+		nonHoverable = $component.find('table.table.table-component.table-hoverable').length === 0;
+		equal(nonHoverable, true, 'The table should not be hoverable');
+	});
+});
+
+test('should set .table-striped class on the table tag if striped is true', function() {
+	var component = this.subject({
+			striped: true,
+			columns: []
+		}),
+		$component = this.append(),
+		isStripey = false;
+	Em.run(function(){
+		isStripey = $component.find('table.table.table-component.table-striped').length > 0;
+		equal(isStripey, true, 'The table should be striped');
+	});
+});
+
+test('should NOT set .table-striped class on the table tag if striped is false', function() {
+	var component = this.subject({
+			striped: false,
+			columns: []
+		}),
+		$component = this.append(),
+		nonStriped = false;
+	Em.run(function(){
+		nonStriped = $component.find('table.table.table-component.table-striped').length === 0;
+		equal(nonStriped, true, 'The table should not be striped');
+	});
+});
+
+test('should set .table-bordered class on the table tag if bordered is true', function() {
+	var component = this.subject({
+			bordered: true,
+			columns: []
+		}),
+		$component = this.append(),
+		isBordered = false;
+	Em.run(function(){
+		isBordered = $component.find('table.table.table-component.table-bordered').length > 0;
+		equal(isBordered, true, 'The table should be bordered');
+	});
+});
+
+test('should NOT set .table-bordered class on the table tag if bordered is false', function() {
+	var component = this.subject({
+			bordered: false,
+			columns: []
+		}),
+		$component = this.append(),
+		nonBordered = false;
+	Em.run(function(){
+		nonBordered = $component.find('table.table.table-component.table-bordered').length === 0;
+		equal(nonBordered, true, 'The table should not be bordered');
+	});
+});
+
+test('should set .table-condensed class on the table tag if condensed is true', function() {
+	var component = this.subject({
+			condensed: true,
+			columns: []
+		}),
+		$component = this.append(),
+		isCondensed = false;
+	Em.run(function(){
+		isCondensed = $component.find('table.table.table-component.table-condensed').length > 0;
+		equal(isCondensed, true, 'The table should be condensed');
+	});
+});
+
+test('should NOT set .table-condensed class on the table tag if condensed is false', function() {
+	var component = this.subject({
+			condensed: false,
+			columns: []
+		}),
+		$component = this.append(),
+		nonCondensed = false;
+	Em.run(function(){
+		nonCondensed = $component.find('table.table.table-component.table-condensed').length === 0;
+		equal(nonCondensed, true, 'The table should not be condensed');
+	});
+});
+
 test('should not render thead if showHeader property is set to false', function() {
 	var component = this.subject({
 			showHeader: false,
