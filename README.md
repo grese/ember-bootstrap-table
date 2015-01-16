@@ -29,6 +29,8 @@ You'll need to include the following files in your project:
 * sortProperty: "<Property to Sort On>" *// (only active if customSortAction is null)*
 * sortAscending: (true || false) *// (only active if customSortAction is null)*
 * defaultSortProperty: "<Default sortProperty>" *// (only active if customSortAction is null)*
+* rowDetailViewClass: (null || <Instance of Ember.View>) *// (Defines a custom view for the detail rows - only used when hasDetailRows is true)*
+* hasDetailRows:  (true || false) *// (enabled/disables detail rows)*
 
 #### Column Configurations:
 Here are the options for configuring columns:

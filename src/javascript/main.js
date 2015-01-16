@@ -28,6 +28,8 @@
 			this._super();
 		},
 		layoutName: 'ember-bootstrap-table-template-main',
+		detailRowViewClass: null,
+    	hasDetailRows: false,
 		showHeader: true,
 		hoverable: true,
 		striped: false,
@@ -48,6 +50,9 @@
 			return this.get('columns').map(function(column){
 				return DefaultColumnConfig.create(column);
 			});
+		}.property('columns.[]'),
+		_numColumns: function(){
+			return this.get('columns').length;
 		}.property('columns.[]'),
 		_rows: function(){
 			return this.get('rows');

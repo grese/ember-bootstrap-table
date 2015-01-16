@@ -38,6 +38,17 @@
                     {{/if}}
                 {{/each}}
             </tr>
+            {{#if hasDetailRows}}
+                <tr class='table-component-detail-row collapse'>
+                    <td {{bind-attr colspan=_numColumns}}>
+                        <div class="table-component-detail-container">
+                            {{#if detailRowViewClass}}
+                                {{view detailRowViewClass row=row}}
+                            {{/if}}
+                        </div>
+                    </td>
+                </tr>
+            {{/if}}
         {{/each}}
         </tbody>
     </table>
