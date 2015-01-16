@@ -93,5 +93,6 @@ export default Ember.Controller.extend({
   striped=true
   hasDetailRows=true
   rowDetailViewClass=detailRowViewClass
+  useDefaultDetailRowToggle=true
 }}
 ```
