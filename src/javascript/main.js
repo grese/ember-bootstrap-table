@@ -11,6 +11,11 @@
 		columnWidth: null
 	});
 
+	var RowObject = Ember.ObjectProxy.extend({
+		_rowDetailVisible: false,
+		_rowIndex: null
+	});
+
 	// The component :)
 	var TableComponent = Ember.Component.extend({
 		init: function(){
@@ -80,17 +85,15 @@
 				rowIdx = 0;
 			if(rows){
 				return rows.map(function(row){
-					if(typeof row.get('_rowDetailVisible') === 'undefined'){
-						row.set('_rowDetailVisible', false);
-					}
-					row.set('_rowIndex', rowIdx);
-					rowIdx++;
-					return row;
+					return RowObject.create({
+						content: row,
+						_rowIndex: rowIdx++
+					});
 				});
 			}else{
 				return [];
 			}
-		}.property('rows.[]', 'columns.[]', 'sortProperty', 'sortAscending'),
+		}.property('rows.[]', 'sortProperty', 'sortAscending'),
 		showDetailForRow: function(rowIndex){
 			this.get('rows').objectAt(rowIndex).toggleProperty('_rowDetailVisible');
 		},

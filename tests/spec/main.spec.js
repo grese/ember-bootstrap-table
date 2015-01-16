@@ -28,9 +28,9 @@ moduleForComponent('table-component', 'Table Component', {
 		];
 
 		MockRows = [
-			Em.Object.create({ id: 'row1' }),
-			Em.Object.create({ id: 'row2' }),
-			Em.Object.create({ id: 'row3' })
+			Em.Object.create({ id: 'row1', someProperty: 'someValue', someOtherProperty: 'someOtherValue' }),
+			Em.Object.create({ id: 'row2', someProperty: 'someValue', someOtherProperty: 'someOtherValue' }),
+			Em.Object.create({ id: 'row3', someProperty: 'someValue', someOtherProperty: 'someOtherValue' })
 		];
 
 		MockDetailRowView = Em.View.extend();
@@ -278,6 +278,36 @@ test('#_rows property should return an empty array if rows is null', function(){
 	deepEqual(parsedRows, [], 'should be an empty array.');
 });
 
+test('#_rows property should return an array of instances of Em.ObjectProxy', function(){
+	var component = this.subject({
+			columns: [],
+			rows: MockRows
+		}),
+		parsedRows = component.get('_rows');
+	$.each(parsedRows, function(idx, row){
+		var isObjProxy = row instanceof Ember.ObjectProxy;
+		ok(isObjProxy, 'should be instane of Em.ObjectProxy');
+	});
+});
+
+test('items from #_rows property should all have both the properties of the original object, and the _rowIndex and _rowDetailVisible properties.', function(){
+	var component = this.subject({
+			columns: [],
+			rows: MockRows
+		}),
+		parsedRows = component.get('_rows');
+
+	$.each(parsedRows, function(idx, row){
+		var origRow = MockRows[idx];
+		strictEqual(row.get('id'), origRow.get('id'), 'id property should have been carried over.');
+		strictEqual(row.get('someProperty'), origRow.get('someProperty'), 'someProperty property should have been carried over.');
+		strictEqual(row.get('someOtherProperty'), origRow.get('someOtherProperty'), 'someOtherProperty property should have been carried over.');
+		
+		strictEqual(row.get('_rowIndex'), idx);
+		strictEqual(row.get('_rowDetailVisible'), false);
+	});
+});
+
 test('#_rows property should return an array of the rows provided with _rowIndex, and _rowDetailVisible properties set.', function(){
 	var component = this.subject({
 			columns: [],
@@ -289,26 +319,6 @@ test('#_rows property should return an array of the rows provided with _rowIndex
 	$.each(parsedRows, function(idx, row){
 		strictEqual(row.get('_rowIndex'), idx, 'row should have the correctr index');
 		strictEqual(row.get('_rowDetailVisible'), false, 'should be false by default');
-	});
-});
-
-
-test('#_rows property should return an array of the rows provided with _rowIndex, and should maintain value of _rowDetailVisible proerty if it is already set', function(){
-	// initially, set all of the rows to have _rowDetailVisible of true
-	$.each(MockRows, function(idx, row){
-		row.set('_rowDetailVisible', true);
-	});
-
-	var component = this.subject({
-			columns: [],
-			rows: MockRows
-		}),
-		parsedRows = component.get('_rows');
-
-	strictEqual(parsedRows.length, MockRows.length, 'should have same number of array elements');
-	$.each(parsedRows, function(idx, row){
-		strictEqual(row.get('_rowIndex'), idx, 'row should have the correctr index');
-		strictEqual(row.get('_rowDetailVisible'), true, 'should have maintained the value of _rowDetailVisible');
 	});
 });
 
