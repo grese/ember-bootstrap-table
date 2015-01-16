@@ -2,6 +2,8 @@
 // Generated on Fri Jul 05 2013 01:57:57 GMT-0400 (EDT)
 
 module.exports = function(config) {
+  'use strict';
+  
   config.set({
     // list of files / patterns to load in the browser
     files: [
@@ -18,9 +20,10 @@ module.exports = function(config) {
       'tests/app.js',
       'tests/spec/**/*.spec.js',
     ],
-    frameworks: ['qunit'],
+    frameworks: ['qunit', 'sinon'],
     plugins: [
       'karma-qunit',
+      'karma-sinon',
       'karma-phantomjs-launcher',
       'karma-junit-reporter',
       'karma-coverage'

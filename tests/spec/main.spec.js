@@ -3,7 +3,7 @@ App.TableComponentComponent = Ember.TableComponent.extend({
 	layoutName: null,
 	layout: Ember.TEMPLATES['ember-bootstrap-table-template-main']
 });
-var MockColumnConfigs;
+var MockColumnConfigs, MockRows, MockDetailRowView;
 moduleForComponent('table-component', 'Table Component', {
 	setup: function(){
 		MockColumnConfigs = [
@@ -26,6 +26,14 @@ moduleForComponent('table-component', 'Table Component', {
 				}
 			})
 		];
+
+		MockRows = [
+			Em.Object.create({ id: 'row1' }),
+			Em.Object.create({ id: 'row2' }),
+			Em.Object.create({ id: 'row3' })
+		];
+
+		MockDetailRowView = Em.View.extend();
 	}
 });
 
@@ -244,3 +252,207 @@ test('should render the correct column headers and sorting controls for each sor
 		deepEqual(actualHeaderNames, expectedHeaderNames, 'The correct column headers should be present.');
 	});
 });
+
+test('#_columns property should return an array of column configurations if columns are provided', function(){
+	var component = this.subject({
+			columns: MockColumnConfigs
+		}),
+		cols = component.get('_columns');
+	equal(cols.length, 3, 'should return array of column configs');
+});
+
+test('#_columns property should return an empty array if columns is null', function(){
+	var component = this.subject({
+			columns: null
+		}),
+		cols = component.get('_columns');
+	deepEqual(cols, [], 'should be an empty array.');
+});
+
+test('#_rows property should return an empty array if rows is null', function(){
+	var component = this.subject({
+			columns: [],
+			rows: null
+		}),
+		parsedRows = component.get('_rows');
+	deepEqual(parsedRows, [], 'should be an empty array.');
+});
+
+test('#_rows property should return an array of the rows provided with _rowIndex, and _rowDetailVisible properties set.', function(){
+	var component = this.subject({
+			columns: [],
+			rows: MockRows
+		}),
+		parsedRows = component.get('_rows');
+
+	strictEqual(parsedRows.length, MockRows.length, 'should have same number of array elements');
+	$.each(parsedRows, function(idx, row){
+		strictEqual(row.get('_rowIndex'), idx, 'row should have the correctr index');
+		strictEqual(row.get('_rowDetailVisible'), false, 'should be false by default');
+	});
+});
+
+
+test('#_rows property should return an array of the rows provided with _rowIndex, and should maintain value of _rowDetailVisible proerty if it is already set', function(){
+	// initially, set all of the rows to have _rowDetailVisible of true
+	$.each(MockRows, function(idx, row){
+		row.set('_rowDetailVisible', true);
+	});
+
+	var component = this.subject({
+			columns: [],
+			rows: MockRows
+		}),
+		parsedRows = component.get('_rows');
+
+	strictEqual(parsedRows.length, MockRows.length, 'should have same number of array elements');
+	$.each(parsedRows, function(idx, row){
+		strictEqual(row.get('_rowIndex'), idx, 'row should have the correctr index');
+		strictEqual(row.get('_rowDetailVisible'), true, 'should have maintained the value of _rowDetailVisible');
+	});
+});
+
+test('#_detailRowsEnabled should return false if hasDetailRows property is false', function(){
+	var component = this.subject({
+			columns: [],
+			hasDetailRows: false
+		}),
+		detailRowsEnabled = component.get('_detailRowsEnabled');
+	equal(detailRowsEnabled, false, 'should return false');
+});
+
+test('#_detailRowsEnabled should return false if hasDetailRows property is true, but there is no detailRowViewClass specified', function(){
+	var component = this.subject({
+			columns: [],
+			hasDetailRows: true
+		}),
+		detailRowsEnabled = component.get('_detailRowsEnabled');
+	equal(detailRowsEnabled, false, 'should return false');
+});
+
+test('#_detailRowsEnabled should return true if hasDetailRows property is true, and a detailRowViewClass is provided', function(){
+	
+	var component = this.subject({
+			columns: [],
+			hasDetailRows: true,
+			detailRowViewClass: MockDetailRowView
+		}),
+		detailRowsEnabled = component.get('_detailRowsEnabled');
+	equal(detailRowsEnabled, true, 'should return true');
+});
+
+test('#_numColumns should return the number of columns specified', function(){
+	var component = this.subject({
+			columns: MockColumnConfigs
+		}),
+		numCols = component.get('_numColumns');
+	equal(numCols, 3, 'should have 3 columns');
+});
+
+test('#_detailRowColspan should return (_numColumns + 1) if useDefaultDetailRowToggle is true', function(){
+	var component = this.subject({
+			columns: MockColumnConfigs
+		}),
+		numCols = component.get('_detailRowColspan');
+	equal(numCols, 4, 'should have 4 columns');
+});
+
+test('#_detailRowColspan should return the same value as _numColumns if useDefaultDetailRowToggle is false', function(){
+	var component = this.subject({
+			columns: MockColumnConfigs,
+			useDefaultDetailRowToggle: false
+		}),
+		numCols = component.get('_detailRowColspan');
+	equal(numCols, 3, 'should have 3 columns');
+});
+
+test('should render an extra empty column header cell if useDefaultDetailRowToggle is true', function(){
+	var component = this.subject({
+			columns: MockColumnConfigs,
+			hasDetailRows: true,
+			detailRowViewClass: MockDetailRowView
+		}),
+		$component = this.append();
+
+	var expectedNumCols = MockColumnConfigs.length + 1,
+		headers = $component.find('table.table-component th.table-component-header');
+	strictEqual(headers.length, expectedNumCols, 'should have an extra header cell');
+
+	var cellIsEmpty = $.trim($(headers[0]).text()) === "";
+	strictEqual(cellIsEmpty, true, 'extra header cell should be empty');
+});
+
+test('should NOT render an extra column header if useDefaultDetailRowToggle is false', function(){
+	var component = this.subject({
+			columns: MockColumnConfigs,
+			hasDetailRows: true,
+			detailRowViewClass: MockDetailRowView,
+			useDefaultDetailRowToggle: false
+		}),
+		$component = this.append();
+
+	var expectedNumCols = MockColumnConfigs.length,
+		headers = $component.find('table.table-component th.table-component-header');
+	strictEqual(headers.length, expectedNumCols, 'should NOT have an extra header cell');
+});
+
+test('should render an extra cell in each row with a button to toggle the detail view for the row if useDefaultDetailRowToggle is true', function(){
+	var component = this.subject({
+			columns: MockColumnConfigs,
+			hasDetailRows: true,
+			detailRowViewClass: MockDetailRowView,
+			rows: MockRows
+		}),
+		$component = this.append();
+
+	var expectedNumCols = MockColumnConfigs.length + 1,
+		$row1 = $component.find('table.table-component tbody tr').eq(0),
+		cells = $row1.find('td');
+	strictEqual(cells.length, expectedNumCols, 'should have extra cell');
+
+	var $cell1 = $(cells.eq(0)),
+		hasButton = $cell1.find('.toggle-detail-row').length === 1;
+	strictEqual(hasButton, true, 'should have a toggle button');
+});
+
+test('should render a detail-row for each row if hasDetailRows is true, and detailRowViewClass is provided.', function(){
+	var component = this.subject({
+			columns: MockColumnConfigs,
+			hasDetailRows: true,
+			detailRowViewClass: MockDetailRowView,
+			rows: MockRows
+		}),
+		$component = this.append();
+
+	var expectedNumRows = MockColumnConfigs.length * 2,
+		numRows = $component.find('table.table-component tbody tr').length;
+	strictEqual(numRows, expectedNumRows, 'should have twice as many rows');
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

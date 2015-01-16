@@ -31,6 +31,7 @@ You'll need to include the following files in your project:
 * defaultSortProperty: "<Default sortProperty>" *// (only active if customSortAction is null)*
 * rowDetailViewClass: (null || <Instance of Ember.View>) *// (Defines a custom view for the detail rows - only used when hasDetailRows is true)*
 * hasDetailRows:  (true || false) *// (enabled/disables detail rows)*
+* useDefaultDetailRowToggle: (true || false) *// (when true, an extra column will be added to the table to allow the user to show and hide the detail rows.  If false, you must provide your own mechanism for showing/hiding the detail rows)*
 
 #### Column Configurations:
 Here are the options for configuring columns:
@@ -47,6 +48,7 @@ Here are the options for configuring columns:
 ```javascript
 import CustomHeaderCell from 'app/views/custom-header-view';
 import CustomCell from 'app/views/custom-cell-view';
+import DetailRow from 'app/views/detail-row-view';
 
 export default Ember.Controller.extend({
   columns: function(){
@@ -70,7 +72,10 @@ export default Ember.Controller.extend({
   }.property(),
   rows: function(){
     return this.get('model') || [];
-  }.property('model.[]')
+  }.property('model.[]'),
+  detailRowViewClass: function(){
+    return DetailRow;
+  }.property()
 });
 ```
 
@@ -86,5 +91,7 @@ export default Ember.Controller.extend({
   responsive=true
   bordered=false
   striped=true
+  hasDetailRows=true
+  rowDetailViewClass=detailRowViewClass
 }}
 ```

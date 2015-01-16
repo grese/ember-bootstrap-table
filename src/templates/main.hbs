@@ -3,6 +3,12 @@
         {{#if showHeader}}
             <thead>
             <tr>
+                {{#if _detailRowsEnabled}}
+                    {{#if useDefaultDetailRowToggle}}
+                        {{!-- add an empty column for detailRow toggle cells --}}
+                        <th class="table-component-header" width=20></th>
+                    {{/if}}
+                {{/if}}
                 {{#each col in _columns}}
                     <th class="table-component-header" {{bind-attr width=col.columnWidth}}>
                         {{#if col.headerCellCustomViewClass}}
@@ -14,7 +20,7 @@
                                         <span>
                                             {{col.headerCellName}}
                                             &nbsp;
-                                            {{tableComponentSortIcon col sortProperty sortAscending}}
+                                            {{tableComponentSortIcon col _sortProperty sortAscending}}
                                         </span>
                                     </div>
                                 </button>
@@ -30,6 +36,20 @@
         <tbody>
         {{#each row in _rows}}
             <tr>
+                {{#if _detailRowsEnabled}}
+                    {{#if useDefaultDetailRowToggle}}
+                        {{!-- add cell with button to toggle row detail --}}
+                        <td>
+                            <button {{bind-attr data-rowindex='row._rowIndex'}} class='toggle-detail-row'>
+                                {{#if row._rowDetailVisible}}
+                                    <span class='fa fa-minus fa-sm'></span>
+                                {{else}}
+                                    <span class='fa fa-plus fa-sm'></span>
+                                {{/if}}
+                            </button>
+                        </td>
+                    {{/if}}
+                {{/if}}
                 {{#each col in _columns}}
                     {{#if col.cellCustomViewClass}}
                         {{view col.cellCustomViewClass row=row config=col}}
@@ -38,13 +58,11 @@
                     {{/if}}
                 {{/each}}
             </tr>
-            {{#if hasDetailRows}}
-                <tr class='table-component-detail-row collapse'>
-                    <td {{bind-attr colspan=_numColumns}}>
+            {{#if _detailRowsEnabled}}
+                <tr {{bind-attr class=':table-component-detail-row :collapse row._rowDetailVisible:in'}}>
+                    <td {{bind-attr colspan='_detailRowColspan'}}>
                         <div class="table-component-detail-container">
-                            {{#if detailRowViewClass}}
-                                {{view detailRowViewClass row=row}}
-                            {{/if}}
+                            {{view detailRowViewClass row=row}}
                         </div>
                     </td>
                 </tr>

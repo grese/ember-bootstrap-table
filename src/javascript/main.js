@@ -29,7 +29,8 @@
 		},
 		layoutName: 'ember-bootstrap-table-template-main',
 		detailRowViewClass: null,
-    	hasDetailRows: false,
+		hasDetailRows: false,
+		useDefaultDetailRowToggle: true,
 		showHeader: true,
 		hoverable: true,
 		striped: false,
@@ -40,23 +41,75 @@
 		sortProperty: null,
 		sortAscending: true,
 		_sortProperty: function(){
-			if(!this.get('sortProperty')){
-				return this.get('defaultSortProperty');
-			}else{
-				return this.get('sortProperty');
-			}
+			return this.get('sortProperty') ? this.get('sortProperty') : this.get('defaultSortProperty');
 		}.property('sortProperty'),
 		_columns: function(){
-			return this.get('columns').map(function(column){
-				return DefaultColumnConfig.create(column);
-			});
+			if(this.get('columns')){
+				return this.get('columns').map(function(column){
+					return DefaultColumnConfig.create(column);
+				});
+			}else{
+				Em.Logger.warn('<WARNING>: Column configurations must be provided to table component');
+				return [];
+			}
 		}.property('columns.[]'),
 		_numColumns: function(){
 			return this.get('columns').length;
 		}.property('columns.[]'),
+		_detailRowColspan: function(){
+			if(this.get('useDefaultDetailRowToggle')){
+				// extra column for the detailView toggle
+				return this.get('_numColumns') + 1;
+			}else{
+				return this.get('_numColumns');
+			}
+		}.property('columns.[]'),
+		_detailRowsEnabled: function(){
+			var enabled = false;
+			if(this.get('hasDetailRows')){
+				if(this.get('detailRowViewClass') !== null){
+					enabled = true;
+				}else{
+					Em.Logger.warn('<WARNING>: when hasDetailRows is true, you must also provide a view for the detailRowViewClass');
+				}
+			}
+			return enabled;
+		}.property('hasDetailRows', 'detailRowViewClass'),
 		_rows: function(){
-			return this.get('rows');
+			var rows = this.get('rows'),
+				rowIdx = 0;
+			if(rows){
+				return rows.map(function(row){
+					if(typeof row.get('_rowDetailVisible') === 'undefined'){
+						row.set('_rowDetailVisible', false);
+					}
+					row.set('_rowIndex', rowIdx);
+					rowIdx++;
+					return row;
+				});
+			}else{
+				return [];
+			}
 		}.property('rows.[]', 'columns.[]', 'sortProperty', 'sortAscending'),
+		showDetailForRow: function(rowIndex){
+			this.get('rows').objectAt(rowIndex).toggleProperty('_rowDetailVisible');
+		},
+		attachDetailRowClickHandlers: function(){
+			var self = this,
+				elmId = this.get('elementId'),
+				$rowToggles = $('#'+elmId+' .toggle-detail-row');
+			$rowToggles.off();
+			$rowToggles.on('click', function(){
+				var idx = $(this).data('rowindex');
+				self.showDetailForRow(idx);
+			});
+		},
+		didInsertElement: function(){
+			if(this.get('_detailRowsEnabled')){
+				this.attachDetailRowClickHandlers();
+				this.addObserver('rows.[]', this, this.attachDetailRowClickHandlers);
+			}
+		},
 		actions: {
 			sortTable: function(sortPath){
 				if(this.get('customSortAction')){

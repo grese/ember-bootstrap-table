@@ -21,7 +21,8 @@
     "setResolver",
     "QUnit",
     "App",
-    "console"
+    "console",
+    "sinon"
   ],
   "node" : false,
   "browser" : false,
