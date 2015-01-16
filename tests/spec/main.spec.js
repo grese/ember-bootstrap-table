@@ -439,7 +439,21 @@ test('should render a detail-row for each row if hasDetailRows is true, and deta
 	strictEqual(numRows, expectedNumRows, 'should have twice as many rows');
 });
 
-
+test('when _detailRowsEnabled returns true, #attachDetailRowClickHandlers should be called, and an observer set.', function(){
+	var component = this.subject({
+			columns: MockColumnConfigs,
+			hasDetailRows: true,
+			detailRowViewClass: MockDetailRowView,
+			rows: MockRows
+		});
+	sinon.spy(component, 'attachDetailRowClickHandlers');
+	sinon.spy(component, 'addObserver');
+	var $component = this.append();
+	Em.run(function(){
+		ok(component.attachDetailRowClickHandlers.calledOnce, 'should have fired #attachDetailRowClickHandlers');
+		ok(component.attachDetailRowClickHandlers.calledOnce, 'should have added observer');
+	});
+});
 
 
 
