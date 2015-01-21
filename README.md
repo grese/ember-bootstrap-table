@@ -25,23 +25,23 @@ You'll need to include the following files in your project:
 * condensed: (true || false) *// (Condenses table rows)*
 * responsive: (true || false) *// (Makes table horizontally scrollable)*
 * bordered: (true || false) *// (Adds borders to the table)*
-* customSortAction: "<Action Name>" *// (Overrides default sortAction)*
-* sortProperty: "<Property to Sort On>" *// (only active if customSortAction is null)*
+* customSortAction: "[Action Name]" *// (Overrides default sortAction)*
+* sortProperty: "[Property to Sort On]" *// (only active if customSortAction is null)*
 * sortAscending: (true || false) *// (only active if customSortAction is null)*
-* defaultSortProperty: "<Default sortProperty>" *// (only active if customSortAction is null)*
-* rowDetailViewClass: (null || <Instance of Ember.View>) *// (Defines a custom view for the detail rows - only used when hasDetailRows is true)*
+* defaultSortProperty: "[Default sortProperty]" *// (only active if customSortAction is null)*
+* rowDetailViewClass: (null || [Instance of Ember.View]) *// (Defines a custom view for the detail rows - only used when hasDetailRows is true)*
 * hasDetailRows:  (true || false) *// (enabled/disables detail rows)*
 * useDefaultDetailRowToggle: (true || false) *// (when true, an extra column will be added to the table to allow the user to show and hide the detail rows.  If false, you must provide your own mechanism for showing/hiding the detail rows)*
 * infiniteScrollEnabled: (true || false) *// (whether or not infinite scroll should be enabled)*
 * isLoadingRows: (true || false) *// (a flag to bind to for showing/hiding the table's loading indicator - only used when infiniteScrollEnabled is true)*
-* loadMoreAction: "<Action Name>" *// (the action that should be fired when user scrolls to bottom of page - only used when infiniteScrollEnabled is true, and isLoadingRows is false)*
+* loadMoreAction: "[Action Name]" *// (the action that should be fired when user scrolls to bottom of page - only used when infiniteScrollEnabled is true, and isLoadingRows is false)*
 
 #### Column Configurations:
 Here are the options for configuring columns:
-* headerCellName: "<Cell Header Text>" *// (only used if headerCellCustomViewClass is null)*
-* headerCellCustomViewClass: (null || <Instance of Ember.View>) *// (Defines a custom view for header cell)*
+* headerCellName: "[Cell Header Text]" *// (only used if headerCellCustomViewClass is null)*
+* headerCellCustomViewClass: (null || [Instance of Ember.View]) *// (Defines a custom view for header cell)*
 * cellValuePath: (null || "Path to value") *// (Defines the property of row where value is -- Only used if customCellViewClass and getCellContent are both null)*
-* cellCustomViewClass: (null || <Instance of Ember.View>) *// (Defines a custom view for the cell)*
+* cellCustomViewClass: (null || [Instance of Ember.View]) *// (Defines a custom view for the cell)*
 * getCellContent: (null || function) *// (Defines a function to return value for cell - Only used if customCellViewClass is null)*
 * columnWidth: (null || int) *// (Defines a fixed width for the column)*
 
@@ -78,7 +78,18 @@ export default Ember.Controller.extend({
   }.property('model.[]'),
   detailRowViewClass: function(){
     return DetailRow;
-  }.property()
+  }.property(),
+  isLoadingData: false,
+  actions: {
+    loadMore: function(){
+      var self = this;
+      this.set('isLoadingData', true);
+      this.store.find('somemodel').then(function(result){
+        self.set('model', result);
+        self.set('isLoadingData', false);
+      });
+    }
+  }
 });
 ```
 
@@ -97,5 +108,8 @@ export default Ember.Controller.extend({
   hasDetailRows=true
   rowDetailViewClass=detailRowViewClass
   useDefaultDetailRowToggle=true
+  infiniteScrollEnabled=true
+  isLoadingRows=isLoadingData
+  loadMoreAction=loadMore
 }}
 ```
