@@ -112,7 +112,7 @@
 		loadMoreAction: null,
 		_loadMoreRows: function(){
 			if(this.get('loadMoreAction') && !this.get('isLoadingRows')){
-				this.sendAction(this.get('loadMoreAction'));
+				this.sendAction('loadMoreAction');
 			}
 		},
 		_showLoadingRow: function(){
@@ -139,7 +139,7 @@
 			sortTable: function(sortPath){
 				if(this.get('customSortAction')){
 					// If customSortAction is defined, bubble it up along with the sortPath.
-					this.sendAction(this.get('customSortAction'), sortPath);
+					this.sendAction('customSortAction', sortPath);
 				}else{
 					// If no customSortAction defined, then perform the default behavior.
 					if(this.get('getSortProperty') === sortPath){

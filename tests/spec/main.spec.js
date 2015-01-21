@@ -521,6 +521,7 @@ test('should NOT fire #attachInfiniteScrollListener after didInsertElement hook 
 test('#_loadMoreRows function should send an action if the loadMoreAction is supplied, and the isLoadingRows property is false', function(){
 	var MockActionName = 'someaction',
 		component = this.subject({
+			columns: [],
 			isLoadingRows: false,
 			loadMoreAction: MockActionName
 		});
@@ -529,7 +530,7 @@ test('#_loadMoreRows function should send an action if the loadMoreAction is sup
 
 	component._loadMoreRows();
 	Em.run(function(){
-		var calledWith = component.sendAction.calledWith(MockActionName);
+		var calledWith = component.sendAction.calledWith('loadMoreAction');
 		ok(calledWith, 'should have called sendAction with correct action name');
 	});
 });
@@ -537,6 +538,7 @@ test('#_loadMoreRows function should send an action if the loadMoreAction is sup
 test('#_loadMoreRows function should NOT send an action if the loadMoreAction is supplied, and the isLoadingRows property is true', function(){
 	var MockActionName = 'someaction',
 		component = this.subject({
+			columns: [],
 			isLoadingRows: true,
 			loadMoreAction: MockActionName
 		});
@@ -552,6 +554,7 @@ test('#_loadMoreRows function should NOT send an action if the loadMoreAction is
 
 test('#_loadMoreRows function should NOT send an action if the loadMoreAction is NOT supplied, and the isLoadingRows property is false', function(){
 	var component = this.subject({
+			columns: [],
 			isLoadingRows: false,
 			loadMoreAction: null
 		});
@@ -565,6 +568,57 @@ test('#_loadMoreRows function should NOT send an action if the loadMoreAction is
 	});
 });
 
+test('#sortTable action should toggle the sortAscending property if customSortAction is not provided, and the sortPath equals current sortProperty', function(){
+	var MockSortPath = 'somewhere',
+		component = this.subject({
+			columns: [],
+			customSortAction: null,
+			sortProperty: MockSortPath,
+			sortAscending: false
+		});
+	this.append();
+
+	Em.run(function(){
+		component.send('sortTable', MockSortPath);
+		var toggledProperty = component.get('sortAscending') === true;
+		ok(toggledProperty, 'sortAscending should have been true');
+	});
+});
+
+test('#sortTable action should set sortAscending to true, and sortProperty to the new sortPath if customSortAction is not provided, and the sortPath is not equal to current sortProperty', function(){
+	var OriginalSortPath = 'something',
+		MockSortPath = 'somewhere',
+		component = this.subject({
+			columns: [],
+			customSortAction: null,
+			sortProperty: OriginalSortPath,
+			sortAscending: false
+		});
+	this.append();
+
+	Em.run(function(){
+		component.send('sortTable', MockSortPath);
+		ok(component.get('sortAscending'), 'sortAscending should have been true');
+		strictEqual(component.get('sortProperty'), MockSortPath, 'should have updated the sortProperty.');
+	});
+});
+
+test('#sortTable action should fire an action if customSortAction property is provided.', function(){
+	var CustomSortAction = 'sortThis',
+		MockSortPath = 'something',
+		component = this.subject({
+			columns: [],
+			customSortAction: CustomSortAction
+	});
+	sinon.spy(component, 'sendAction');
+	this.append();
+
+	Em.run(function(){
+		component.send('sortTable', MockSortPath);
+		var calledWith = component.sendAction.calledWith('customSortAction', MockSortPath);
+		ok(calledWith, 'should have fired an action with sortPath');
+	});
+});
 
 
 
