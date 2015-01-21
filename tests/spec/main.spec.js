@@ -455,18 +455,18 @@ test('when _detailRowsEnabled returns true, #attachDetailRowClickHandlers should
 	});
 });
 
-test('#_showLoadingRow should return true if infiniteScrollEnabled is true, and if _loadingRows is true', function(){
+test('#_showLoadingRow should return true if infiniteScrollEnabled is true, and if isLoadingRows is true', function(){
 	var component = this.subject({
 		columns: [],
 		infiniteScrollEnabled: true,
-		_loadingRows: true
+		isLoadingRows: true
 	});
 
 	var showLoadingRow = component.get('_showLoadingRow');
 	ok(showLoadingRow, 'should return true.');
 });
 
-test('#_showLoadingRow should return false if infiniteScrollEnabled is false, or if _loadingRows is false', function(){
+test('#_showLoadingRow should return false if infiniteScrollEnabled is false, or if isLoadingRows is false', function(){
 	var component = this.subject({
 		columns: [],
 		infiniteScrollEnabled: false
@@ -476,13 +476,13 @@ test('#_showLoadingRow should return false if infiniteScrollEnabled is false, or
 	ok(notShowLoadingRow, 'should return false.');
 
 	Em.run(function(){
-		component.set('_loadingRows', true);
+		component.set('isLoadingRows', true);
 		notShowLoadingRow = !component.get('_showLoadingRow');
 		ok(notShowLoadingRow, 'should return false.');
 
 		component.setProperties({
 			infiniteScrollEnabled: true,
-			_loadingRows: false
+			isLoadingRows: false
 		});
 		notShowLoadingRow = !component.get('_showLoadingRow');
 		ok(notShowLoadingRow, 'should return false.');		
@@ -518,7 +518,52 @@ test('should NOT fire #attachInfiniteScrollListener after didInsertElement hook 
 	});
 });
 
+test('#_loadMoreRows function should send an action if the loadMoreAction is supplied, and the isLoadingRows property is false', function(){
+	var MockActionName = 'someaction',
+		component = this.subject({
+			isLoadingRows: false,
+			loadMoreAction: MockActionName
+		});
+	sinon.spy(component, 'sendAction');
+	this.append();
 
+	component._loadMoreRows();
+	Em.run(function(){
+		var calledWith = component.sendAction.calledWith(MockActionName);
+		ok(calledWith, 'should have called sendAction with correct action name');
+	});
+});
+
+test('#_loadMoreRows function should NOT send an action if the loadMoreAction is supplied, and the isLoadingRows property is true', function(){
+	var MockActionName = 'someaction',
+		component = this.subject({
+			isLoadingRows: true,
+			loadMoreAction: MockActionName
+		});
+	sinon.spy(component, 'sendAction');
+	this.append();
+
+	component._loadMoreRows();
+	Em.run(function(){
+		var notCalled = !component.sendAction.called;
+		ok(notCalled, 'should NOT have called sendAction');
+	});
+});
+
+test('#_loadMoreRows function should NOT send an action if the loadMoreAction is NOT supplied, and the isLoadingRows property is false', function(){
+	var component = this.subject({
+			isLoadingRows: false,
+			loadMoreAction: null
+		});
+	sinon.spy(component, 'sendAction');
+	this.append();
+
+	component._loadMoreRows();
+	Em.run(function(){
+		var notCalled = !component.sendAction.called;
+		ok(notCalled, 'should NOT have called sendAction');
+	});
+});
 
 
 

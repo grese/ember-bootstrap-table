@@ -32,6 +32,9 @@ You'll need to include the following files in your project:
 * rowDetailViewClass: (null || <Instance of Ember.View>) *// (Defines a custom view for the detail rows - only used when hasDetailRows is true)*
 * hasDetailRows:  (true || false) *// (enabled/disables detail rows)*
 * useDefaultDetailRowToggle: (true || false) *// (when true, an extra column will be added to the table to allow the user to show and hide the detail rows.  If false, you must provide your own mechanism for showing/hiding the detail rows)*
+* infiniteScrollEnabled: (true || false) *// (whether or not infinite scroll should be enabled)*
+* isLoadingRows: (true || false) *// (a flag to bind to for showing/hiding the table's loading indicator - only used when infiniteScrollEnabled is true)*
+* loadMoreAction: "<Action Name>" *// (the action that should be fired when user scrolls to bottom of page - only used when infiniteScrollEnabled is true, and isLoadingRows is false)*
 
 #### Column Configurations:
 Here are the options for configuring columns:

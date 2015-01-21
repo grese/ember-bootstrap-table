@@ -54,3 +54,6 @@
 .table-component-detail-container{
   padding-left: 60px;
 }
+.table-component-loading-row .table-component-loading-container{
+  text-align: center;
+}

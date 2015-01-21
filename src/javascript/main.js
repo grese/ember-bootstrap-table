@@ -108,15 +108,21 @@
 				self.showDetailForRow(idx);
 			});
 		},
-		_loadingRows: false,
+		isLoadingRows: false,
+		loadMoreAction: null,
+		_loadMoreRows: function(){
+			if(this.get('loadMoreAction') && !this.get('isLoadingRows')){
+				this.sendAction(this.get('loadMoreAction'));
+			}
+		},
 		_showLoadingRow: function(){
-			return this.get('infiniteScrollEnabled') && this.get('_loadingRows');
-		}.property('_loadingRows', 'infiniteScrollEnabled'),
+			return this.get('infiniteScrollEnabled') && this.get('isLoadingRows');
+		}.property('isLoadingRows', 'infiniteScrollEnabled'),
 		attachInfiniteScrollListener: function(){
 			var self = this;
 			$(window).scroll(function(){
 				if($(window).scrollTop() === $(document).height() - $(window).height()){
-					self.set('_loadingRows', true);
+					self._loadMoreRows();
 				}
 			});
 		},
