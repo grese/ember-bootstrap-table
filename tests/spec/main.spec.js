@@ -359,20 +359,20 @@ test('#_numColumns should return the number of columns specified', function(){
 	equal(numCols, 3, 'should have 3 columns');
 });
 
-test('#_detailRowColspan should return (_numColumns + 1) if useDefaultDetailRowToggle is true', function(){
+test('#_rowColspan should return (_numColumns + 1) if useDefaultDetailRowToggle is true', function(){
 	var component = this.subject({
 			columns: MockColumnConfigs
 		}),
-		numCols = component.get('_detailRowColspan');
+		numCols = component.get('_rowColspan');
 	equal(numCols, 4, 'should have 4 columns');
 });
 
-test('#_detailRowColspan should return the same value as _numColumns if useDefaultDetailRowToggle is false', function(){
+test('#_rowColspan should return the same value as _numColumns if useDefaultDetailRowToggle is false', function(){
 	var component = this.subject({
 			columns: MockColumnConfigs,
 			useDefaultDetailRowToggle: false
 		}),
-		numCols = component.get('_detailRowColspan');
+		numCols = component.get('_rowColspan');
 	equal(numCols, 3, 'should have 3 columns');
 });
 
@@ -455,6 +455,68 @@ test('when _detailRowsEnabled returns true, #attachDetailRowClickHandlers should
 	});
 });
 
+test('#_showLoadingRow should return true if infiniteScrollEnabled is true, and if _loadingRows is true', function(){
+	var component = this.subject({
+		columns: [],
+		infiniteScrollEnabled: true,
+		_loadingRows: true
+	});
+
+	var showLoadingRow = component.get('_showLoadingRow');
+	ok(showLoadingRow, 'should return true.');
+});
+
+test('#_showLoadingRow should return false if infiniteScrollEnabled is false, or if _loadingRows is false', function(){
+	var component = this.subject({
+		columns: [],
+		infiniteScrollEnabled: false
+	});
+
+	var notShowLoadingRow = !component.get('_showLoadingRow');
+	ok(notShowLoadingRow, 'should return false.');
+
+	Em.run(function(){
+		component.set('_loadingRows', true);
+		notShowLoadingRow = !component.get('_showLoadingRow');
+		ok(notShowLoadingRow, 'should return false.');
+
+		component.setProperties({
+			infiniteScrollEnabled: true,
+			_loadingRows: false
+		});
+		notShowLoadingRow = !component.get('_showLoadingRow');
+		ok(notShowLoadingRow, 'should return false.');		
+	});
+});
+
+test('should fire #attachInfiniteScrollListener after didInsertElement hook if infiniteScrollEnabled is true', function(){
+	
+	var component = this.subject({
+		columns: [],
+		infiniteScrollEnabled: true
+	});
+	sinon.spy(component, 'attachInfiniteScrollListener');
+
+	this.append();
+	Em.run(function(){
+		ok(component.attachInfiniteScrollListener.calledOnce, 'should have called attachInfiniteScrollListener');
+	});
+});
+
+test('should NOT fire #attachInfiniteScrollListener after didInsertElement hook if infiniteScrollEnabled is false', function(){
+	
+	var component = this.subject({
+		columns: [],
+		infiniteScrollEnabled: false
+	});
+	sinon.spy(component, 'attachInfiniteScrollListener');
+
+	this.append();
+	Em.run(function(){
+		var notCalled = !component.attachInfiniteScrollListener.called;
+		ok(notCalled, 'should NOT have called attachInfiniteScrollListener');
+	});
+});
 
 
 

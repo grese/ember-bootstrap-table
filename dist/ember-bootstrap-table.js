@@ -45,6 +45,7 @@
 		customSortAction: null,
 		sortProperty: null,
 		sortAscending: true,
+		infiniteScrollEnabled: false,
 		_sortProperty: function(){
 			return this.get('sortProperty') ? this.get('sortProperty') : this.get('defaultSortProperty');
 		}.property('sortProperty'),
@@ -61,7 +62,7 @@
 		_numColumns: function(){
 			return this.get('columns').length;
 		}.property('columns.[]'),
-		_detailRowColspan: function(){
+		_rowColspan: function(){
 			if(this.get('useDefaultDetailRowToggle')){
 				// extra column for the detailView toggle
 				return this.get('_numColumns') + 1;
@@ -107,10 +108,25 @@
 				self.showDetailForRow(idx);
 			});
 		},
+		_loadingRows: false,
+		_showLoadingRow: function(){
+			return this.get('infiniteScrollEnabled') && this.get('_loadingRows');
+		}.property('_loadingRows', 'infiniteScrollEnabled'),
+		attachInfiniteScrollListener: function(){
+			var self = this;
+			$(window).scroll(function(){
+				if($(window).scrollTop() === $(document).height() - $(window).height()){
+					self.set('_loadingRows', true);
+				}
+			});
+		},
 		didInsertElement: function(){
 			if(this.get('_detailRowsEnabled')){
 				this.attachDetailRowClickHandlers();
 				this.addObserver('rows.[]', this, this.attachDetailRowClickHandlers);
+			}
+			if(this.get('infiniteScrollEnabled')){
+				this.attachInfiniteScrollListener();
 			}
 		},
 		actions: {
@@ -339,13 +355,24 @@ function program25(depth0,data) {
   },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},contexts:[],types:[],data:data})));
   data.buffer.push(">\n                    <td ");
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'colspan': ("_detailRowColspan")
+    'colspan': ("_rowColspan")
   },hashTypes:{'colspan': "STRING"},hashContexts:{'colspan': depth0},contexts:[],types:[],data:data})));
   data.buffer.push(">\n                        <div class=\"table-component-detail-container\">\n                            ");
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "detailRowViewClass", {hash:{
     'row': ("row")
   },hashTypes:{'row': "ID"},hashContexts:{'row': depth0},contexts:[depth0],types:["ID"],data:data})));
   data.buffer.push("\n                        </div>\n                    </td>\n                </tr>\n            ");
+  return buffer;
+  }
+
+function program27(depth0,data) {
+  
+  var buffer = '';
+  data.buffer.push("\n            <tr class='table-component-loading-row'>\n                <td ");
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'colspan': ("_rowColspan")
+  },hashTypes:{'colspan': "STRING"},hashContexts:{'colspan': depth0},contexts:[],types:[],data:data})));
+  data.buffer.push(">\n                    <div class=\"table-component-loading-container\">\n                        <span class='fa fa-spinner fa-spin fa-2x'></span>\n                    </div>\n                </td>\n            </tr>\n        ");
   return buffer;
   }
 
@@ -362,6 +389,9 @@ function program25(depth0,data) {
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n        <tbody>\n        ");
   stack1 = helpers.each.call(depth0, "row", "in", "_rows", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(13, program13, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n        ");
+  stack1 = helpers['if'].call(depth0, "_showLoadingRow", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(27, program27, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n        </tbody>\n    </table>\n</div>");
   return buffer;

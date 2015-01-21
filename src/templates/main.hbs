@@ -60,7 +60,7 @@
             </tr>
             {{#if _detailRowsEnabled}}
                 <tr {{bind-attr class=':table-component-detail-row :collapse row._rowDetailVisible:in'}}>
-                    <td {{bind-attr colspan='_detailRowColspan'}}>
+                    <td {{bind-attr colspan='_rowColspan'}}>
                         <div class="table-component-detail-container">
                             {{view detailRowViewClass row=row}}
                         </div>
@@ -68,6 +68,15 @@
                 </tr>
             {{/if}}
         {{/each}}
+        {{#if _showLoadingRow}}
+            <tr class='table-component-loading-row'>
+                <td {{bind-attr colspan='_rowColspan'}}>
+                    <div class="table-component-loading-container">
+                        <span class='fa fa-spinner fa-spin fa-2x'></span>
+                    </div>
+                </td>
+            </tr>
+        {{/if}}
         </tbody>
     </table>
 </div>

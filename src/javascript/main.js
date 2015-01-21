@@ -45,6 +45,7 @@
 		customSortAction: null,
 		sortProperty: null,
 		sortAscending: true,
+		infiniteScrollEnabled: false,
 		_sortProperty: function(){
 			return this.get('sortProperty') ? this.get('sortProperty') : this.get('defaultSortProperty');
 		}.property('sortProperty'),
@@ -61,7 +62,7 @@
 		_numColumns: function(){
 			return this.get('columns').length;
 		}.property('columns.[]'),
-		_detailRowColspan: function(){
+		_rowColspan: function(){
 			if(this.get('useDefaultDetailRowToggle')){
 				// extra column for the detailView toggle
 				return this.get('_numColumns') + 1;
@@ -107,10 +108,25 @@
 				self.showDetailForRow(idx);
 			});
 		},
+		_loadingRows: false,
+		_showLoadingRow: function(){
+			return this.get('infiniteScrollEnabled') && this.get('_loadingRows');
+		}.property('_loadingRows', 'infiniteScrollEnabled'),
+		attachInfiniteScrollListener: function(){
+			var self = this;
+			$(window).scroll(function(){
+				if($(window).scrollTop() === $(document).height() - $(window).height()){
+					self.set('_loadingRows', true);
+				}
+			});
+		},
 		didInsertElement: function(){
 			if(this.get('_detailRowsEnabled')){
 				this.attachDetailRowClickHandlers();
 				this.addObserver('rows.[]', this, this.attachDetailRowClickHandlers);
+			}
+			if(this.get('infiniteScrollEnabled')){
+				this.attachInfiniteScrollListener();
 			}
 		},
 		actions: {
