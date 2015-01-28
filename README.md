@@ -110,6 +110,6 @@ export default Ember.Controller.extend({
   useDefaultDetailRowToggle=true
   infiniteScrollEnabled=true
   isLoadingRows=isLoadingData
-  loadMoreAction=loadMore
+  loadMoreAction='loadMore'
 }}
 ```
