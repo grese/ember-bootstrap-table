@@ -32,6 +32,7 @@
 			}
 			this._super();
 		},
+		headersFixed: false,
 		layoutName: 'ember-bootstrap-table-template-main',
 		detailRowViewClass: null,
 		hasDetailRows: false,
@@ -126,6 +127,12 @@
 				}
 			});
 		},
+		_renderHeadersInline: function(){
+			return !this.get('headersFixed') && this.get('showHeader');
+		}.property('headersFixed', 'showHeader'),
+		_renderHeadersFixed: function(){
+			return this.get('headersFixed') && this.get('showHeader');
+		}.property('headersFixed', 'showHeader'),
 		didInsertElement: function(){
 			if(this.get('_detailRowsEnabled')){
 				this.attachDetailRowClickHandlers();

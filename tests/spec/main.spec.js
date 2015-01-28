@@ -620,8 +620,82 @@ test('#sortTable action should fire an action if customSortAction property is pr
 	});
 });
 
+test('#_renderHeadersInline property should return true if showHeader is true, and headersFixed is false', function(){
+	var component = this.subject({
+			columns: [],
+			showHeader: true,
+			headersFixed: false
+		});
+	this.append();
 
+	Em.run(function(){
+		ok(component.get('_renderHeadersInline'), 'should return true');
+	});
+});
 
+test('#_renderHeadersInline property should return false if showHeader is true, and headersFixed is true', function(){
+	var component = this.subject({
+			columns: [],
+			showHeader: true,
+			headersFixed: true
+		});
+	this.append();
+
+	Em.run(function(){
+		ok(!component.get('_renderHeadersInline'), 'should return false');
+	});
+});
+
+test('#_renderHeadersInline property should return false if showHeader is false', function(){
+	var component = this.subject({
+			columns: [],
+			showHeader: false
+		});
+	this.append();
+
+	Em.run(function(){
+		ok(!component.get('_renderHeadersInline'), 'should return false');
+	});
+});
+
+test('#_renderHeadersFixed property should return true if showHeader is true, and headersFixed is true', function(){
+	var component = this.subject({
+			columns: [],
+			showHeader: true,
+			headersFixed: true
+		});
+	this.append();
+
+	Em.run(function(){
+		ok(component.get('_renderHeadersFixed'), 'should return true');
+	});
+});
+
+test('#_renderHeadersFixed property should return false if showHeader is false', function(){
+	var component = this.subject({
+			columns: [],
+			showHeader: false,
+			headersFixed: true
+		});
+	this.append();
+
+	Em.run(function(){
+		ok(!component.get('_renderHeadersFixed'), 'should return false');
+	});
+});
+
+test('#_renderHeadersFixed property should return false if headersFixed is false', function(){
+	var component = this.subject({
+			columns: [],
+			showHeader: true,
+			headersFixed: false
+		});
+	this.append();
+
+	Em.run(function(){
+		ok(!component.get('_renderHeadersFixed'), 'should return false');
+	});
+});
 
 
 

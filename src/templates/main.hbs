@@ -1,6 +1,43 @@
 <div {{bind-attr class="responsive:table-responsive"}}>
+    {{#if _renderHeadersFixed}}
+        <div class='table-component-fixed-headers-container'>
+            <table class='table-component-fixed-headers'>
+                <thead>
+                <tr>
+                    {{#if _detailRowsEnabled}}
+                        {{#if useDefaultDetailRowToggle}}
+                            {{!-- add an empty column for detailRow toggle cells --}}
+                            <th class="table-component-header" width=20></th>
+                        {{/if}}
+                    {{/if}}
+                    {{#each col in _columns}}
+                        <th class="table-component-header" {{bind-attr width=col.columnWidth}}>
+                            {{#if col.headerCellCustomViewClass}}
+                                {{view col.headerCellCustomViewClass config=col}}
+                            {{else}}
+                                {{#if col.sortable}}
+                                    <button {{action 'sortTable' col.cellValuePath}} class="table-component-header-sortable-btn">
+                                        <div class="table-component-header-name">
+                                            <span>
+                                                {{col.headerCellName}}
+                                                &nbsp;
+                                                {{tableComponentSortIcon col _sortProperty sortAscending}}
+                                            </span>
+                                        </div>
+                                    </button>
+                                {{else}}
+                                    <div class="table-component-header-name">{{col.headerCellName}}</div>
+                                {{/if}}
+                            {{/if}}
+                        </th>
+                    {{/each}}
+                </tr>
+                </thead>
+            </table>
+        </div>
+    {{/if}}
     <table {{bind-attr class=":table :table-component hoverable:table-hoverable striped:table-striped bordered:table-bordered condensed:table-condensed"}}>
-        {{#if showHeader}}
+        {{#if _renderHeadersInline}}
             <thead>
             <tr>
                 {{#if _detailRowsEnabled}}
