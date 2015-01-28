@@ -1,5 +1,4 @@
-.table-component thead th,
-.table-component-fixed-headers thead th{
+.table-component thead th{
   text-align: center;
 }
 .table-component tbody tr td{

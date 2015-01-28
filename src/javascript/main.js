@@ -127,11 +127,11 @@
 				}
 			});
 		},
-		_renderHeadersInline: function(){
-			return !this.get('headersFixed') && this.get('showHeader');
-		}.property('headersFixed', 'showHeader'),
-		_renderHeadersFixed: function(){
+		_headersFixed: function(){
 			return this.get('headersFixed') && this.get('showHeader');
+		}.property('headersFixed', 'showHeader'),
+		_headersInline: function(){
+			return !this.get('headersFixed') && this.get('showHeader');
 		}.property('headersFixed', 'showHeader'),
 		didInsertElement: function(){
 			if(this.get('_detailRowsEnabled')){
