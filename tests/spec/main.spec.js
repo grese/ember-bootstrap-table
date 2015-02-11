@@ -586,8 +586,7 @@ test('#sortTable action should toggle the sortAscending property if customSortAc
 });
 
 test('#sortTable action should set sortAscending to true, and sortIndex to the new sortPath if customSortAction is not provided, and the sortPath is not equal to current sortIndex', function(){
-	var OriginalSortPath = 'something',
-		MockSortPath = 1,
+	var MockSortPath = 1,
 		component = this.subject({
 			columns: [],
 			customSortAction: null,

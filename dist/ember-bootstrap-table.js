@@ -30,8 +30,13 @@
 				return rows.sort(function(a, b){
 					var aVal = getCellContent(a),
 						bVal = getCellContent(b);
-					if(aVal < bVal){ return -1; }
-					if(aVal > bVal){ return 1; }
+					if(isAscending){
+						if(aVal < bVal){ return -1; }
+						if(aVal > bVal){ return 1; }
+					}else{
+						if(aVal > bVal){ return -1; }
+						if(aVal < bVal){ return 1; }
+					}
 					return 0;
 				});
 			}else{

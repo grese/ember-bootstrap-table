@@ -46,7 +46,7 @@ Here are the options for configuring columns:
 * cellCustomViewClass: (null || [Instance of Ember.View]) *// (Defines a custom view for the cell)*
 * getCellContent: (null || function) *// (Defines a function to return value for cell - Only used if customCellViewClass is null)*
 * columnWidth: (null || int) *// (Defines a fixed width for the column)*
-* sort: function(column, rows){  } *// (The function used to sort this column.  Only active when the customSortAction is null.)*
+* sort: function(column, rows, isAscending){  } *// (The function used to sort this column.  Only active when the customSortAction is null.)*
 
 *(All column configs must have cellCustomViewClass, cellValuePath, or getCellContent defined)*
 
