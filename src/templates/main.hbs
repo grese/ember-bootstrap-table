@@ -1,63 +1,26 @@
-{{#if _headersFixed}}
-    <div class='table-component-header-fixed-container'>
-        <table class='table-component-header-fixed table table-component'>
-        <thead>
-        <tr>
-            {{#if _detailRowsEnabled}}
-                {{#if useDefaultDetailRowToggle}}
-                    {{!-- add an empty column for detailRow toggle cells --}}
-                    <th class="table-component-header" width=20></th>
-                {{/if}}
-            {{/if}}
-            {{#each col in _columns}}
-                <th class="table-component-header" {{bind-attr width=col.columnWidth}}>
-                    {{#if col.headerCellCustomViewClass}}
-                        {{view col.headerCellCustomViewClass config=col}}
-                    {{else}}
-                        {{#if col.sortable}}
-                            <button {{action 'sortTable' col.cellValuePath}} class="table-component-header-sortable-btn">
-                                <div class="table-component-header-name">
-                                    <span>
-                                        {{col.headerCellName}}
-                                        &nbsp;
-                                        {{tableComponentSortIcon col _sortProperty sortAscending}}
-                                    </span>
-                                </div>
-                            </button>
-                        {{else}}
-                            <div class="table-component-header-name">{{col.headerCellName}}</div>
-                        {{/if}}
-                    {{/if}}
-                </th>
-            {{/each}}
-        </tr>
-        </thead>
-        </table>
-    </div>
-{{/if}}
 <div {{bind-attr class="responsive:table-responsive"}}>
     <table {{bind-attr class=":table :table-component hoverable:table-hoverable striped:table-striped bordered:table-bordered condensed:table-condensed"}}>
-        {{#if _headersInline}}
-            <thead {{bind-attr class='_headersFixed:table-component-header-fixed'}}>
+        {{#if showHeader}}
+            <thead>
             <tr>
                 {{#if _detailRowsEnabled}}
                     {{#if useDefaultDetailRowToggle}}
-                        {{!-- add an empty column for detailRow toggle cells --}}
+                    {{!-- add an empty column for detailRow toggle cells --}}
                         <th class="table-component-header" width=20></th>
                     {{/if}}
                 {{/if}}
                 {{#each col in _columns}}
-                    <th class="table-component-header" {{bind-attr width=col.columnWidth}}>
+                    <th {{bind-attr class=":table-component-header col.headerCellClassName" width=col.columnWidth title=col.headerCellInfo data-toggle="col.headerCellInfo:tooltip"}}>
                         {{#if col.headerCellCustomViewClass}}
                             {{view col.headerCellCustomViewClass config=col}}
                         {{else}}
                             {{#if col.sortable}}
-                                <button {{action 'sortTable' col.cellValuePath}} class="table-component-header-sortable-btn">
+                                <button {{action 'sortTable' col._columnIndex}} class="table-component-header-sortable-btn">
                                     <div class="table-component-header-name">
                                         <span>
                                             {{col.headerCellName}}
                                             &nbsp;
-                                            {{tableComponentSortIcon col _sortProperty sortAscending}}
+                                            {{tableComponentSortIcon col _sortIndex sortAscending}}
                                         </span>
                                     </div>
                                 </button>
@@ -76,7 +39,7 @@
                 {{#if _detailRowsEnabled}}
                     {{#if useDefaultDetailRowToggle}}
                         {{!-- add cell with button to toggle row detail --}}
-                        <td>
+                        <td class="table-component-detail-toggle-cell">
                             <button {{bind-attr data-rowindex='row._rowIndex'}} class='toggle-detail-row'>
                                 {{#if row._rowDetailVisible}}
                                     <span class='fa fa-minus fa-sm'></span>

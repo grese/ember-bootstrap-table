@@ -4,11 +4,40 @@
 	// The default configuration for a column object:
 	var DefaultColumnConfig = Ember.Object.extend({
 		headerCellName: '',
+		headerCellClassName: null,
 		headerCellCustomViewClass: null,
+		headerCellInfo: null,
 		cellValuePath: null,
+		cellClassName: null,
 		cellCustomViewClass: null,
 		getCellContent: null,
-		columnWidth: null
+		columnWidth: null,
+		_columnIndex: 0,
+		sort: function(column, rows){
+			var getCellContent = column.get('getCellContent'),
+				valuePath = column.get('cellValuePath');
+			if(!valuePath && !getCellContent){
+				Em.Logger.warn('<Warning:> Table component\'s default sorting function requires that either ' +
+				'cellValuePath or getCellContent are specified for each sortable column.  ' +
+				'You must either specify one of these params to ' +
+				'return the value for this column, or override this column\'s sort function. ', column);
+				return rows;
+			}
+			if(!(rows instanceof Em.A)){
+				rows = Em.A(rows);
+			}
+			if(getCellContent){
+				return rows.sort(function(a, b){
+					var aVal = getCellContent(a),
+						bVal = getCellContent(b);
+					if(aVal < bVal){ return -1; }
+					if(aVal > bVal){ return 1; }
+					return 0;
+				});
+			}else{
+				return rows.sortBy(valuePath);
+			}
+		}
 	});
 
 	var RowObject = Ember.ObjectProxy.extend({
@@ -18,24 +47,10 @@
 
 	// The component :)
 	var TableComponent = Ember.Component.extend({
-		init: function(){
-			if(!this.get('defaultSortProperty')){
-				// If no defaultSortProperty set, find the first sortable column and set that as default.
-				var defaultProp = '';
-				$.each(this.get('_columns'), function(idx, itm){
-					if(itm.get('sortable')){
-						defaultProp = itm.get('cellValuePath');
-						return false;
-					}
-				});
-				this.set('defaultSortProperty', defaultProp);
-			}
-			this._super();
-		},
-		headersFixed: false,
 		layoutName: 'ember-bootstrap-table-template-main',
 		detailRowViewClass: null,
 		hasDetailRows: false,
+		showTooltips: true,
 		useDefaultDetailRowToggle: true,
 		showHeader: true,
 		hoverable: true,
@@ -43,17 +58,20 @@
 		condensed: false,
 		responsive: true,
 		bordered: false,
-		customSortAction: null,
-		sortProperty: null,
+		sortAction: null,
+		sortIndex: null,
 		sortAscending: true,
 		infiniteScrollEnabled: false,
-		_sortProperty: function(){
-			return this.get('sortProperty') ? this.get('sortProperty') : this.get('defaultSortProperty');
-		}.property('sortProperty'),
+		_sortIndex: function(){
+			return (this.get('sortIndex') !== null) ? this.get('sortIndex') : 0;
+		}.property('sortIndex'),
 		_columns: function(){
+			var idx = 0;
 			if(this.get('columns')){
 				return this.get('columns').map(function(column){
-					return DefaultColumnConfig.create(column);
+					var col = DefaultColumnConfig.create(column);
+					col.set('_columnIndex', idx++);
+					return col;
 				});
 			}else{
 				Em.Logger.warn('<WARNING>: Column configurations must be provided to table component');
@@ -84,8 +102,15 @@
 		}.property('hasDetailRows', 'detailRowViewClass'),
 		_rows: function(){
 			var rows = this.get('rows'),
-				rowIdx = 0;
+				rowIdx = 0,
+				column = this.get('_columns').objectAt(this.get('_sortIndex')),
+				sort;
+
 			if(rows){
+				if(!this.get('customSortAction') && column.get('sortable')){
+					sort = column.get('sort');
+					rows = sort(column, this.get('rows'));
+				}
 				return rows.map(function(row){
 					return RowObject.create({
 						content: row,
@@ -95,7 +120,7 @@
 			}else{
 				return [];
 			}
-		}.property('rows.[]', 'sortProperty', 'sortAscending'),
+		}.property('rows.[]', '_sortIndex', 'sortAscending'),
 		showDetailForRow: function(rowIndex){
 			this.get('rows').objectAt(rowIndex).toggleProperty('_rowDetailVisible');
 		},
@@ -127,33 +152,48 @@
 				}
 			});
 		},
-		_headersFixed: function(){
-			return this.get('headersFixed') && this.get('showHeader');
-		}.property('headersFixed', 'showHeader'),
-		_headersInline: function(){
-			return !this.get('headersFixed') && this.get('showHeader');
-		}.property('headersFixed', 'showHeader'),
-		didInsertElement: function(){
+		attachEventHandlers: function(){
 			if(this.get('_detailRowsEnabled')){
 				this.attachDetailRowClickHandlers();
-				this.addObserver('rows.[]', this, this.attachDetailRowClickHandlers);
+			}
+			if(this.get('showTooltips')){
+				this.initializeTooltips();
+			}
+		},
+		initializeTooltips: function(){
+			var elmId = this.get('elementId');
+			$('#' + elmId + ' [data-toggle="tooltip"]').tooltip();
+		},
+		didInsertElement: function(){
+			var detailsRowsEnabled = this.get('_detailRowsEnabled'),
+				tooltipsEnabled = this.get('showTooltips');
+			if(detailsRowsEnabled){
+				this.attachDetailRowClickHandlers();
 			}
 			if(this.get('infiniteScrollEnabled')){
 				this.attachInfiniteScrollListener();
 			}
+			if(tooltipsEnabled){
+				this.initializeTooltips();
+			}
+
+			// attach observer to re-attach attachEventHandlers
+			if(detailsRowsEnabled || tooltipsEnabled){
+				this.addObserver('rows.[]', this, this.attachEventHandlers);
+			}
 		},
 		actions: {
-			sortTable: function(sortPath){
+			sortTable: function(columnIndex){
 				if(this.get('customSortAction')){
 					// If customSortAction is defined, bubble it up along with the sortPath.
-					this.sendAction('customSortAction', sortPath);
+					this.sendAction('customSortAction', columnIndex, this.get('sortAscending'));
 				}else{
 					// If no customSortAction defined, then perform the default behavior.
-					if(this.get('getSortProperty') === sortPath){
+					if(this.get('sortIndex') === columnIndex){
 						this.toggleProperty('sortAscending');
 					}else{
 						this.set('sortAscending', true);
-						this.set('sortProperty', sortPath);
+						this.set('sortIndex', columnIndex);
 					}
 				}
 			}
@@ -163,7 +203,8 @@
 	// A handlebars helper to create table cells...
 	Ember.Handlebars.helper('tableComponentCell', function(row, column){
 		var getCellContent = column.get('getCellContent') ? column.get('getCellContent') : null,
-			cellContent = '';
+			cellContent = '',
+			cellClass = '';
 		if(!getCellContent && !column.get('cellValuePath')){
 			Ember.Logger.warn("<WARNING>: All column definitions require either the \'cellValuePath\' property or \'getCellContent\' function to be defined.");
 		}
@@ -172,16 +213,18 @@
 		}else{
 			cellContent = row.get(column.get('cellValuePath'));
 		}
-		return new Ember.Handlebars.SafeString("<td>"+cellContent+"</td>");
+
+		if(column.get('cellClassName')){
+			cellClass = column.get('cellClassName');
+		}
+		return new Ember.Handlebars.SafeString("<td class='"+cellClass+"'>"+cellContent+"</td>");
 	});
 
 	// A handlebars helper to manage the sorting icons in table headers...
-	Ember.Handlebars.helper('tableComponentSortIcon', function(column, sortProperty, isAscending) {
+	Ember.Handlebars.helper('tableComponentSortIcon', function(column, sortIndex, isAscending) {
 		var iconClass = 'fa fa-sort';
-		if(column.get('cellValuePath') === sortProperty && isAscending){
-			iconClass = 'fa fa-sort-asc';
-		}else if(column.get('cellValuePath') === sortProperty && !isAscending){
-			iconClass = 'fa fa-sort-desc';
+		if(column.get('_columnIndex') === sortIndex){
+			iconClass = isAscending ? 'fa fa-sort-asc' : 'fa fa-sort-desc';
 		}
 		return new Ember.Handlebars.SafeString("<i class='"+iconClass+"'></i>");
 	});

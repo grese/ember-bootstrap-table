@@ -4,11 +4,40 @@
 	// The default configuration for a column object:
 	var DefaultColumnConfig = Ember.Object.extend({
 		headerCellName: '',
+		headerCellClassName: null,
 		headerCellCustomViewClass: null,
+		headerCellInfo: null,
 		cellValuePath: null,
+		cellClassName: null,
 		cellCustomViewClass: null,
 		getCellContent: null,
-		columnWidth: null
+		columnWidth: null,
+		_columnIndex: 0,
+		sort: function(column, rows){
+			var getCellContent = column.get('getCellContent'),
+				valuePath = column.get('cellValuePath');
+			if(!valuePath && !getCellContent){
+				Em.Logger.warn('<Warning:> Table component\'s default sorting function requires that either ' +
+				'cellValuePath or getCellContent are specified for each sortable column.  ' +
+				'You must either specify one of these params to ' +
+				'return the value for this column, or override this column\'s sort function. ', column);
+				return rows;
+			}
+			if(!(rows instanceof Em.A)){
+				rows = Em.A(rows);
+			}
+			if(getCellContent){
+				return rows.sort(function(a, b){
+					var aVal = getCellContent(a),
+						bVal = getCellContent(b);
+					if(aVal < bVal){ return -1; }
+					if(aVal > bVal){ return 1; }
+					return 0;
+				});
+			}else{
+				return rows.sortBy(valuePath);
+			}
+		}
 	});
 
 	var RowObject = Ember.ObjectProxy.extend({
@@ -18,24 +47,10 @@
 
 	// The component :)
 	var TableComponent = Ember.Component.extend({
-		init: function(){
-			if(!this.get('defaultSortProperty')){
-				// If no defaultSortProperty set, find the first sortable column and set that as default.
-				var defaultProp = '';
-				$.each(this.get('_columns'), function(idx, itm){
-					if(itm.get('sortable')){
-						defaultProp = itm.get('cellValuePath');
-						return false;
-					}
-				});
-				this.set('defaultSortProperty', defaultProp);
-			}
-			this._super();
-		},
-		headersFixed: false,
 		layoutName: 'ember-bootstrap-table-template-main',
 		detailRowViewClass: null,
 		hasDetailRows: false,
+		showTooltips: true,
 		useDefaultDetailRowToggle: true,
 		showHeader: true,
 		hoverable: true,
@@ -43,17 +58,20 @@
 		condensed: false,
 		responsive: true,
 		bordered: false,
-		customSortAction: null,
-		sortProperty: null,
+		sortAction: null,
+		sortIndex: null,
 		sortAscending: true,
 		infiniteScrollEnabled: false,
-		_sortProperty: function(){
-			return this.get('sortProperty') ? this.get('sortProperty') : this.get('defaultSortProperty');
-		}.property('sortProperty'),
+		_sortIndex: function(){
+			return (this.get('sortIndex') !== null) ? this.get('sortIndex') : 0;
+		}.property('sortIndex'),
 		_columns: function(){
+			var idx = 0;
 			if(this.get('columns')){
 				return this.get('columns').map(function(column){
-					return DefaultColumnConfig.create(column);
+					var col = DefaultColumnConfig.create(column);
+					col.set('_columnIndex', idx++);
+					return col;
 				});
 			}else{
 				Em.Logger.warn('<WARNING>: Column configurations must be provided to table component');
@@ -84,8 +102,15 @@
 		}.property('hasDetailRows', 'detailRowViewClass'),
 		_rows: function(){
 			var rows = this.get('rows'),
-				rowIdx = 0;
+				rowIdx = 0,
+				column = this.get('_columns').objectAt(this.get('_sortIndex')),
+				sort;
+
 			if(rows){
+				if(!this.get('customSortAction') && column.get('sortable')){
+					sort = column.get('sort');
+					rows = sort(column, this.get('rows'));
+				}
 				return rows.map(function(row){
 					return RowObject.create({
 						content: row,
@@ -95,7 +120,7 @@
 			}else{
 				return [];
 			}
-		}.property('rows.[]', 'sortProperty', 'sortAscending'),
+		}.property('rows.[]', '_sortIndex', 'sortAscending'),
 		showDetailForRow: function(rowIndex){
 			this.get('rows').objectAt(rowIndex).toggleProperty('_rowDetailVisible');
 		},
@@ -127,33 +152,48 @@
 				}
 			});
 		},
-		_headersFixed: function(){
-			return this.get('headersFixed') && this.get('showHeader');
-		}.property('headersFixed', 'showHeader'),
-		_headersInline: function(){
-			return !this.get('headersFixed') && this.get('showHeader');
-		}.property('headersFixed', 'showHeader'),
-		didInsertElement: function(){
+		attachEventHandlers: function(){
 			if(this.get('_detailRowsEnabled')){
 				this.attachDetailRowClickHandlers();
-				this.addObserver('rows.[]', this, this.attachDetailRowClickHandlers);
+			}
+			if(this.get('showTooltips')){
+				this.initializeTooltips();
+			}
+		},
+		initializeTooltips: function(){
+			var elmId = this.get('elementId');
+			$('#' + elmId + ' [data-toggle="tooltip"]').tooltip();
+		},
+		didInsertElement: function(){
+			var detailsRowsEnabled = this.get('_detailRowsEnabled'),
+				tooltipsEnabled = this.get('showTooltips');
+			if(detailsRowsEnabled){
+				this.attachDetailRowClickHandlers();
 			}
 			if(this.get('infiniteScrollEnabled')){
 				this.attachInfiniteScrollListener();
 			}
+			if(tooltipsEnabled){
+				this.initializeTooltips();
+			}
+
+			// attach observer to re-attach attachEventHandlers
+			if(detailsRowsEnabled || tooltipsEnabled){
+				this.addObserver('rows.[]', this, this.attachEventHandlers);
+			}
 		},
 		actions: {
-			sortTable: function(sortPath){
+			sortTable: function(columnIndex){
 				if(this.get('customSortAction')){
 					// If customSortAction is defined, bubble it up along with the sortPath.
-					this.sendAction('customSortAction', sortPath);
+					this.sendAction('customSortAction', columnIndex, this.get('sortAscending'));
 				}else{
 					// If no customSortAction defined, then perform the default behavior.
-					if(this.get('getSortProperty') === sortPath){
+					if(this.get('sortIndex') === columnIndex){
 						this.toggleProperty('sortAscending');
 					}else{
 						this.set('sortAscending', true);
-						this.set('sortProperty', sortPath);
+						this.set('sortIndex', columnIndex);
 					}
 				}
 			}
@@ -163,7 +203,8 @@
 	// A handlebars helper to create table cells...
 	Ember.Handlebars.helper('tableComponentCell', function(row, column){
 		var getCellContent = column.get('getCellContent') ? column.get('getCellContent') : null,
-			cellContent = '';
+			cellContent = '',
+			cellClass = '';
 		if(!getCellContent && !column.get('cellValuePath')){
 			Ember.Logger.warn("<WARNING>: All column definitions require either the \'cellValuePath\' property or \'getCellContent\' function to be defined.");
 		}
@@ -172,16 +213,18 @@
 		}else{
 			cellContent = row.get(column.get('cellValuePath'));
 		}
-		return new Ember.Handlebars.SafeString("<td>"+cellContent+"</td>");
+
+		if(column.get('cellClassName')){
+			cellClass = column.get('cellClassName');
+		}
+		return new Ember.Handlebars.SafeString("<td class='"+cellClass+"'>"+cellContent+"</td>");
 	});
 
 	// A handlebars helper to manage the sorting icons in table headers...
-	Ember.Handlebars.helper('tableComponentSortIcon', function(column, sortProperty, isAscending) {
+	Ember.Handlebars.helper('tableComponentSortIcon', function(column, sortIndex, isAscending) {
 		var iconClass = 'fa fa-sort';
-		if(column.get('cellValuePath') === sortProperty && isAscending){
-			iconClass = 'fa fa-sort-asc';
-		}else if(column.get('cellValuePath') === sortProperty && !isAscending){
-			iconClass = 'fa fa-sort-desc';
+		if(column.get('_columnIndex') === sortIndex){
+			iconClass = isAscending ? 'fa fa-sort-asc' : 'fa fa-sort-desc';
 		}
 		return new Ember.Handlebars.SafeString("<i class='"+iconClass+"'></i>");
 	});
@@ -198,102 +241,104 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = '', stack1;
-  data.buffer.push("\n    <div class='table-component-header-fixed-container'>\n        <table class='table-component-header-fixed table table-component'>\n        <thead>\n        <tr>\n            ");
+  data.buffer.push("\n            <thead>\n            <tr>\n                ");
   stack1 = helpers['if'].call(depth0, "_detailRowsEnabled", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n            ");
+  data.buffer.push("\n                ");
   stack1 = helpers.each.call(depth0, "col", "in", "_columns", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n        </tr>\n        </thead>\n        </table>\n    </div>\n");
+  data.buffer.push("\n            </tr>\n            </thead>\n        ");
   return buffer;
   }
 function program2(depth0,data) {
   
   var buffer = '', stack1;
-  data.buffer.push("\n                ");
+  data.buffer.push("\n                    ");
   stack1 = helpers['if'].call(depth0, "useDefaultDetailRowToggle", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n            ");
+  data.buffer.push("\n                ");
   return buffer;
   }
 function program3(depth0,data) {
   
   var buffer = '';
-  data.buffer.push("\n                    \n                    <th class=\"table-component-header\" width=20></th>\n                ");
+  data.buffer.push("\n                    \n                        <th class=\"table-component-header\" width=20></th>\n                    ");
   return buffer;
   }
 
 function program5(depth0,data) {
   
   var buffer = '', stack1;
-  data.buffer.push("\n                <th class=\"table-component-header\" ");
+  data.buffer.push("\n                    <th ");
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'width': ("col.columnWidth")
-  },hashTypes:{'width': "ID"},hashContexts:{'width': depth0},contexts:[],types:[],data:data})));
-  data.buffer.push(">\n                    ");
+    'class': (":table-component-header col.headerCellClassName"),
+    'width': ("col.columnWidth"),
+    'title': ("col.headerCellInfo"),
+    'data-toggle': ("col.headerCellInfo:tooltip")
+  },hashTypes:{'class': "STRING",'width': "ID",'title': "ID",'data-toggle': "STRING"},hashContexts:{'class': depth0,'width': depth0,'title': depth0,'data-toggle': depth0},contexts:[],types:[],data:data})));
+  data.buffer.push(">\n                        ");
   stack1 = helpers['if'].call(depth0, "col.headerCellCustomViewClass", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n                </th>\n            ");
+  data.buffer.push("\n                    </th>\n                ");
   return buffer;
   }
 function program6(depth0,data) {
   
   var buffer = '';
-  data.buffer.push("\n                        ");
+  data.buffer.push("\n                            ");
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "col.headerCellCustomViewClass", {hash:{
     'config': ("col")
   },hashTypes:{'config': "ID"},hashContexts:{'config': depth0},contexts:[depth0],types:["ID"],data:data})));
-  data.buffer.push("\n                    ");
+  data.buffer.push("\n                        ");
   return buffer;
   }
 
 function program8(depth0,data) {
   
   var buffer = '', stack1;
-  data.buffer.push("\n                        ");
+  data.buffer.push("\n                            ");
   stack1 = helpers['if'].call(depth0, "col.sortable", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(11, program11, data),fn:self.program(9, program9, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n                    ");
+  data.buffer.push("\n                        ");
   return buffer;
   }
 function program9(depth0,data) {
   
   var buffer = '', stack1, helper, options;
-  data.buffer.push("\n                            <button ");
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "sortTable", "col.cellValuePath", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0],types:["STRING","ID"],data:data})));
-  data.buffer.push(" class=\"table-component-header-sortable-btn\">\n                                <div class=\"table-component-header-name\">\n                                    <span>\n                                        ");
+  data.buffer.push("\n                                <button ");
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "sortTable", "col._columnIndex", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0],types:["STRING","ID"],data:data})));
+  data.buffer.push(" class=\"table-component-header-sortable-btn\">\n                                    <div class=\"table-component-header-name\">\n                                        <span>\n                                            ");
   stack1 = helpers._triageMustache.call(depth0, "col.headerCellName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n                                        &nbsp;\n                                        ");
-  data.buffer.push(escapeExpression((helper = helpers.tableComponentSortIcon || (depth0 && depth0.tableComponentSortIcon),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data},helper ? helper.call(depth0, "col", "_sortProperty", "sortAscending", options) : helperMissing.call(depth0, "tableComponentSortIcon", "col", "_sortProperty", "sortAscending", options))));
-  data.buffer.push("\n                                    </span>\n                                </div>\n                            </button>\n                        ");
+  data.buffer.push("\n                                            &nbsp;\n                                            ");
+  data.buffer.push(escapeExpression((helper = helpers.tableComponentSortIcon || (depth0 && depth0.tableComponentSortIcon),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data},helper ? helper.call(depth0, "col", "_sortIndex", "sortAscending", options) : helperMissing.call(depth0, "tableComponentSortIcon", "col", "_sortIndex", "sortAscending", options))));
+  data.buffer.push("\n                                        </span>\n                                    </div>\n                                </button>\n                            ");
   return buffer;
   }
 
 function program11(depth0,data) {
   
   var buffer = '', stack1;
-  data.buffer.push("\n                            <div class=\"table-component-header-name\">");
+  data.buffer.push("\n                                <div class=\"table-component-header-name\">");
   stack1 = helpers._triageMustache.call(depth0, "col.headerCellName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("</div>\n                        ");
+  data.buffer.push("</div>\n                            ");
   return buffer;
   }
 
 function program13(depth0,data) {
   
   var buffer = '', stack1;
-  data.buffer.push("\n            <thead ");
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'class': ("_headersFixed:table-component-header-fixed")
-  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},contexts:[],types:[],data:data})));
-  data.buffer.push(">\n            <tr>\n                ");
+  data.buffer.push("\n            <tr>\n                ");
   stack1 = helpers['if'].call(depth0, "_detailRowsEnabled", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(14, program14, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                ");
-  stack1 = helpers.each.call(depth0, "col", "in", "_columns", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(17, program17, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data});
+  stack1 = helpers.each.call(depth0, "col", "in", "_columns", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(20, program20, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n            </tr>\n            </thead>\n        ");
+  data.buffer.push("\n            </tr>\n            ");
+  stack1 = helpers['if'].call(depth0, "_detailRowsEnabled", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(25, program25, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n        ");
   return buffer;
   }
 function program14(depth0,data) {
@@ -307,127 +352,39 @@ function program14(depth0,data) {
   }
 function program15(depth0,data) {
   
-  var buffer = '';
-  data.buffer.push("\n                        \n                        <th class=\"table-component-header\" width=20></th>\n                    ");
-  return buffer;
-  }
-
-function program17(depth0,data) {
-  
   var buffer = '', stack1;
-  data.buffer.push("\n                    <th class=\"table-component-header\" ");
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'width': ("col.columnWidth")
-  },hashTypes:{'width': "ID"},hashContexts:{'width': depth0},contexts:[],types:[],data:data})));
-  data.buffer.push(">\n                        ");
-  stack1 = helpers['if'].call(depth0, "col.headerCellCustomViewClass", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(20, program20, data),fn:self.program(18, program18, data),contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n                    </th>\n                ");
-  return buffer;
-  }
-function program18(depth0,data) {
-  
-  var buffer = '';
-  data.buffer.push("\n                            ");
-  data.buffer.push(escapeExpression(helpers.view.call(depth0, "col.headerCellCustomViewClass", {hash:{
-    'config': ("col")
-  },hashTypes:{'config': "ID"},hashContexts:{'config': depth0},contexts:[depth0],types:["ID"],data:data})));
-  data.buffer.push("\n                        ");
-  return buffer;
-  }
-
-function program20(depth0,data) {
-  
-  var buffer = '', stack1;
-  data.buffer.push("\n                            ");
-  stack1 = helpers['if'].call(depth0, "col.sortable", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(23, program23, data),fn:self.program(21, program21, data),contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n                        ");
-  return buffer;
-  }
-function program21(depth0,data) {
-  
-  var buffer = '', stack1, helper, options;
-  data.buffer.push("\n                                <button ");
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "sortTable", "col.cellValuePath", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0],types:["STRING","ID"],data:data})));
-  data.buffer.push(" class=\"table-component-header-sortable-btn\">\n                                    <div class=\"table-component-header-name\">\n                                        <span>\n                                            ");
-  stack1 = helpers._triageMustache.call(depth0, "col.headerCellName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n                                            &nbsp;\n                                            ");
-  data.buffer.push(escapeExpression((helper = helpers.tableComponentSortIcon || (depth0 && depth0.tableComponentSortIcon),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data},helper ? helper.call(depth0, "col", "_sortProperty", "sortAscending", options) : helperMissing.call(depth0, "tableComponentSortIcon", "col", "_sortProperty", "sortAscending", options))));
-  data.buffer.push("\n                                        </span>\n                                    </div>\n                                </button>\n                            ");
-  return buffer;
-  }
-
-function program23(depth0,data) {
-  
-  var buffer = '', stack1;
-  data.buffer.push("\n                                <div class=\"table-component-header-name\">");
-  stack1 = helpers._triageMustache.call(depth0, "col.headerCellName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("</div>\n                            ");
-  return buffer;
-  }
-
-function program25(depth0,data) {
-  
-  var buffer = '', stack1;
-  data.buffer.push("\n            <tr>\n                ");
-  stack1 = helpers['if'].call(depth0, "_detailRowsEnabled", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(26, program26, data),contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n                ");
-  stack1 = helpers.each.call(depth0, "col", "in", "_columns", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(32, program32, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n            </tr>\n            ");
-  stack1 = helpers['if'].call(depth0, "_detailRowsEnabled", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(37, program37, data),contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n        ");
-  return buffer;
-  }
-function program26(depth0,data) {
-  
-  var buffer = '', stack1;
-  data.buffer.push("\n                    ");
-  stack1 = helpers['if'].call(depth0, "useDefaultDetailRowToggle", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(27, program27, data),contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n                ");
-  return buffer;
-  }
-function program27(depth0,data) {
-  
-  var buffer = '', stack1;
-  data.buffer.push("\n                        \n                        <td>\n                            <button ");
+  data.buffer.push("\n                        \n                        <td class=\"table-component-detail-toggle-cell\">\n                            <button ");
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'data-rowindex': ("row._rowIndex")
   },hashTypes:{'data-rowindex': "STRING"},hashContexts:{'data-rowindex': depth0},contexts:[],types:[],data:data})));
   data.buffer.push(" class='toggle-detail-row'>\n                                ");
-  stack1 = helpers['if'].call(depth0, "row._rowDetailVisible", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(30, program30, data),fn:self.program(28, program28, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "row._rowDetailVisible", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(18, program18, data),fn:self.program(16, program16, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                            </button>\n                        </td>\n                    ");
   return buffer;
   }
-function program28(depth0,data) {
+function program16(depth0,data) {
   
   
   data.buffer.push("\n                                    <span class='fa fa-minus fa-sm'></span>\n                                ");
   }
 
-function program30(depth0,data) {
+function program18(depth0,data) {
   
   
   data.buffer.push("\n                                    <span class='fa fa-plus fa-sm'></span>\n                                ");
   }
 
-function program32(depth0,data) {
+function program20(depth0,data) {
   
   var buffer = '', stack1;
   data.buffer.push("\n                    ");
-  stack1 = helpers['if'].call(depth0, "col.cellCustomViewClass", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(35, program35, data),fn:self.program(33, program33, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "col.cellCustomViewClass", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(23, program23, data),fn:self.program(21, program21, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                ");
   return buffer;
   }
-function program33(depth0,data) {
+function program21(depth0,data) {
   
   var buffer = '';
   data.buffer.push("\n                        ");
@@ -439,7 +396,7 @@ function program33(depth0,data) {
   return buffer;
   }
 
-function program35(depth0,data) {
+function program23(depth0,data) {
   
   var buffer = '', helper, options;
   data.buffer.push("\n                        ");
@@ -448,7 +405,7 @@ function program35(depth0,data) {
   return buffer;
   }
 
-function program37(depth0,data) {
+function program25(depth0,data) {
   
   var buffer = '';
   data.buffer.push("\n                <tr ");
@@ -467,7 +424,7 @@ function program37(depth0,data) {
   return buffer;
   }
 
-function program39(depth0,data) {
+function program27(depth0,data) {
   
   var buffer = '';
   data.buffer.push("\n            <tr class='table-component-loading-row'>\n                <td ");
@@ -478,9 +435,7 @@ function program39(depth0,data) {
   return buffer;
   }
 
-  stack1 = helpers['if'].call(depth0, "_headersFixed", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n<div ");
+  data.buffer.push("<div ");
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'class': ("responsive:table-responsive")
   },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},contexts:[],types:[],data:data})));
@@ -489,13 +444,13 @@ function program39(depth0,data) {
     'class': (":table :table-component hoverable:table-hoverable striped:table-striped bordered:table-bordered condensed:table-condensed")
   },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},contexts:[],types:[],data:data})));
   data.buffer.push(">\n        ");
-  stack1 = helpers['if'].call(depth0, "_headersInline", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(13, program13, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "showHeader", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n        <tbody>\n        ");
-  stack1 = helpers.each.call(depth0, "row", "in", "_rows", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(25, program25, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data});
+  stack1 = helpers.each.call(depth0, "row", "in", "_rows", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(13, program13, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n        ");
-  stack1 = helpers['if'].call(depth0, "_showLoadingRow", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(39, program39, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "_showLoadingRow", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(27, program27, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n        </tbody>\n    </table>\n</div>");
   return buffer;

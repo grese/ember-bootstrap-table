@@ -25,10 +25,9 @@ You'll need to include the following files in your project:
 * condensed: (true || false) *// (Condenses table rows)*
 * responsive: (true || false) *// (Makes table horizontally scrollable)*
 * bordered: (true || false) *// (Adds borders to the table)*
-* customSortAction: "[Action Name]" *// (Overrides default sortAction)*
-* sortProperty: "[Property to Sort On]" *// (only active if customSortAction is null)*
+* customSortAction: "[Action Name]" *// (The action that will fire when a user has clicked a sortable column header.  Set this parameter to override the default sorting behavior of the table.  The action will be fired with two parameters:  'columnIndex', and 'isAscending'  When specified, this will make the .sort property on your column configs inactive.)*
+* sortIndex: "[Property to Sort On]" *// (only active if customSortAction is null)*
 * sortAscending: (true || false) *// (only active if customSortAction is null)*
-* defaultSortProperty: "[Default sortProperty]" *// (only active if customSortAction is null)*
 * rowDetailViewClass: (null || [Instance of Ember.View]) *// (Defines a custom view for the detail rows - only used when hasDetailRows is true)*
 * hasDetailRows:  (true || false) *// (enabled/disables detail rows)*
 * useDefaultDetailRowToggle: (true || false) *// (when true, an extra column will be added to the table to allow the user to show and hide the detail rows.  If false, you must provide your own mechanism for showing/hiding the detail rows)*
@@ -39,11 +38,15 @@ You'll need to include the following files in your project:
 #### Column Configurations:
 Here are the options for configuring columns:
 * headerCellName: "[Cell Header Text]" *// (only used if headerCellCustomViewClass is null)*
+* headerCellClassName: "classname1 classname2" *// (only used if headerCellCustomViewClass is null)*
+* headerCellInfo: "this info will be shown in a tooltip." *// (only used if headerCellCustomViewClass is null)*
 * headerCellCustomViewClass: (null || [Instance of Ember.View]) *// (Defines a custom view for header cell)*
 * cellValuePath: (null || "Path to value") *// (Defines the property of row where value is -- Only used if customCellViewClass and getCellContent are both null)*
+* cellClassName: "classname1 classname2" *// (only used if cellCustomViewClass is null)*
 * cellCustomViewClass: (null || [Instance of Ember.View]) *// (Defines a custom view for the cell)*
 * getCellContent: (null || function) *// (Defines a function to return value for cell - Only used if customCellViewClass is null)*
 * columnWidth: (null || int) *// (Defines a fixed width for the column)*
+* sort: function(column, rows){  } *// (The function used to sort this column.  Only active when the customSortAction is null.)*
 
 *(All column configs must have cellCustomViewClass, cellValuePath, or getCellContent defined)*
 
@@ -88,6 +91,9 @@ export default Ember.Controller.extend({
         self.set('model', result);
         self.set('isLoadingData', false);
       });
+    },
+    sortTheTable: function(columnIndex, isAscending){
+
     }
   }
 });
@@ -111,5 +117,6 @@ export default Ember.Controller.extend({
   infiniteScrollEnabled=true
   isLoadingRows=isLoadingData
   loadMoreAction='loadMore'
+  customSortAction='sortTheTable'
 }}
 ```

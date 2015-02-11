@@ -271,7 +271,7 @@ test('#_columns property should return an empty array if columns is null', funct
 
 test('#_rows property should return an empty array if rows is null', function(){
 	var component = this.subject({
-			columns: [],
+			columns: MockColumnConfigs,
 			rows: null
 		}),
 		parsedRows = component.get('_rows');
@@ -280,7 +280,7 @@ test('#_rows property should return an empty array if rows is null', function(){
 
 test('#_rows property should return an array of instances of Em.ObjectProxy', function(){
 	var component = this.subject({
-			columns: [],
+			columns: MockColumnConfigs,
 			rows: MockRows
 		}),
 		parsedRows = component.get('_rows');
@@ -292,7 +292,7 @@ test('#_rows property should return an array of instances of Em.ObjectProxy', fu
 
 test('items from #_rows property should all have both the properties of the original object, and the _rowIndex and _rowDetailVisible properties.', function(){
 	var component = this.subject({
-			columns: [],
+			columns: MockColumnConfigs,
 			rows: MockRows
 		}),
 		parsedRows = component.get('_rows');
@@ -310,7 +310,7 @@ test('items from #_rows property should all have both the properties of the orig
 
 test('#_rows property should return an array of the rows provided with _rowIndex, and _rowDetailVisible properties set.', function(){
 	var component = this.subject({
-			columns: [],
+			columns: MockColumnConfigs,
 			rows: MockRows
 		}),
 		parsedRows = component.get('_rows');
@@ -324,7 +324,7 @@ test('#_rows property should return an array of the rows provided with _rowIndex
 
 test('#_detailRowsEnabled should return false if hasDetailRows property is false', function(){
 	var component = this.subject({
-			columns: [],
+			columns: MockColumnConfigs,
 			hasDetailRows: false
 		}),
 		detailRowsEnabled = component.get('_detailRowsEnabled');
@@ -333,7 +333,7 @@ test('#_detailRowsEnabled should return false if hasDetailRows property is false
 
 test('#_detailRowsEnabled should return false if hasDetailRows property is true, but there is no detailRowViewClass specified', function(){
 	var component = this.subject({
-			columns: [],
+			columns: MockColumnConfigs,
 			hasDetailRows: true
 		}),
 		detailRowsEnabled = component.get('_detailRowsEnabled');
@@ -343,7 +343,7 @@ test('#_detailRowsEnabled should return false if hasDetailRows property is true,
 test('#_detailRowsEnabled should return true if hasDetailRows property is true, and a detailRowViewClass is provided', function(){
 	
 	var component = this.subject({
-			columns: [],
+			columns: MockColumnConfigs,
 			hasDetailRows: true,
 			detailRowViewClass: MockDetailRowView
 		}),
@@ -568,12 +568,12 @@ test('#_loadMoreRows function should NOT send an action if the loadMoreAction is
 	});
 });
 
-test('#sortTable action should toggle the sortAscending property if customSortAction is not provided, and the sortPath equals current sortProperty', function(){
-	var MockSortPath = 'somewhere',
+test('#sortTable action should toggle the sortAscending property if customSortAction is not provided, and the sortPath equals current sortIndex', function(){
+	var MockSortPath = 1,
 		component = this.subject({
 			columns: [],
 			customSortAction: null,
-			sortProperty: MockSortPath,
+			sortIndex: 0,
 			sortAscending: false
 		});
 	this.append();
@@ -585,13 +585,13 @@ test('#sortTable action should toggle the sortAscending property if customSortAc
 	});
 });
 
-test('#sortTable action should set sortAscending to true, and sortProperty to the new sortPath if customSortAction is not provided, and the sortPath is not equal to current sortProperty', function(){
+test('#sortTable action should set sortAscending to true, and sortIndex to the new sortPath if customSortAction is not provided, and the sortPath is not equal to current sortIndex', function(){
 	var OriginalSortPath = 'something',
-		MockSortPath = 'somewhere',
+		MockSortPath = 1,
 		component = this.subject({
 			columns: [],
 			customSortAction: null,
-			sortProperty: OriginalSortPath,
+			sortIndex: 0,
 			sortAscending: false
 		});
 	this.append();
@@ -599,13 +599,13 @@ test('#sortTable action should set sortAscending to true, and sortProperty to th
 	Em.run(function(){
 		component.send('sortTable', MockSortPath);
 		ok(component.get('sortAscending'), 'sortAscending should have been true');
-		strictEqual(component.get('sortProperty'), MockSortPath, 'should have updated the sortProperty.');
+		strictEqual(component.get('sortIndex'), MockSortPath, 'should have updated the sortIndex.');
 	});
 });
 
 test('#sortTable action should fire an action if customSortAction property is provided.', function(){
 	var CustomSortAction = 'sortThis',
-		MockSortPath = 'something',
+		MockSortPath = 1,
 		component = this.subject({
 			columns: [],
 			customSortAction: CustomSortAction
@@ -617,71 +617,6 @@ test('#sortTable action should fire an action if customSortAction property is pr
 		component.send('sortTable', MockSortPath);
 		var calledWith = component.sendAction.calledWith('customSortAction', MockSortPath);
 		ok(calledWith, 'should have fired an action with sortPath');
-	});
-});
-
-test('#_headersFixed property should return true if showHeader is true, and headersFixed is true', function(){
-	var component = this.subject({
-			columns: [],
-			showHeader: true,
-			headersFixed: true
-		});
-	this.append();
-
-	Em.run(function(){
-		ok(component.get('_headersFixed'), 'should return true');
-	});
-});
-
-test('#_headersFixed property should return false if showHeader is false', function(){
-	var component = this.subject({
-			columns: [],
-			showHeader: false,
-			headersFixed: true
-		});
-	this.append();
-
-	Em.run(function(){
-		ok(!component.get('_headersFixed'), 'should return false');
-	});
-});
-
-test('#_headersFixed property should return false if headersFixed is false', function(){
-	var component = this.subject({
-			columns: [],
-			showHeader: true,
-			headersFixed: false
-		});
-	this.append();
-
-	Em.run(function(){
-		ok(!component.get('_headersFixed'), 'should return false');
-	});
-});
-
-test('#_headersInline property should return true if showHeader is true, and headersFixed is false', function(){
-	var component = this.subject({
-			columns: [],
-			showHeader: true,
-			headersFixed: false
-		});
-	this.append();
-
-	Em.run(function(){
-		ok(component.get('_headersInline'), 'should return true');
-	});
-});
-
-test('#_headersInline property should return false if showHeader is false', function(){
-	var component = this.subject({
-			columns: [],
-			showHeader: false,
-			headersFixed: true
-		});
-	this.append();
-
-	Em.run(function(){
-		ok(!component.get('_headersInline'), 'should return false');
 	});
 });
 
