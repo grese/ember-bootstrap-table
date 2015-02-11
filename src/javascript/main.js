@@ -13,7 +13,7 @@
 		getCellContent: null,
 		columnWidth: null,
 		_columnIndex: 0,
-		sort: function(column, rows){
+		sort: function(column, rows, isAscending){
 			var getCellContent = column.get('getCellContent'),
 				valuePath = column.get('cellValuePath');
 			if(!valuePath && !getCellContent){
@@ -109,7 +109,7 @@
 			if(rows){
 				if(!this.get('customSortAction') && column.get('sortable')){
 					sort = column.get('sort');
-					rows = sort(column, this.get('rows'));
+					rows = sort(column, this.get('rows'), this.get('sortAscending'));
 				}
 				return rows.map(function(row){
 					return RowObject.create({
@@ -189,7 +189,7 @@
 					this.sendAction('customSortAction', columnIndex, this.get('sortAscending'));
 				}else{
 					// If no customSortAction defined, then perform the default behavior.
-					if(this.get('sortIndex') === columnIndex){
+					if(this.get('_sortIndex') === columnIndex){
 						this.toggleProperty('sortAscending');
 					}else{
 						this.set('sortAscending', true);
