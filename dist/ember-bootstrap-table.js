@@ -15,14 +15,12 @@
 		_columnIndex: 0,
 		sort: function(column, rows, isAscending){
 			var getCellContent = column.get('getCellContent'),
-				valuePath = column.get('cellValuePath'),
-				rowsArray;
-			if(rows instanceof Em.A){
-				rowsArray = rows.get('content');
-			}else if($.isArray(rows)){
-				rowsArray = rows;
+				valuePath = column.get('cellValuePath');
+
+			if(!(rows instanceof Em.A) && $.isArray(rows)){
+				rows = Em.A(rows);
 			}else{
-				rowsArray = [];
+				rows = Em.A([]);
 			}
 
 			if(!valuePath && !getCellContent){
@@ -33,7 +31,7 @@
 				return rows;
 			}
 			if(getCellContent){
-				return rowsArray.sort(function(a, b){
+				return rows.sort(function(a, b){
 					var aVal = getCellContent(a),
 						bVal = getCellContent(b);
 					if(isAscending){
@@ -46,18 +44,7 @@
 					return 0;
 				});
 			}else{
-				return rowsArray.sort(function(a, b){
-					var aVal = a.get(valuePath),
-						bVal = b.get(valuePath);
-					if(isAscending){
-						if(aVal < bVal){ return -1; }
-						if(aVal > bVal){ return 1; }
-					}else{
-						if(aVal > bVal){ return -1; }
-						if(aVal < bVal){ return 1; }
-					}
-					return 0;
-				});
+				return rows.sortBy(valuePath);
 			}
 		},
 		_hasTooltipText: function(){
