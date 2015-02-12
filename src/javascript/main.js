@@ -17,8 +17,8 @@
 			var getCellContent = column.get('getCellContent'),
 				valuePath = column.get('cellValuePath');
 
-			if(!(rows instanceof Em.A)){
-				rows = Em.A(rows);
+			if(!rows.sort && rows.get('content')){
+				rows = rows.get('content');
 			}
 
 			if(!valuePath && !getCellContent){
@@ -42,7 +42,18 @@
 					return 0;
 				});
 			}else{
-				return rows.sortBy(valuePath);
+				return rows.sort(function(a, b){
+					var aVal = a.get(valuePath),
+						bVal = b.get(valuePath);
+					if(isAscending){
+						if(aVal < bVal){ return -1; }
+						if(aVal > bVal){ return 1; }
+					}else{
+						if(aVal > bVal){ return -1; }
+						if(aVal < bVal){ return 1; }
+					}
+					return 0;
+				});
 			}
 		},
 		_hasTooltipText: function(){
