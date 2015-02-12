@@ -10,7 +10,7 @@
                     {{/if}}
                 {{/if}}
                 {{#each col in _columns}}
-                    <th {{bind-attr class=":table-component-header col.headerCellClassName" width=col.columnWidth title=col.headerCellInfo data-toggle="col.headerCellInfo:tooltip"}}>
+                    <th {{bind-attr class=":table-component-header col.headerCellClassName col._hasTooltipText:table-component-has-tooltip" width=col.columnWidth title=col.headerCellInfo}} data-toggle="tooltip">
                         {{#if col.headerCellCustomViewClass}}
                             {{view col.headerCellCustomViewClass config=col}}
                         {{else}}

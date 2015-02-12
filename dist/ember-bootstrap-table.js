@@ -42,7 +42,10 @@
 			}else{
 				return rows.sortBy(valuePath);
 			}
-		}
+		},
+		_hasTooltipText: function(){
+			return this.get('headerCellInfo') ? true : false;
+		}.property('headerCellInfo')
 	});
 
 	var RowObject = Ember.ObjectProxy.extend({
@@ -167,7 +170,7 @@
 		},
 		initializeTooltips: function(){
 			var elmId = this.get('elementId');
-			$('#' + elmId + ' [data-toggle="tooltip"]').tooltip();
+			$('#' + elmId + ' .table-component-has-tooltip').tooltip();
 		},
 		didInsertElement: function(){
 			var detailsRowsEnabled = this.get('_detailRowsEnabled'),
@@ -276,12 +279,11 @@ function program5(depth0,data) {
   var buffer = '', stack1;
   data.buffer.push("\n                    <th ");
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'class': (":table-component-header col.headerCellClassName"),
+    'class': (":table-component-header col.headerCellClassName col._hasTooltipText:table-component-has-tooltip"),
     'width': ("col.columnWidth"),
-    'title': ("col.headerCellInfo"),
-    'data-toggle': ("col.headerCellInfo:tooltip")
-  },hashTypes:{'class': "STRING",'width': "ID",'title': "ID",'data-toggle': "STRING"},hashContexts:{'class': depth0,'width': depth0,'title': depth0,'data-toggle': depth0},contexts:[],types:[],data:data})));
-  data.buffer.push(">\n                        ");
+    'title': ("col.headerCellInfo")
+  },hashTypes:{'class': "STRING",'width': "ID",'title': "ID"},hashContexts:{'class': depth0,'width': depth0,'title': depth0},contexts:[],types:[],data:data})));
+  data.buffer.push(" data-toggle=\"tooltip\">\n                        ");
   stack1 = helpers['if'].call(depth0, "col.headerCellCustomViewClass", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                    </th>\n                ");

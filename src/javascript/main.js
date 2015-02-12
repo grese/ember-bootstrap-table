@@ -42,7 +42,10 @@
 			}else{
 				return rows.sortBy(valuePath);
 			}
-		}
+		},
+		_hasTooltipText: function(){
+			return this.get('headerCellInfo') ? true : false;
+		}.property('headerCellInfo')
 	});
 
 	var RowObject = Ember.ObjectProxy.extend({
@@ -167,7 +170,7 @@
 		},
 		initializeTooltips: function(){
 			var elmId = this.get('elementId');
-			$('#' + elmId + ' [data-toggle="tooltip"]').tooltip();
+			$('#' + elmId + ' .table-component-has-tooltip').tooltip();
 		},
 		didInsertElement: function(){
 			var detailsRowsEnabled = this.get('_detailRowsEnabled'),
