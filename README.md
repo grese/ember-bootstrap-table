@@ -47,6 +47,7 @@ Here are the options for configuring columns:
 * getCellContent: (null || function) *// (Defines a function to return value for cell - Only used if customCellViewClass is null)*
 * columnWidth: (null || int) *// (Defines a fixed width for the column)*
 * sort: function(column, rows, isAscending){  } *// (The function used to sort this column.  Only active when the customSortAction is null.)*
+* sortOn: 'cellValuePath' || 'getCellContent' // (This will tell the default sorting function to sort on the cellValuePath or getCellContent function if both are specified in your column config.  Inactive when customSortAction is provided.)*
 
 *(All column configs must have cellCustomViewClass, cellValuePath, or getCellContent defined)*
 

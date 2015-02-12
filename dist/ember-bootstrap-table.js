@@ -13,10 +13,11 @@
 		getCellContent: null,
 		columnWidth: null,
 		_columnIndex: 0,
+		sortOn: null,
 		sort: function(column, rows, isAscending){
 			var getCellContent = column.get('getCellContent'),
-				valuePath = column.get('cellValuePath');
-
+				valuePath = column.get('cellValuePath'),
+				sortOnCellValuePath = column.get('sortOn') && (column.get('sortOn') === 'cellValuePath');
 			if(!rows.sort && rows.get('content')){
 				rows = rows.get('content');
 			}
@@ -28,7 +29,7 @@
 				'return the value for this column, or override this column\'s sort function. ', column);
 				return rows;
 			}
-			if(getCellContent){
+			if(getCellContent && !sortOnCellValuePath){
 				return rows.sort(function(a, b){
 					var aVal = getCellContent(a),
 						bVal = getCellContent(b);
