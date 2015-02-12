@@ -242,7 +242,7 @@
 		if(column.get('_columnIndex') === sortIndex){
 			iconClass = isAscending ? 'fa fa-sort-asc' : 'fa fa-sort-desc';
 		}
-		return new Ember.Handlebars.SafeString("<i class='"+iconClass+"'></i>");
+		return new Ember.Handlebars.SafeString("<span class='table-component-sort-icon "+iconClass+"'></span>");
 	});
 
 	Ember.TableComponent = TableComponent;

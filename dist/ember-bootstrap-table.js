@@ -242,7 +242,7 @@
 		if(column.get('_columnIndex') === sortIndex){
 			iconClass = isAscending ? 'fa fa-sort-asc' : 'fa fa-sort-desc';
 		}
-		return new Ember.Handlebars.SafeString("<i class='"+iconClass+"'></i>");
+		return new Ember.Handlebars.SafeString("<span class='table-component-sort-icon "+iconClass+"'></span>");
 	});
 
 	Ember.TableComponent = TableComponent;
@@ -326,10 +326,10 @@ function program9(depth0,data) {
     'class': (":table-component-header-name col._hasTooltipText:table-component-has-tooltip"),
     'title': ("col.headerCellInfo")
   },hashTypes:{'class': "STRING",'title': "ID"},hashContexts:{'class': depth0,'title': depth0},contexts:[],types:[],data:data})));
-  data.buffer.push(" data-toggle=\"tooltip\">\n                                        <span>\n                                            ");
+  data.buffer.push(" data-toggle=\"tooltip\">\n                                        <span class=\"table-component-header-cell-text\">\n                                            ");
   stack1 = helpers._triageMustache.call(depth0, "col.headerCellName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n                                            &nbsp;\n                                            ");
+  data.buffer.push("\n                                        </span>\n                                        <span class=\"table-component-header-cell-sort-container\">\n                                            ");
   data.buffer.push(escapeExpression((helper = helpers.tableComponentSortIcon || (depth0 && depth0.tableComponentSortIcon),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data},helper ? helper.call(depth0, "col", "_sortIndex", "sortAscending", options) : helperMissing.call(depth0, "tableComponentSortIcon", "col", "_sortIndex", "sortAscending", options))));
   data.buffer.push("\n                                        </span>\n                                    </div>\n                                </button>\n                            ");
   return buffer;
@@ -343,10 +343,10 @@ function program11(depth0,data) {
     'class': (":table-component-header-name col._hasTooltipText:table-component-has-tooltip"),
     'title': ("col.headerCellInfo")
   },hashTypes:{'class': "STRING",'title': "ID"},hashContexts:{'class': depth0,'title': depth0},contexts:[],types:[],data:data})));
-  data.buffer.push(" data-toggle=\"tooltip\">\n                                    ");
+  data.buffer.push(" data-toggle=\"tooltip\">\n                                    <span class=\"table-component-header-cell-text\">\n                                        ");
   stack1 = helpers._triageMustache.call(depth0, "col.headerCellName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n                                </div>\n                            ");
+  data.buffer.push("\n                                    </span>\n                                </div>\n                            ");
   return buffer;
   }
 

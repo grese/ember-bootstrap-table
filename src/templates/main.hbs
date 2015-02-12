@@ -17,16 +17,19 @@
                             {{#if col.sortable}}
                                 <button {{action 'sortTable' col._columnIndex}} class="table-component-header-sortable-btn">
                                     <div {{bind-attr class=":table-component-header-name col._hasTooltipText:table-component-has-tooltip" title=col.headerCellInfo}} data-toggle="tooltip">
-                                        <span>
+                                        <span class="table-component-header-cell-text">
                                             {{col.headerCellName}}
-                                            &nbsp;
+                                        </span>
+                                        <span class="table-component-header-cell-sort-container">
                                             {{tableComponentSortIcon col _sortIndex sortAscending}}
                                         </span>
                                     </div>
                                 </button>
                             {{else}}
                                 <div {{bind-attr class=":table-component-header-name col._hasTooltipText:table-component-has-tooltip" title=col.headerCellInfo}} data-toggle="tooltip">
-                                    {{col.headerCellName}}
+                                    <span class="table-component-header-cell-text">
+                                        {{col.headerCellName}}
+                                    </span>
                                 </div>
                             {{/if}}
                         {{/if}}

@@ -57,3 +57,6 @@
 .table-component-loading-row .table-component-loading-container{
   text-align: center;
 }
+.table-component-header-cell-sort-container{
+  padding-left: 2px;
+}
