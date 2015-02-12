@@ -41,15 +41,13 @@
 					var aVal = a.get(valuePath),
 						bVal = b.get(valuePath);
 					if(isAscending){
-						if(isAscending){
-							if(aVal < bVal){ return -1; }
-							if(aVal > bVal){ return 1; }
-						}else{
-							if(aVal > bVal){ return -1; }
-							if(aVal < bVal){ return 1; }
-						}
-						return 0;
+						if(aVal < bVal){ return -1; }
+						if(aVal > bVal){ return 1; }
+					}else{
+						if(aVal > bVal){ return -1; }
+						if(aVal < bVal){ return 1; }
 					}
+					return 0;
 				});
 			}
 		},
