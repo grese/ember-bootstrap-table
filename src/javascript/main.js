@@ -17,10 +17,8 @@
 			var getCellContent = column.get('getCellContent'),
 				valuePath = column.get('cellValuePath');
 
-			if(!(rows instanceof Em.A) && $.isArray(rows)){
+			if(!(rows instanceof Em.A)){
 				rows = Em.A(rows);
-			}else{
-				rows = Em.A([]);
 			}
 
 			if(!valuePath && !getCellContent){
