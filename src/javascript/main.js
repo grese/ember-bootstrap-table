@@ -23,9 +23,6 @@
 				'return the value for this column, or override this column\'s sort function. ', column);
 				return rows;
 			}
-			if(!(rows instanceof Em.A)){
-				rows = Em.A(rows);
-			}
 			if(getCellContent){
 				return rows.sort(function(a, b){
 					var aVal = getCellContent(a),
@@ -40,7 +37,20 @@
 					return 0;
 				});
 			}else{
-				return rows.sortBy(valuePath);
+				return rows.sort(function(a, b){
+					var aVal = a.get(valuePath),
+						bVal = b.get(valuePath);
+					if(isAscending){
+						if(isAscending){
+							if(aVal < bVal){ return -1; }
+							if(aVal > bVal){ return 1; }
+						}else{
+							if(aVal > bVal){ return -1; }
+							if(aVal < bVal){ return 1; }
+						}
+						return 0;
+					}
+				});
 			}
 		},
 		_hasTooltipText: function(){
