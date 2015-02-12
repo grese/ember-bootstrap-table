@@ -217,7 +217,7 @@ test('should render the correct column headers as defined in the headerCellName 
 	Em.run(function(){
 		headerCells = $component.find('table.table-component thead .table-component-header-name');
 		$.each(headerCells, function(idx, item){
-			actualHeaderNames.push($(item).text());
+			actualHeaderNames.push($.trim($(item).text()));
 		});
 		
 		deepEqual(actualHeaderNames, expectedHeaderNames, 'The correct column headers should be present.');

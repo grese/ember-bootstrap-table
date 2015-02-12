@@ -10,13 +10,13 @@
                     {{/if}}
                 {{/if}}
                 {{#each col in _columns}}
-                    <th {{bind-attr class=":table-component-header col.headerCellClassName col._hasTooltipText:table-component-has-tooltip" width=col.columnWidth title=col.headerCellInfo}} data-toggle="tooltip">
+                    <th {{bind-attr class=":table-component-header col.headerCellClassName" width=col.columnWidth}}>
                         {{#if col.headerCellCustomViewClass}}
                             {{view col.headerCellCustomViewClass config=col}}
                         {{else}}
                             {{#if col.sortable}}
                                 <button {{action 'sortTable' col._columnIndex}} class="table-component-header-sortable-btn">
-                                    <div class="table-component-header-name">
+                                    <div {{bind-attr class=":table-component-header-name col._hasTooltipText:table-component-has-tooltip" title=col.headerCellInfo}} data-toggle="tooltip">
                                         <span>
                                             {{col.headerCellName}}
                                             &nbsp;
@@ -25,7 +25,9 @@
                                     </div>
                                 </button>
                             {{else}}
-                                <div class="table-component-header-name">{{col.headerCellName}}</div>
+                                <div {{bind-attr class=":table-component-header-name col._hasTooltipText:table-component-has-tooltip" title=col.headerCellInfo}} data-toggle="tooltip">
+                                    {{col.headerCellName}}
+                                </div>
                             {{/if}}
                         {{/if}}
                     </th>

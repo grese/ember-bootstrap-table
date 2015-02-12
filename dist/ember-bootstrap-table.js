@@ -279,11 +279,10 @@ function program5(depth0,data) {
   var buffer = '', stack1;
   data.buffer.push("\n                    <th ");
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'class': (":table-component-header col.headerCellClassName col._hasTooltipText:table-component-has-tooltip"),
-    'width': ("col.columnWidth"),
-    'title': ("col.headerCellInfo")
-  },hashTypes:{'class': "STRING",'width': "ID",'title': "ID"},hashContexts:{'class': depth0,'width': depth0,'title': depth0},contexts:[],types:[],data:data})));
-  data.buffer.push(" data-toggle=\"tooltip\">\n                        ");
+    'class': (":table-component-header col.headerCellClassName"),
+    'width': ("col.columnWidth")
+  },hashTypes:{'class': "STRING",'width': "ID"},hashContexts:{'class': depth0,'width': depth0},contexts:[],types:[],data:data})));
+  data.buffer.push(">\n                        ");
   stack1 = helpers['if'].call(depth0, "col.headerCellCustomViewClass", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                    </th>\n                ");
@@ -314,7 +313,12 @@ function program9(depth0,data) {
   var buffer = '', stack1, helper, options;
   data.buffer.push("\n                                <button ");
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "sortTable", "col._columnIndex", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0],types:["STRING","ID"],data:data})));
-  data.buffer.push(" class=\"table-component-header-sortable-btn\">\n                                    <div class=\"table-component-header-name\">\n                                        <span>\n                                            ");
+  data.buffer.push(" class=\"table-component-header-sortable-btn\">\n                                    <div ");
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': (":table-component-header-name col._hasTooltipText:table-component-has-tooltip"),
+    'title': ("col.headerCellInfo")
+  },hashTypes:{'class': "STRING",'title': "ID"},hashContexts:{'class': depth0,'title': depth0},contexts:[],types:[],data:data})));
+  data.buffer.push(" data-toggle=\"tooltip\">\n                                        <span>\n                                            ");
   stack1 = helpers._triageMustache.call(depth0, "col.headerCellName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                                            &nbsp;\n                                            ");
@@ -326,10 +330,15 @@ function program9(depth0,data) {
 function program11(depth0,data) {
   
   var buffer = '', stack1;
-  data.buffer.push("\n                                <div class=\"table-component-header-name\">");
+  data.buffer.push("\n                                <div ");
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': (":table-component-header-name col._hasTooltipText:table-component-has-tooltip"),
+    'title': ("col.headerCellInfo")
+  },hashTypes:{'class': "STRING",'title': "ID"},hashContexts:{'class': depth0,'title': depth0},contexts:[],types:[],data:data})));
+  data.buffer.push(" data-toggle=\"tooltip\">\n                                    ");
   stack1 = helpers._triageMustache.call(depth0, "col.headerCellName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("</div>\n                            ");
+  data.buffer.push("\n                                </div>\n                            ");
   return buffer;
   }
 
