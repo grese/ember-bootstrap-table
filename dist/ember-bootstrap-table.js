@@ -15,7 +15,16 @@
 		_columnIndex: 0,
 		sort: function(column, rows, isAscending){
 			var getCellContent = column.get('getCellContent'),
-				valuePath = column.get('cellValuePath');
+				valuePath = column.get('cellValuePath'),
+				rowsArray;
+			if(rows instanceof Em.A){
+				rowsArray = rows.get('content');
+			}else if($.isArray(rows)){
+				rowsArray = rows;
+			}else{
+				rowsArray = [];
+			}
+
 			if(!valuePath && !getCellContent){
 				Em.Logger.warn('<Warning:> Table component\'s default sorting function requires that either ' +
 				'cellValuePath or getCellContent are specified for each sortable column.  ' +
@@ -24,7 +33,7 @@
 				return rows;
 			}
 			if(getCellContent){
-				return rows.sort(function(a, b){
+				return rowsArray.sort(function(a, b){
 					var aVal = getCellContent(a),
 						bVal = getCellContent(b);
 					if(isAscending){
@@ -37,7 +46,7 @@
 					return 0;
 				});
 			}else{
-				return rows.sort(function(a, b){
+				return rowsArray.sort(function(a, b){
 					var aVal = a.get(valuePath),
 						bVal = b.get(valuePath);
 					if(isAscending){
