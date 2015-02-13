@@ -91,7 +91,7 @@
 			return this.get('noContentView') !== null;
 		}.property('noContentView'),
 		_showNoContentView: function(){
-			return this.get('_hasNoContentView') && this.get('_hasRows');
+			return this.get('_hasNoContentView') && !this.get('_hasRows');
 		}.property('_hasNoContentView', 'rows.[]'),
 		_hasRows: function(){
 			return this.get('rows') && this.get('rows.length') > 0;
