@@ -86,6 +86,16 @@
 		sortIndex: null,
 		sortAscending: true,
 		infiniteScrollEnabled: false,
+		noContentView: null,
+		_hasNoContentView: function(){
+			return this.get('noContentView') !== null;
+		}.property('noContentView'),
+		_showNoContentView: function(){
+			return this.get('_hasNoContentView') && this.get('_hasRows');
+		}.property('_hasNoContentView', 'rows.[]'),
+		_hasRows: function(){
+			return this.get('rows') && this.get('rows.length') > 0;
+		}.property('rows.[]'),
 		_sortIndex: function(){
 			return (this.get('sortIndex') !== null) ? this.get('sortIndex') : 0;
 		}.property('sortIndex'),
@@ -145,6 +155,12 @@
 				return [];
 			}
 		}.property('rows.[]', '_sortIndex', 'sortAscending'),
+		_rowsWillRefresh: function(){
+
+		}.observesBefore('_rows'),
+		_rowsDidRefresh: function(){
+
+		}.observes('_rows'),
 		showDetailForRow: function(rowIndex){
 			this.get('rows').objectAt(rowIndex).toggleProperty('_rowDetailVisible');
 		},
