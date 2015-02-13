@@ -15,6 +15,8 @@
 		_columnIndex: 0,
 		sortOn: null,
 		sort: function(column, rows, isAscending){
+			rows = rows || [];
+			column = column || Em.Object.create();
 			var getCellContent = column.get('getCellContent'),
 				valuePath = column.get('cellValuePath'),
 				sortOnCellValuePath = column.get('sortOn') && (column.get('sortOn') === 'cellValuePath');
