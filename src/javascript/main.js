@@ -159,7 +159,7 @@
             var component = this;
             Em.run.once(function(){
                 if(component.get('useRenderingIndicator')){
-                    component.set('_isRendering', true);
+                    component._insertRenderingIndicator();
                     component._startDOMListener();
                 }
                 component.notifyPropertyChange('_rows');
@@ -199,9 +199,20 @@
         $tbody: null,
         useRenderingIndicator: true,
         _isRendering: false,
-        _showRenderingIndicator: function(){
-            return this.get('useRenderingIndicator') && this.get('_isRendering');
-        }.property('useRenderingIndicator', '_isRendering'),
+        _insertRenderingIndicator: function(){
+            var $tbody = this.get('$tbody');
+            $tbody.before('<tr class=\'table-component-rendering-row\'>' +
+            '<td class=\'table-component-rendering-cell\'>' +
+            '<span class=\'table-component-rendering-icon fa fa-spinner fa-pulse fa-2x\'></span>'+
+            '</td>' +
+            '</tr>');
+        },
+        _removeRenderingIndicator: function(){
+            var $renderingRow = this.get('$tbody').find('.table-component-rendering-row');
+            if($renderingRow){
+                $renderingRow.remove();
+            }
+        },
 		_startDOMListener: function(){
             var component = this,
                 $tbody = this.get('$tbody'),
@@ -215,7 +226,7 @@
                         ++rowCtr;
                         if(rowCtr >= numRows){
                             component._stopDOMListener();
-                            component.set('_isRendering', false);
+                            component._removeRenderingIndicator();
                         }
                     }
                 });

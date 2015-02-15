@@ -159,7 +159,7 @@
             var component = this;
             Em.run.once(function(){
                 if(component.get('useRenderingIndicator')){
-                    component.set('_isRendering', true);
+                    component._insertRenderingIndicator();
                     component._startDOMListener();
                 }
                 component.notifyPropertyChange('_rows');
@@ -199,9 +199,20 @@
         $tbody: null,
         useRenderingIndicator: true,
         _isRendering: false,
-        _showRenderingIndicator: function(){
-            return this.get('useRenderingIndicator') && this.get('_isRendering');
-        }.property('useRenderingIndicator', '_isRendering'),
+        _insertRenderingIndicator: function(){
+            var $tbody = this.get('$tbody');
+            $tbody.before('<tr class=\'table-component-rendering-row\'>' +
+            '<td class=\'table-component-rendering-cell\'>' +
+            '<span class=\'table-component-rendering-icon fa fa-spinner fa-pulse fa-2x\'></span>'+
+            '</td>' +
+            '</tr>');
+        },
+        _removeRenderingIndicator: function(){
+            var $renderingRow = this.get('$tbody').find('.table-component-rendering-row');
+            if($renderingRow){
+                $renderingRow.remove();
+            }
+        },
 		_startDOMListener: function(){
             var component = this,
                 $tbody = this.get('$tbody'),
@@ -215,7 +226,7 @@
                         ++rowCtr;
                         if(rowCtr >= numRows){
                             component._stopDOMListener();
-                            component.set('_isRendering', false);
+                            component._removeRenderingIndicator();
                         }
                     }
                 });
@@ -561,13 +572,10 @@ function program3(depth0,data) {
   stack1 = helpers['if'].call(depth0, "showHeader", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n            <tbody>\n            ");
-  stack1 = helpers['if'].call(depth0, "_showRenderingIndicator", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(16, program16, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers.each.call(depth0, "row", "in", "_rows", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(16, program16, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n            ");
-  stack1 = helpers.each.call(depth0, "row", "in", "_rows", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(18, program18, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n            ");
-  stack1 = helpers['if'].call(depth0, "_showLoadingRow", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(32, program32, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "_showLoadingRow", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(30, program30, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n            </tbody>\n        </table>\n    </div>\n");
   return buffer;
@@ -670,40 +678,29 @@ function program14(depth0,data) {
 
 function program16(depth0,data) {
   
-  var buffer = '';
-  data.buffer.push("\n              <tr class=\"table-component-rendering-row\">\n                  <td class='table-component-rendering-cell' ");
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'colspan': ("_numColumns")
-  },hashTypes:{'colspan': "STRING"},hashContexts:{'colspan': depth0},contexts:[],types:[],data:data})));
-  data.buffer.push(">\n                      <span class=\"table-component-rendering-indicator fa fa-spinner fa-pulse\"></span>\n                  </td>\n              </tr>\n            ");
-  return buffer;
-  }
-
-function program18(depth0,data) {
-  
   var buffer = '', stack1;
   data.buffer.push("\n                <tr>\n                    ");
-  stack1 = helpers['if'].call(depth0, "_detailRowsEnabled", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(19, program19, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "_detailRowsEnabled", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(17, program17, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                    ");
-  stack1 = helpers.each.call(depth0, "col", "in", "_columns", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(25, program25, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data});
+  stack1 = helpers.each.call(depth0, "col", "in", "_columns", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(23, program23, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                </tr>\n                ");
-  stack1 = helpers['if'].call(depth0, "_detailRowsEnabled", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(30, program30, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "_detailRowsEnabled", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(28, program28, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n            ");
   return buffer;
   }
-function program19(depth0,data) {
+function program17(depth0,data) {
   
   var buffer = '', stack1;
   data.buffer.push("\n                        ");
-  stack1 = helpers['if'].call(depth0, "useDefaultDetailRowToggle", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(20, program20, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "useDefaultDetailRowToggle", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(18, program18, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                    ");
   return buffer;
   }
-function program20(depth0,data) {
+function program18(depth0,data) {
   
   var buffer = '', stack1;
   data.buffer.push("\n                        \n                            <td class=\"table-component-detail-toggle-cell\">\n                                <button ");
@@ -711,33 +708,33 @@ function program20(depth0,data) {
     'data-rowindex': ("row._rowIndex")
   },hashTypes:{'data-rowindex': "STRING"},hashContexts:{'data-rowindex': depth0},contexts:[],types:[],data:data})));
   data.buffer.push(" class='toggle-detail-row'>\n                                    ");
-  stack1 = helpers['if'].call(depth0, "row._rowDetailVisible", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(23, program23, data),fn:self.program(21, program21, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "row._rowDetailVisible", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(21, program21, data),fn:self.program(19, program19, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                                </button>\n                            </td>\n                        ");
   return buffer;
   }
-function program21(depth0,data) {
+function program19(depth0,data) {
   
   
   data.buffer.push("\n                                        <span class='fa fa-minus fa-sm'></span>\n                                    ");
   }
 
-function program23(depth0,data) {
+function program21(depth0,data) {
   
   
   data.buffer.push("\n                                        <span class='fa fa-plus fa-sm'></span>\n                                    ");
   }
 
-function program25(depth0,data) {
+function program23(depth0,data) {
   
   var buffer = '', stack1;
   data.buffer.push("\n                        ");
-  stack1 = helpers['if'].call(depth0, "col.cellCustomViewClass", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(28, program28, data),fn:self.program(26, program26, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "col.cellCustomViewClass", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(26, program26, data),fn:self.program(24, program24, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                    ");
   return buffer;
   }
-function program26(depth0,data) {
+function program24(depth0,data) {
   
   var buffer = '';
   data.buffer.push("\n                            ");
@@ -749,7 +746,7 @@ function program26(depth0,data) {
   return buffer;
   }
 
-function program28(depth0,data) {
+function program26(depth0,data) {
   
   var buffer = '', helper, options;
   data.buffer.push("\n                            ");
@@ -758,7 +755,7 @@ function program28(depth0,data) {
   return buffer;
   }
 
-function program30(depth0,data) {
+function program28(depth0,data) {
   
   var buffer = '';
   data.buffer.push("\n                    <tr ");
@@ -777,7 +774,7 @@ function program30(depth0,data) {
   return buffer;
   }
 
-function program32(depth0,data) {
+function program30(depth0,data) {
   
   var buffer = '';
   data.buffer.push("\n                <tr class='table-component-loading-row'>\n                    <td ");
