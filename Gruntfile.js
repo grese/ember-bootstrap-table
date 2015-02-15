@@ -15,7 +15,8 @@ module.exports = function(grunt) {
       },
       build: {
         src: [
-          'src/javascript/**/*.js'
+          'src/javascript/**/*.js',
+          'helpers/**/*.js'
         ],
         dest: 'build/javascript.js'
       },
@@ -37,7 +38,7 @@ module.exports = function(grunt) {
         'tests/spec/**/*.js'
       ],
       options: {
-        jshintrc: '.jshintrc',        
+        jshintrc: '.jshintrc'
       }
     },
     uglify: {

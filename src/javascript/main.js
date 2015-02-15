@@ -154,13 +154,17 @@
 			}else{
 				return [];
 			}
-		}.property('rows.[]', '_sortIndex', 'sortAscending'),
-		_rowsWillRefresh: function(){
-
-		}.observesBefore('_rows'),
-		_rowsDidRefresh: function(){
-
-		}.observes('_rows'),
+		}.property(),
+		_rowsDidChange: function(){
+            var component = this;
+            Em.run.once(function(){
+                if(component.get('useRenderingIndicator')){
+                    component.set('_isRendering', true);
+                    component._startDOMListener();
+                }
+                component.notifyPropertyChange('_rows');
+            });
+		}.observes('rows.[]', '_sortIndex', 'sortAscending'),
 		showDetailForRow: function(rowIndex){
 			this.get('rows').objectAt(rowIndex).toggleProperty('_rowDetailVisible');
 		},
@@ -192,6 +196,33 @@
 				}
 			});
 		},
+        $tbody: null,
+        useRenderingIndicator: true,
+        _isRendering: false,
+        _showRenderingIndicator: function(){
+            return this.get('useRenderingIndicator') && this.get('_isRendering');
+        }.property('useRenderingIndicator', '_isRendering'),
+		_startDOMListener: function(){
+            var component = this,
+                $tbody = this.get('$tbody'),
+                numRows = this.get('rows.length'),
+                rowCtr = 0;
+			$tbody.livequery('tr',
+                function() {
+                    var $row = $(this);
+                    if(!$row.hasClass('table-component-loading-row') &&
+                       !$row.hasClass('table-component-rendering-row')){
+                        ++rowCtr;
+                        if(rowCtr >= numRows){
+                            component._stopDOMListener();
+                            component.set('_isRendering', false);
+                        }
+                    }
+                });
+		},
+        _stopDOMListener: function(){
+            this.get('$tbody').expire('tr');
+        },
 		attachEventHandlers: function(){
 			if(this.get('_detailRowsEnabled')){
 				this.attachDetailRowClickHandlers();
@@ -207,6 +238,9 @@
 		didInsertElement: function(){
 			var detailsRowsEnabled = this.get('_detailRowsEnabled'),
 				tooltipsEnabled = this.get('showTooltips');
+
+            this.set('$tbody', this.$().find('tbody'));
+
 			if(detailsRowsEnabled){
 				this.attachDetailRowClickHandlers();
 			}

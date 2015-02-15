@@ -35,6 +35,7 @@ You'll need to include the following files in your project:
 * isLoadingRows: (true || false) *// (a flag to bind to for showing/hiding the table's loading indicator - only used when infiniteScrollEnabled is true)*
 * loadMoreAction: "[Action Name]" *// (the action that should be fired when user scrolls to bottom of page - only used when infiniteScrollEnabled is true, and isLoadingRows is false)*
 * noContentView: [Instance of Em.View] *// (this view will be rendered instead of the table if there are no rows.)*
+* useRenderingIndicator: (true || false) *// (True by default.  When true, this will disable the adding of a rendering indicator to the table when the table is taking a while to render)*
 
 #### Column Configurations:
 Here are the options for configuring columns:

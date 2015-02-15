@@ -44,6 +44,13 @@
                 </thead>
             {{/if}}
             <tbody>
+            {{#if _showRenderingIndicator}}
+              <tr class="table-component-rendering-row">
+                  <td class='table-component-rendering-cell' {{bind-attr colspan='_numColumns'}}>
+                      <span class="table-component-rendering-indicator fa fa-spinner fa-pulse"></span>
+                  </td>
+              </tr>
+            {{/if}}
             {{#each row in _rows}}
                 <tr>
                     {{#if _detailRowsEnabled}}
@@ -82,7 +89,7 @@
                 <tr class='table-component-loading-row'>
                     <td {{bind-attr colspan='_rowColspan'}}>
                         <div class="table-component-loading-container">
-                            <span class='fa fa-spinner fa-spin fa-2x'></span>
+                            <span class='fa fa-spinner fa-pulse fa-2x'></span>
                         </div>
                     </td>
                 </tr>
