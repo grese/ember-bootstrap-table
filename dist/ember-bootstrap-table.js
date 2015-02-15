@@ -158,10 +158,6 @@
 		_rowsDidChange: function(){
             var component = this;
             Em.run.once(function(){
-                if(component.get('useRenderingIndicator')){
-                    component.set('_isRendering', true);
-                    component._startDOMListener();
-                }
                 component.notifyPropertyChange('_rows');
             });
 		}.observes('rows.[]', '_sortIndex', 'sortAscending'),
@@ -196,33 +192,6 @@
 				}
 			});
 		},
-        $tbody: null,
-        useRenderingIndicator: true,
-        _isRendering: false,
-        _showRenderingIndicator: function(){
-            return this.get('useRenderingIndicator') && this.get('_isRendering');
-        }.property('useRenderingIndicator', '_isRendering'),
-		_startDOMListener: function(){
-            var component = this,
-                $tbody = this.get('$tbody'),
-                numRows = this.get('rows.length'),
-                rowCtr = 0;
-			$tbody.livequery('tr',
-                function() {
-                    var $row = $(this);
-                    if(!$row.hasClass('table-component-loading-row') &&
-                       !$row.hasClass('table-component-rendering-row')){
-                        ++rowCtr;
-                        if(rowCtr >= numRows){
-                            component._stopDOMListener();
-                            component.set('_isRendering', false);
-                        }
-                    }
-                });
-		},
-        _stopDOMListener: function(){
-            this.get('$tbody').expire('tr');
-        },
 		attachEventHandlers: function(){
 			if(this.get('_detailRowsEnabled')){
 				this.attachDetailRowClickHandlers();
@@ -238,8 +207,6 @@
 		didInsertElement: function(){
 			var detailsRowsEnabled = this.get('_detailRowsEnabled'),
 				tooltipsEnabled = this.get('showTooltips');
-
-            this.set('$tbody', this.$().find('tbody'));
 
 			if(detailsRowsEnabled){
 				this.attachDetailRowClickHandlers();
@@ -307,231 +274,6 @@
 	Ember.Handlebars.helper('table-component', Ember.TableComponent);
 }(this));
 
-(function (factory) {
-    if ( typeof define === 'function' && define.amd ) {
-        // AMD. Register as an anonymous module.
-        define(['jquery'], factory);
-    } else if (typeof exports === 'object') {
-        // Node/CommonJS style for Browserify
-        module.exports = factory;
-    } else {
-        // Browser globals
-        factory(jQuery);
-    }
-}(function ($) {
-
-    $.extend($.fn, {
-        livequery: function(selector, matchedFn, unmatchedFn) {
-            var q = $.livequery.findorcreate(this, selector, matchedFn, unmatchedFn);
-            q.run();
-            return this;
-        },
-        expire: function(selector, matchedFn, unmatchedFn) {
-            var q = $.livequery.find(this, selector, matchedFn, unmatchedFn);
-            if (q) { q.stop(); }
-            return this;
-        }
-    });
-
-
-    $.livequery = function(jq, selector, matchedFn, unmatchedFn) {
-        this.selector    = selector;
-        this.jq          = jq;
-        this.context     = jq.context;
-        this.matchedFn   = matchedFn;
-        this.unmatchedFn = unmatchedFn;
-        this.stopped     = false;
-        this.id          = $.livequery.queries.push(this)-1;
-
-        matchedFn.$lqguid = matchedFn.$lqguid || $.livequery.guid++;
-        if (unmatchedFn) { unmatchedFn.$lqguid = unmatchedFn.$lqguid || $.livequery.guid++; }
-    };
-    $.livequery.prototype = {
-        run: function() {
-            this.stopped = false;
-            this.jq.find(this.selector).each($.proxy(function(i, element) {
-                this.added(element);
-            }, this));
-        },
-        stop: function() {
-            this.jq.find(this.selector).each($.proxy(function(i, element) {
-                this.removed(element);
-            }, this));
-            this.stopped = true;
-        },
-        matches: function(element) {
-            return !this.isStopped() && $(element, this.context).is(this.selector) && this.jq.has(element).length;
-        },
-        added: function(element) {
-            if ( !this.isStopped() && !this.isMatched(element) ) {
-                this.markAsMatched(element);
-                this.matchedFn.call(element, element);
-            }
-        },
-        removed: function(element) {
-            if ( !this.isStopped() && this.isMatched(element) ) {
-                this.removeMatchedMark(element);
-                if (this.unmatchedFn) { this.unmatchedFn.call(element, element); }
-            }
-        },
-        getLQArray: function(element) {
-            var arr   = $.data(element, $.livequery.key) || [],
-                index = $.inArray(this.id, arr);
-            arr.index = index;
-            return arr;
-        },
-        markAsMatched: function(element) {
-            var arr  = this.getLQArray(element);
-            if ( arr.index === -1 ) {
-                arr.push(this.id);
-                $.data(element, $.livequery.key, arr);
-            }
-        },
-        removeMatchedMark: function(element) {
-            var arr = this.getLQArray(element);
-            if ( arr.index > -1 ) {
-                arr.splice(arr.index, 1);
-                $.data(element, $.livequery.key, arr);
-            }
-        },
-        isMatched: function(element) {
-            var arr = this.getLQArray(element);
-            return arr.index !== -1;
-        },
-        isStopped: function() {
-            return this.stopped === true;
-        }
-    };
-
-    $.extend($.livequery, {
-        version: '2.0.0-pre',
-        guid: 0,
-        queries: [],
-        watchAttributes: true,
-        attributeFilter: ['class', 'className'],
-        setup: false,
-        timeout: null,
-        method: 'none',
-        prepared: false,
-        key: 'livequery',
-        htcPath: false,
-        prepare: {
-            mutationobserver: function() {
-                var observer = new MutationObserver($.livequery.handle.mutationobserver);
-                observer.observe(document, { childList: true, attributes: $.livequery.watchAttributes, subtree: true, attributeFilter: $.livequery.attributeFilter });
-                $.livequery.prepared = true;
-            },
-            mutationevent: function() {
-                document.addEventListener('DOMNodeInserted', $.livequery.handle.mutationevent, false);
-                document.addEventListener('DOMNodeRemoved', $.livequery.handle.mutationevent, false);
-                if ( $.livequery.watchAttributes ) {
-                    document.addEventListener('DOMAttrModified', $.livequery.handle.mutationevent, false);
-                }
-                $.livequery.prepared = true;
-            },
-            iebehaviors: function() {
-                if ( $.livequery.htcPath ) {
-                    $('head').append('<style>body *{behavior:url('+$.livequery.htcPath+')}</style>');
-                    $.livequery.prepared = true;
-                }
-            }
-        },
-        handle: {
-            added: function(target) {
-                $.each( $.livequery.queries, function(i, query) {
-                    if (query.matches(target)) {
-                        setTimeout(function() {
-                            query.added(target);
-                        }, 1);
-                    }
-                });
-            },
-            removed: function(target) {
-                $.each( $.livequery.queries, function(i, query) {
-                    if (query.isMatched(target)) {
-                        setTimeout(function() {
-                            query.removed(target);
-                        }, 1);
-                    }
-                });
-            },
-            modified: function(target) {
-                $.each( $.livequery.queries, function(i, query) {
-                    if ( query.isMatched(target) ) {
-                        if ( !query.matches(target) ) {
-                            query.removed(target);
-                        }
-                    } else {
-                        if (query.matches(target)) {
-                            query.added(target);
-                        }
-                    }
-                });
-            },
-            mutationevent: function(event) {
-                var map = {
-                        'DOMNodeInserted' : 'added',
-                        'DOMNodeRemoved'  : 'removed',
-                        'DOMAttrModified' : 'modified'
-                    },
-                    type = map[event.type];
-                if ( type === 'modified' ) {
-                    if ( $.livequery.attributeFilter.indexOf(event.attrName) > -1 ) {
-                        $.livequery.handle.modified(event.target);
-                    }
-                } else {
-                    $.livequery.handle[type](event.target);
-                }
-            },
-            mutationobserver: function(mutations) {
-                $.each(mutations, function(index, mutation) {
-                    if (mutation.type === 'attributes') {
-                        $.livequery.handle.modified(mutation.target);
-                    } else {
-                        $.each(['added', 'removed'], function(i, type) {
-                            $.each(mutation[type + 'Nodes'], function(i, element) {
-                                $.livequery.handle[type](element);
-                            });
-                        });
-                    }
-                });
-            }
-        },
-        find: function(jq, selector, matchedFn, unmatchedFn) {
-            var q;
-            $.each( $.livequery.queries, function(i, query) {
-                if ( selector === query.selector && jq === query.jq &&
-                    (!matchedFn || matchedFn.$lqguid === query.matchedFn.$lqguid) &&
-                    (!unmatchedFn || unmatchedFn.$lqguid === query.unmatchedFn.$lqguid) ) {
-                    return (q = query) && false;
-                }
-            });
-            return q;
-        },
-        findorcreate: function(jq, selector, matchedFn, unmatchedFn) {
-            return $.livequery.find(jq, selector, matchedFn, unmatchedFn) ||
-                new $.livequery(jq, selector, matchedFn, unmatchedFn);
-        }
-    });
-
-    $(function() {
-        if ('MutationObserver' in window) {
-            $.livequery.method = 'mutationobserver';
-        } else if ('MutationEvent' in window) {
-            $.livequery.method = 'mutationevent';
-        } else if ('behavior' in document.documentElement.currentStyle) {
-            $.livequery.method = 'iebehaviors';
-        }
-
-        if ($.livequery.method) {
-            $.livequery.prepare[$.livequery.method]();
-        } else {
-            throw new Error('Could not find a means to monitor the DOM');
-        }
-    });
-
-}));
-
 Ember.TEMPLATES["ember-bootstrap-table-template-main"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
@@ -561,13 +303,10 @@ function program3(depth0,data) {
   stack1 = helpers['if'].call(depth0, "showHeader", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n            <tbody>\n            ");
-  stack1 = helpers['if'].call(depth0, "_showRenderingIndicator", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(16, program16, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers.each.call(depth0, "row", "in", "_rows", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(16, program16, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n            ");
-  stack1 = helpers.each.call(depth0, "row", "in", "_rows", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(18, program18, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n            ");
-  stack1 = helpers['if'].call(depth0, "_showLoadingRow", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(32, program32, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "_showLoadingRow", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(30, program30, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n            </tbody>\n        </table>\n    </div>\n");
   return buffer;
@@ -670,40 +409,29 @@ function program14(depth0,data) {
 
 function program16(depth0,data) {
   
-  var buffer = '';
-  data.buffer.push("\n              <tr class=\"table-component-rendering-row\">\n                  <td class='table-component-rendering-cell' ");
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'colspan': ("_numColumns")
-  },hashTypes:{'colspan': "STRING"},hashContexts:{'colspan': depth0},contexts:[],types:[],data:data})));
-  data.buffer.push(">\n                      <span class=\"table-component-rendering-indicator fa fa-spinner fa-pulse\"></span>\n                  </td>\n              </tr>\n            ");
-  return buffer;
-  }
-
-function program18(depth0,data) {
-  
   var buffer = '', stack1;
   data.buffer.push("\n                <tr>\n                    ");
-  stack1 = helpers['if'].call(depth0, "_detailRowsEnabled", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(19, program19, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "_detailRowsEnabled", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(17, program17, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                    ");
-  stack1 = helpers.each.call(depth0, "col", "in", "_columns", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(25, program25, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data});
+  stack1 = helpers.each.call(depth0, "col", "in", "_columns", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(23, program23, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                </tr>\n                ");
-  stack1 = helpers['if'].call(depth0, "_detailRowsEnabled", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(30, program30, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "_detailRowsEnabled", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(28, program28, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n            ");
   return buffer;
   }
-function program19(depth0,data) {
+function program17(depth0,data) {
   
   var buffer = '', stack1;
   data.buffer.push("\n                        ");
-  stack1 = helpers['if'].call(depth0, "useDefaultDetailRowToggle", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(20, program20, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "useDefaultDetailRowToggle", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(18, program18, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                    ");
   return buffer;
   }
-function program20(depth0,data) {
+function program18(depth0,data) {
   
   var buffer = '', stack1;
   data.buffer.push("\n                        \n                            <td class=\"table-component-detail-toggle-cell\">\n                                <button ");
@@ -711,33 +439,33 @@ function program20(depth0,data) {
     'data-rowindex': ("row._rowIndex")
   },hashTypes:{'data-rowindex': "STRING"},hashContexts:{'data-rowindex': depth0},contexts:[],types:[],data:data})));
   data.buffer.push(" class='toggle-detail-row'>\n                                    ");
-  stack1 = helpers['if'].call(depth0, "row._rowDetailVisible", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(23, program23, data),fn:self.program(21, program21, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "row._rowDetailVisible", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(21, program21, data),fn:self.program(19, program19, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                                </button>\n                            </td>\n                        ");
   return buffer;
   }
-function program21(depth0,data) {
+function program19(depth0,data) {
   
   
   data.buffer.push("\n                                        <span class='fa fa-minus fa-sm'></span>\n                                    ");
   }
 
-function program23(depth0,data) {
+function program21(depth0,data) {
   
   
   data.buffer.push("\n                                        <span class='fa fa-plus fa-sm'></span>\n                                    ");
   }
 
-function program25(depth0,data) {
+function program23(depth0,data) {
   
   var buffer = '', stack1;
   data.buffer.push("\n                        ");
-  stack1 = helpers['if'].call(depth0, "col.cellCustomViewClass", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(28, program28, data),fn:self.program(26, program26, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "col.cellCustomViewClass", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(26, program26, data),fn:self.program(24, program24, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n                    ");
   return buffer;
   }
-function program26(depth0,data) {
+function program24(depth0,data) {
   
   var buffer = '';
   data.buffer.push("\n                            ");
@@ -749,7 +477,7 @@ function program26(depth0,data) {
   return buffer;
   }
 
-function program28(depth0,data) {
+function program26(depth0,data) {
   
   var buffer = '', helper, options;
   data.buffer.push("\n                            ");
@@ -758,7 +486,7 @@ function program28(depth0,data) {
   return buffer;
   }
 
-function program30(depth0,data) {
+function program28(depth0,data) {
   
   var buffer = '';
   data.buffer.push("\n                    <tr ");
@@ -777,7 +505,7 @@ function program30(depth0,data) {
   return buffer;
   }
 
-function program32(depth0,data) {
+function program30(depth0,data) {
   
   var buffer = '';
   data.buffer.push("\n                <tr class='table-component-loading-row'>\n                    <td ");
