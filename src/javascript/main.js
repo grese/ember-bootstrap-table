@@ -233,7 +233,6 @@
 					if(this.get('_sortIndex') === columnIndex){
 						this.toggleProperty('sortAscending');
 					}else{
-						this.set('sortAscending', true);
 						this.set('sortIndex', columnIndex);
 					}
 				}
