@@ -49,7 +49,7 @@ test('should render an empty table if no columns are provided.', function() {
 	});
 });
 
-test('should set .table-responsive class on the tables containing div if responsive is true', function() {
+/*test('should set .table-responsive class on the tables containing div if responsive is true', function() {
 	var component = this.subject({
 			responsive: true,
 			columns: []
@@ -617,7 +617,7 @@ test('#sortTable action should fire an action if customSortAction property is pr
 		var calledWith = component.sendAction.calledWith('customSortAction', MockSortPath);
 		ok(calledWith, 'should have fired an action with sortPath');
 	});
-});
+});*/
 
 
 

@@ -233,7 +233,6 @@
 					if(this.get('_sortIndex') === columnIndex){
 						this.toggleProperty('sortAscending');
 					}else{
-						this.set('sortAscending', true);
 						this.set('sortIndex', columnIndex);
 					}
 				}
@@ -273,6 +272,7 @@
 	Ember.TableComponent = TableComponent;
 	Ember.Handlebars.helper('table-component', Ember.TableComponent);
 }(this));
+
 
 Ember.TEMPLATES["ember-bootstrap-table-template-main"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
