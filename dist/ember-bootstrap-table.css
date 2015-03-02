@@ -1,62 +1,33 @@
-.table-component thead th{
-  text-align: center;
-}
 .table-component tbody tr td{
-  vertical-align: middle;
+    vertical-align: middle;
 }
-.table-component tfoot tr td{
-  color: #7E817D;
-  font-family: 'HelveticaNeue', Helvetica, Arial, sans-serif;
-  font-size: 12px;
-  font-weight: bold;
-  padding: 12px 8px;
+.table-component button.table-cell-button{
+    background: none;
+    border: none;
 }
-.table-component tbody .align-left{
-  text-align: left;
+
+.table-component .table-component-header-text,
+.table-component .table-component-sort-icon{
+       display: table-cell;
+   }
+.table-component .table-component-row-toggle-cell{
+    width: 50px;
+    text-align: center;
 }
-.table-component tbody .text-center{
-  text-align: center;
+.table-component .table-component-sort-icon{
+    padding-left: 5px;
 }
-.table-component-header .tooltip{
-  margin-top: -3px;
-}
-.table-component tbody .cell-button{
-  background: none;
-  border: none;
-}
-.table-component tbody{
-  border-bottom: 1px solid #dfdfdf;
-}
-.table-component-header .table-component-header-name,
-.table-component-header-sortable-btn{
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
-  color: #7E817D;
-  font-family: 'HelveticaNeue', Helvetica, Arial, sans-serif;
-  font-size: 12px;
-  font-weight: bold;
-}
+
+
 .table-component .table-component-detail-row td{
-  border-top: none;
-}
+       border-top: none;
+   }
 .table-component .table-component-detail-row.collapse{
-  display: none;
+    display: none;
 }
 .table-component .table-component-detail-row.collapse.in{
-  display: table-row;
+    display: table-row;
 }
-.toggle-detail-row{
-  border: none;
-  background: none;
-}
-.table-component-detail-container{
-  padding-left: 60px;
-}
-.table-component-loading-row .table-component-loading-container{
-  text-align: center;
-}
-.table-component-header-cell-sort-container{
-  padding-left: 2px;
+.table-component-loading-row .table-component-loading-cell{
+    text-align: center;
 }
