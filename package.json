@@ -1,6 +1,6 @@
 {
   "name": "ember-bootstrap-table",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "An Ember Component for creating dynamic bootstrap tables.",
   "repository": {
     "type": "git",
