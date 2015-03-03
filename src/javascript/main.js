@@ -146,7 +146,7 @@
                 contents =
                     "<button " + btnAction + " " + btnClass + " " + tooltipAttr + ">" +
                     "<span " + textClass + ">" + headerName + "</span>" +
-                    "<span " + iconBinding + "></span>" +
+                    "<span class='table-component-sort-icon-container'><span " + iconBinding + "></span></span>" +
                     "</button>";
             }else{
                 contents = "<span " + textClass + tooltipAttr + ">" + headerName + "</span>";

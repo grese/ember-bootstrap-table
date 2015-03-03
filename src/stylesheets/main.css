@@ -6,22 +6,26 @@
     border: none;
 }
 
+.table-component-header-cell-sort{
+    display: table-row;
+}
 .table-component .table-component-header-text,
 .table-component .table-component-sort-icon{
-       display: table-cell;
-   }
+    display: table-cell;
+}
 .table-component .table-component-row-toggle-cell{
     width: 50px;
     text-align: center;
 }
-.table-component .table-component-sort-icon{
+.table-component .table-component-sort-icon-container{
     padding-left: 5px;
+    vertical-align: middle;
 }
 
 
 .table-component .table-component-detail-row td{
        border-top: none;
-   }
+}
 .table-component .table-component-detail-row.collapse{
     display: none;
 }
