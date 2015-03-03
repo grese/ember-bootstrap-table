@@ -10,7 +10,7 @@
     display: table-row;
 }
 .table-component .table-component-header-text,
-.table-component .table-component-sort-icon{
+.table-component .table-component-sort-icon-container{
     display: table-cell;
 }
 .table-component .table-component-row-toggle-cell{
