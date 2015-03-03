@@ -44,7 +44,7 @@ test('should render an empty table if no columns are provided.', function() {
 		$component = this.append(),
 		hasTable = false;
 	Em.run(function(){
-		hasTable = $component.find('table.table.table-component').length > 0;
+		hasTable = $component.find('table.table').length > 0;
 		equal(hasTable, true, 'The component should render an empty table.');
 	});
 });
