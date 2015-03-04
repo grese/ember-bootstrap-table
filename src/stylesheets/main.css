@@ -35,3 +35,7 @@
 .table-component-loading-row .table-component-loading-cell{
     text-align: center;
 }
+
+.table-component tfoot .table-component-loading-cell{
+    border: none;
+}
