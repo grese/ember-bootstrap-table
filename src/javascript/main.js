@@ -473,9 +473,14 @@
         }.property('customSortAction'),
         _performNativeSort: function(rows){
             var sortAsc = this.get('sortAscending'),
-                colConfig = this.get('_cols').objectAt(this.get('sortIndex'));
-            var sort = get(colConfig, 'sort');
-            return sort(colConfig, rows, sortAsc);
+                colConfig = this.get('_cols').objectAt(this.get('sortIndex')),
+                sort;
+            if(colConfig.get('sortable')){
+                sort = get(colConfig, 'sort');
+                return sort(colConfig, rows, sortAsc);
+            }else{
+                return rows;
+            }
         },
         _sortingPropertiesChanged: function(){
             var component = this;
