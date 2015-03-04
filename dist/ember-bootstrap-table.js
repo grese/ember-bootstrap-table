@@ -251,10 +251,10 @@
 
     var DetailRowContainerView = Em.ContainerView.extend({
         init: function(){
-            this._super();
             this.pushObject(DetailRowCellView.create({
                 rowData: this.get('rowData')
             }));
+            this._super();
         },
         tagName: 'tr',
         classNames: ['table-component-detail-row', 'collapse'],
@@ -335,15 +335,27 @@
     });
 
     var TFootContainerView = Em.ContainerView.extend({
+        init: function(){
+            this.set('loadingRow', LoadingRow.create());
+            this._super();
+        },
         tagName: 'tfoot',
         childViews: ['loadingRow'],
-        loadingRow: LoadingRow.create(),
+        loadingRow: null,
         component: function(){
             return this.get('_parentView.component');
         }.property()
     });
 
     var TableContainerView = Em.ContainerView.extend({
+        init: function(){
+            this.setProperties({
+                thead: THeadContainerView.create(),
+                tbody: TBodyContainerView.create(),
+                tfoot: TFootContainerView.create()
+            });
+            this._super();
+        },
         tagName: 'table',
         childViews: ['thead', 'tbody', 'tfoot'],
         classNames: ['table-component-table', 'table'],
@@ -356,9 +368,9 @@
             'component.bordered:table-bordered',
             'component.hoverable:table-hoverable'
         ],
-        thead: THeadContainerView.create(),
-        tbody: TBodyContainerView.create(),
-        tfoot: TFootContainerView.create(),
+        thead: null,
+        tbody: null,
+        tfoot: null,
         setup: function(){
             if(this.get('component.showHeader')){
                 this.get('thead').insertHeaderCells(this.container);
@@ -376,6 +388,10 @@
     });
 
     var TableComponent = Em.Component.extend({
+        init: function(){
+            this.set('_table', TableContainerView.create());
+            this._super();
+        },
 
         // [BEGIN] User-Defined Options:
         sortIndex: 0,
@@ -405,7 +421,7 @@
         tagName: 'div',
         classNames: ['table-component'],
         classNameBindings: ['responsive:table-responsive'],
-        _table: TableContainerView.create(),
+        _table: null,
         layout: Em.Handlebars.compile(
             "{{#if _showNoContentView}}" +
             "{{view noContentView}}" +
