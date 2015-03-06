@@ -251,10 +251,10 @@
 
     var DetailRowContainerView = Em.ContainerView.extend({
         init: function(){
+            this._super();
             this.pushObject(DetailRowCellView.create({
                 rowData: this.get('rowData')
             }));
-            this._super();
         },
         tagName: 'tr',
         classNames: ['table-component-detail-row', 'collapse'],
@@ -325,7 +325,8 @@
                 // If detailRows are enabled, create a detailRow for this item...
                 if(self.get('component._detailRowsEnabled')){
                     rowViews.push(DetailRowContainerView.create({
-                        rowData: rowData
+                        rowData: rowData,
+                        container: container
                     }));
                 }
             });
