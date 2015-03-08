@@ -337,11 +337,11 @@
 
     var TFootContainerView = Em.ContainerView.extend({
         init: function(){
-            this.set('loadingRow', LoadingRow.create());
             this._super();
+            this.set('loadingRow', LoadingRow.create());
+            this.pushObject(this.get('loadingRow'));
         },
         tagName: 'tfoot',
-        childViews: ['loadingRow'],
         loadingRow: null,
         component: function(){
             return this.get('_parentView.component');
@@ -350,15 +350,15 @@
 
     var TableContainerView = Em.ContainerView.extend({
         init: function(){
+            this._super();
             this.setProperties({
                 thead: THeadContainerView.create(),
                 tbody: TBodyContainerView.create(),
                 tfoot: TFootContainerView.create()
             });
-            this._super();
+            this.pushObjects([this.get('thead'), this.get('tbody'), this.get('tfoot')]);
         },
         tagName: 'table',
-        childViews: ['thead', 'tbody', 'tfoot'],
         classNames: ['table-component-table', 'table'],
         component: function(){
             return this.get('_parentView._parentView');
