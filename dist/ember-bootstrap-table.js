@@ -337,11 +337,11 @@
 
     var TFootContainerView = Em.ContainerView.extend({
         init: function(){
-            this.set('loadingRow', LoadingRow.create());
             this._super();
+            this.set('loadingRow', LoadingRow.create());
+            this.pushObject(this.get('loadingRow'));
         },
         tagName: 'tfoot',
-        childViews: ['loadingRow'],
         loadingRow: null,
         component: function(){
             return this.get('_parentView.component');
@@ -350,15 +350,15 @@
 
     var TableContainerView = Em.ContainerView.extend({
         init: function(){
+            this._super();
             this.setProperties({
                 thead: THeadContainerView.create(),
                 tbody: TBodyContainerView.create(),
                 tfoot: TFootContainerView.create()
             });
-            this._super();
+            this.pushObjects([this.get('thead'), this.get('tbody'), this.get('tfoot')]);
         },
         tagName: 'table',
-        childViews: ['thead', 'tbody', 'tfoot'],
         classNames: ['table-component-table', 'table'],
         component: function(){
             return this.get('_parentView._parentView');
@@ -416,6 +416,7 @@
         infiniteScrollEnabled: false,
         isLoadingRows: false,
         loadMoreAction: null,
+        disableSortDirection: false,
         // [END] User-Defined Options:
 
 
@@ -558,7 +559,10 @@
             _sortTable: function(colIdx){
                 // If the colIdx is same as current sortIndex, reverse sorting order.
                 if(colIdx === this.get('sortIndex')){
-                    this.set('sortAscending', !this.get('sortAscending'));
+                    // If disableSortDirection is false, we update sortAscending.  If not, do nothing.
+                    if(!this.get('disableSortDirection')){
+                        this.set('sortAscending', !this.get('sortAscending'));
+                    }
                 }else{
                     this.set('sortIndex', colIdx);
                 }

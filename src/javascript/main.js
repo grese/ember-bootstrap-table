@@ -416,6 +416,7 @@
         infiniteScrollEnabled: false,
         isLoadingRows: false,
         loadMoreAction: null,
+        disableSortDirection: false,
         // [END] User-Defined Options:
 
 
@@ -558,7 +559,10 @@
             _sortTable: function(colIdx){
                 // If the colIdx is same as current sortIndex, reverse sorting order.
                 if(colIdx === this.get('sortIndex')){
-                    this.set('sortAscending', !this.get('sortAscending'));
+                    // If disableSortDirection is false, we update sortAscending.  If not, do nothing.
+                    if(!this.get('disableSortDirection')){
+                        this.set('sortAscending', !this.get('sortAscending'));
+                    }
                 }else{
                     this.set('sortIndex', colIdx);
                 }

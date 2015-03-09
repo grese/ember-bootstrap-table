@@ -36,6 +36,7 @@ You'll need to include the following files in your project:
 * loadMoreAction: "[Action Name]" *// (the action that should be fired when user scrolls to bottom of page - only used when infiniteScrollEnabled is true, and isLoadingRows is false)*
 * noContentView: [Instance of Em.View] *// (this view will be rendered instead of the table if there are no rows.)*
 * useRenderingIndicator: (true || false) *// (True by default.  When true, this will disable the adding of a rendering indicator to the table when the table is taking a while to render)*
+* disableSortDirection: (true || false) *// (False by default.) When true, the sortAscending property will not change when the user clicks a column header (The sortAscending property will remain unchanged)*
 
 #### Column Configurations:
 Here are the options for configuring columns:
@@ -121,5 +122,7 @@ export default Ember.Controller.extend({
   isLoadingRows=isLoadingData
   loadMoreAction='loadMore'
   customSortAction='sortTheTable'
+  sortAscending=false
+  disableSortDirection=false
 }}
 ```
