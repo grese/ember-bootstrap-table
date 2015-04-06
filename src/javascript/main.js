@@ -348,6 +348,28 @@
         }.property()
     });
 
+    var StickyHeaderTable = Em.ContainerView.extend({
+        init: function(){
+            this._super();
+            this.set('thead', THeadContainerView.create());
+        },
+        tagName: 'table',
+        classNames: ['table-component-headers-table'],
+        classNameBindings: ['sticky:table-component-headers-sticky'],
+        component: function(){
+            return this.get('_parentView._parentView');
+        }.property(),
+        thead: null,
+        sticky: function(){
+            return this.get('component.stickyHeaderActive');
+        }.property('component.stickyHeaderActive'),
+        setup: function(){
+            if(this.get('component.showHeader')){
+                this.get('thead').insertHeaderCells(this.container);
+            }
+        }
+    });
+
     var TableContainerView = Em.ContainerView.extend({
         init: function(){
             this._super();
@@ -373,7 +395,7 @@
         tbody: null,
         tfoot: null,
         setup: function(){
-            if(this.get('component.showHeader')){
+            if(this.get('component.showHeader') && !this.get('component.stickyHeader')){
                 this.get('thead').insertHeaderCells(this.container);
             }
         },
@@ -391,6 +413,9 @@
     var TableComponent = Em.Component.extend({
         init: function(){
             this.set('_table', TableContainerView.create());
+            if(this.get('showHeader') && this.get('stickyHeader')){
+                this.set('_headerTable', StickyHeaderTable.create());
+            }
             this._super();
         },
 
@@ -417,6 +442,8 @@
         isLoadingRows: false,
         loadMoreAction: null,
         disableSortDirection: false,
+        stickyHeader: false,
+        stickyHeaderActive: false, // flag to add/remove the 'stickyness' of the header.
         // [END] User-Defined Options:
 
 
@@ -424,13 +451,23 @@
         classNames: ['table-component'],
         classNameBindings: ['responsive:table-responsive'],
         _table: null,
-        layout: Em.Handlebars.compile(
-            "{{#if _showNoContentView}}" +
-            "{{view noContentView}}" +
-            "{{else}}" +
-            "{{view _table}}" +
-            "{{/if}}"
-        ),
+        _headerTable: null,
+        layout: function(){
+
+            var tableHBS = "";
+            if(this.get('showHeader') && this.get('stickyHeader')){
+                tableHBS += "{{view _headerTable}}";
+            }
+            tableHBS  += "{{view _table}}";
+
+            return Em.Handlebars.compile(
+                "{{#if _showNoContentView}}" +
+                    "{{view noContentView}}" +
+                "{{else}}" +
+                    tableHBS +
+                "{{/if}}"
+            );
+        }.property('_showNoContentView', 'stickyHeaderActive'),
         _cols: function(){
             var cols = this.get('columns') || [],
                 colIdx = 0;
