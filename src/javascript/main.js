@@ -412,10 +412,10 @@
 
     var TableComponent = Em.Component.extend({
         init: function(){
-            this.set('_table', TableContainerView.create());
-            if(this.get('showHeader') && this.get('stickyHeader')){
+            if(this.get('_useStickyHeader')){
                 this.set('_headerTable', StickyHeaderTable.create());
             }
+            this.set('_table', TableContainerView.create());
             this._super();
         },
 
@@ -453,7 +453,6 @@
         _table: null,
         _headerTable: null,
         layout: function(){
-
             var tableHBS = "";
             if(this.get('showHeader') && this.get('stickyHeader')){
                 tableHBS += "{{view _headerTable}}";
@@ -563,6 +562,9 @@
         _showLoadingRow: function(){
             return this.get('infiniteScrollEnabled') && this.get('isLoadingRows');
         }.property('isLoadingRows', 'infiniteScrollEnabled'),
+        _useStickyHeader: function(){
+            return this.get('showHeader') && this.get('stickyHeader');
+        }.property('showHeader', 'stickyHeader'),
         _insertDefaultDetailToggle: function(){
             return this.get('_detailRowsEnabled') && this.get('useDefaultDetailRowToggle');
         }.property(),
@@ -583,6 +585,9 @@
         },
         willInsertElement: function(){
             // call setup on table prior to inserting element into DOM:
+            if(this.get('_tableHeader')){
+                this.get('_tableHeader').setup();
+            }
             this.get('_table').setup();
             this.get('_table').update();
         },
