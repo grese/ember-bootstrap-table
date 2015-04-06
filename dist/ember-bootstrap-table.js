@@ -352,6 +352,7 @@
         init: function(){
             this._super();
             this.set('thead', THeadContainerView.create());
+            this.pushObject(this.get('thead'));
         },
         tagName: 'table',
         classNames: ['table-component-headers-table'],
@@ -452,7 +453,7 @@
         _headerTable: null,
         layout: function(){
             var tableHBS = "";
-            if(this.get('showHeader') && this.get('stickyHeader')){
+            if(this.get('_useStickyHeader')){
                 tableHBS += "{{view _headerTable}}";
             }
             tableHBS  += "{{view _table}}";
