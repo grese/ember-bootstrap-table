@@ -364,9 +364,7 @@
             return this.get('component.stickyHeaderActive');
         }.property('component.stickyHeaderActive'),
         setup: function(){
-            if(this.get('component.showHeader')){
-                this.get('thead').insertHeaderCells(this.container);
-            }
+            this.get('thead').insertHeaderCells(this.container);
         }
     });
 
@@ -585,8 +583,8 @@
         },
         willInsertElement: function(){
             // call setup on table prior to inserting element into DOM:
-            if(this.get('_tableHeader')){
-                this.get('_tableHeader').setup();
+            if(this.get('_headerTable')){
+                this.get('_headerTable').setup();
             }
             this.get('_table').setup();
             this.get('_table').update();
