@@ -48,6 +48,9 @@
     -webkit-transition: background-color 0.25s, top 0.1s; /* Safari */
     transition: background-color 0.25s, top 0.1s;
 }
+.table-component .table-component-sticky-header-container thead th.table-component-header-cell{
+    border-bottom: none;
+}
 .table-component .table-component-sticky-header-container.sticky{
     position: fixed;
     width: 100%;

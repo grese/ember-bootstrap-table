@@ -379,7 +379,7 @@
             this.set('thead', THeadContainerView.create());
             this.pushObject(this.get('thead'));
         },
-        classNames: ['table-component-sticky-header-table'],
+        classNames: ['table-component-sticky-header-table', 'table'],
         tagName: 'table',
         component: function(){
             return this.get('_parentView._parentView');
