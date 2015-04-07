@@ -37,6 +37,8 @@ You'll need to include the following files in your project:
 * noContentView: [Instance of Em.View] *// (this view will be rendered instead of the table if there are no rows.)*
 * useRenderingIndicator: (true || false) *// (True by default.  When true, this will disable the adding of a rendering indicator to the table when the table is taking a while to render)*
 * disableSortDirection: (true || false) *// (False by default.) When true, the sortAscending property will not change when the user clicks a column header (The sortAscending property will remain unchanged)*
+* stickyHeaders: (true || false) *//(False by default). When true, the headers will be rendered into their own table, which will become sticky when the window scrolls to the position specified by "stickyHeaderActivatePosition".*
+* stickyHeaderActivatePosition: int value *//(90 by defualt). stickyHeaders will become active when the user scrolls to this y position.  disabled when stickyHeaders is false.*
 
 #### Column Configurations:
 Here are the options for configuring columns:
@@ -124,5 +126,7 @@ export default Ember.Controller.extend({
   customSortAction='sortTheTable'
   sortAscending=false
   disableSortDirection=false
+  stickyHeaders=true
+  stickyHeaderActivatePosition=100
 }}
 ```
