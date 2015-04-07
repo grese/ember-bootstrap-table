@@ -193,6 +193,22 @@
             var headerRow = HeaderRowContainerView.create();
             headerRow.pushObjects(headerCells);
             this.pushObject(headerRow);
+        },
+        setHeaderCellWidths: function(){
+            var row = this.objectAt(0) || Em.Object.create(),
+                cells = row.get('childViews') || [],
+                widths = this.get('component._table._columnWidths') || [];
+            cells.forEach(function(cell, idx){
+                var w = widths[idx];
+                cell.$().css('width', w);
+            });
+
+        },
+        didInsertElement: function(){
+            var self = this;
+            Em.run.later(function(){
+                self.setHeaderCellWidths();
+            }, 1);
         }
     });
 
@@ -332,6 +348,15 @@
             });
             // Push new rows into tbody...
             this.pushObjects(rowViews);
+        },
+        didInsertElement: function(){
+            var table = this.get('_parentView');
+            // Calculate the column widths for sticky header if 'stickyHeader' enabled.
+            if(this.get('component._useStickyHeader')){
+                Em.run.later(function(){
+                    table.calculateColumnWidths();
+                });
+            }
         }
     });
 
@@ -354,29 +379,24 @@
             this.set('thead', THeadContainerView.create());
             this.pushObject(this.get('thead'));
         },
+        classNames: ['table-component-sticky-header-table'],
         tagName: 'table',
-        classNames: ['table-component-headers-table'],
-        classNameBindings: ['sticky:table-component-headers-sticky'],
         component: function(){
             return this.get('_parentView._parentView');
         }.property(),
-        thead: null,
-        sticky: function(){
-            return this.get('component.stickyHeaderActive');
-        }.property('component.stickyHeaderActive'),
         setup: function(){
-            this.get('thead').insertHeaderCells(this.container);
+            if(this.get('component._useStickyHeader')){
+                this.get('thead').insertHeaderCells(this.container);
+            }
         }
     });
 
     var TableContainerView = Em.ContainerView.extend({
         init: function(){
             this._super();
-            this.setProperties({
-                thead: THeadContainerView.create(),
-                tbody: TBodyContainerView.create(),
-                tfoot: TFootContainerView.create()
-            });
+            this.set('tbody', TBodyContainerView.create());
+            this.set('tfoot', TFootContainerView.create());
+            this.set('thead', THeadContainerView.create());
             this.pushObjects([this.get('thead'), this.get('tbody'), this.get('tfoot')]);
         },
         tagName: 'table',
@@ -401,6 +421,18 @@
         update: function(){
             this.get('tbody').removeAllChildren();
             this.get('tbody').insertRows();
+        },
+        _columnWidths: [],
+        calculateColumnWidths: function(){
+            var self = this,
+                firstRow = this.get('tbody').objectAt(0),
+                cells = firstRow.get('childViews');
+            cells.forEach(function(cell, idx){
+                var $cell = cell.$();
+                if($cell){
+                    self.get('_columnWidths')[idx] = $cell.outerWidth();
+                }
+            });
         }
     });
 
@@ -443,26 +475,30 @@
         disableSortDirection: false,
         stickyHeader: false,
         stickyHeaderActive: false, // flag to add/remove the 'stickyness' of the header.
+        stickyHeaderActivatePosition: 90, // # of pixels from top when sticky header becomes active.
         // [END] User-Defined Options:
 
 
         tagName: 'div',
         classNames: ['table-component'],
-        classNameBindings: ['responsive:table-responsive'],
         _table: null,
         _headerTable: null,
         layout: function(){
-            var tableHBS = "";
+            var theadHBS = "",
+                tableHBS = "{{view _table}}";
             if(this.get('_useStickyHeader')){
-                tableHBS += "{{view _headerTable}}";
+                theadHBS = "<div {{bind-attr class=':table-component-sticky-header-container stickyHeaderActive:sticky'}}>" +
+                "<div class='table-component-sticky-header-inner container row'>{{view _headerTable}}</div>" +
+                "</div>";
             }
-            tableHBS  += "{{view _table}}";
-
             return Em.Handlebars.compile(
                 "{{#if _showNoContentView}}" +
-                    "{{view noContentView}}" +
+                "{{view noContentView}}" +
                 "{{else}}" +
+                    theadHBS +
+                "<div {{bind-attr class='responsive:table-responsive'}}>" +
                     tableHBS +
+                "</div>" +
                 "{{/if}}"
             );
         }.property('_showNoContentView', 'stickyHeaderActive'),
@@ -582,6 +618,31 @@
                 }
             });
         },
+        _attachStickyHeaderListener: function(){
+            var comp = this;
+            var stickyHeaderPos = this.get('stickyHeaderActivatePosition');
+            var $table = this.get('_table').$();
+            $(window).scroll(function(){
+                var pos = $(window).scrollTop();
+                var tableBottom = ($table.position().top + $table.outerHeight(true) + 20);
+                if(pos <= tableBottom){
+                    if(pos >= stickyHeaderPos){
+                        if(!comp.get('stickyHeaderActive')){
+                            comp.set('stickyHeaderActive', true);
+                        }
+                    }else if(pos < stickyHeaderPos){
+                        if(comp.get('stickyHeaderActive')){
+                            comp.set('stickyHeaderActive', false);
+                        }
+                    }
+                }else{
+                    // The user has scrolled past the bottom of the table, so headers shouldn't be sticky anymore.
+                    if(comp.get('stickyHeaderActive')){
+                        comp.set('stickyHeaderActive', false);
+                    }
+                }
+            });
+        },
         willInsertElement: function(){
             // call setup on table prior to inserting element into DOM:
             if(this.get('_headerTable')){
@@ -593,6 +654,9 @@
         didInsertElement: function(){
             if(this.get('infiniteScrollEnabled')){
                 this._attachInfiniteScrollListener();
+            }
+            if(this.get('_useStickyHeader')){
+                this._attachStickyHeaderListener();
             }
         },
 
