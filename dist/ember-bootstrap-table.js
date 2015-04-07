@@ -381,13 +381,13 @@
         },
         classNames: ['table-component-sticky-header-table', 'table'],
         tagName: 'table',
-        component: function(){
-            return this.get('_parentView._parentView');
-        }.property(),
+        component: null,
+        isSetup: false,
         setup: function(){
             if(this.get('component._useStickyHeader')){
                 this.get('thead').insertHeaderCells(this.container);
             }
+            this.set('isSetup', true);
         }
     });
 
@@ -401,9 +401,7 @@
         },
         tagName: 'table',
         classNames: ['table-component-table', 'table'],
-        component: function(){
-            return this.get('_parentView._parentView');
-        }.property(),
+        component: null,
         classNameBindings: [
             'component.condensed:table-condensed',
             'component.striped:table-striped',
@@ -413,10 +411,12 @@
         thead: null,
         tbody: null,
         tfoot: null,
+        isSetup: false,
         setup: function(){
             if(this.get('component.showHeader') && !this.get('component.stickyHeader')){
                 this.get('thead').insertHeaderCells(this.container);
             }
+            this.set('isSetup', true);
         },
         update: function(){
             this.get('tbody').removeAllChildren();
@@ -426,13 +426,16 @@
         calculateColumnWidths: function(){
             var self = this,
                 firstRow = this.get('tbody').objectAt(0),
+                cells;
+            if(firstRow){
                 cells = firstRow.get('childViews');
-            cells.forEach(function(cell, idx){
-                var $cell = cell.$();
-                if($cell){
-                    self.get('_columnWidths')[idx] = $cell.outerWidth();
-                }
-            });
+                cells.forEach(function(cell, idx){
+                    var $cell = cell.$();
+                    if($cell){
+                        self.get('_columnWidths')[idx] = $cell.outerWidth();
+                    }
+                });
+            }
         }
     });
 
@@ -444,9 +447,15 @@
     var TableComponent = Em.Component.extend({
         init: function(){
             if(this.get('_useStickyHeader')){
-                this.set('_headerTable', StickyHeaderTable.create());
+                this.set('_headerTable', StickyHeaderTable.create({
+                    component: this,
+                    container: this.container
+                }));
             }
-            this.set('_table', TableContainerView.create());
+            this.set('_table', TableContainerView.create({
+                component: this,
+                container: this.container
+            }));
             this._super();
         },
 
@@ -491,17 +500,22 @@
                 "<div class='table-component-sticky-header-inner container row'>{{view _headerTable}}</div>" +
                 "</div>";
             }
-            return Em.Handlebars.compile(
-                "{{#if _showNoContentView}}" +
+            var noContent = "";
+            if(this.get('noContentView') != null){
+                noContent = "<div {{bind-attr class=':table-component-no-content-container _showNoContentView::hidden'}}>" +
                 "{{view noContentView}}" +
-                "{{else}}" +
-                    theadHBS +
+                "</div>";
+            }
+            return Em.Handlebars.compile(
+                noContent +
+                "<div {{bind-attr class=':table-component-table-container _showNoContentView:hidden'}}>" +
+                theadHBS +
                 "<div {{bind-attr class='responsive:table-responsive'}}>" +
-                    tableHBS +
+                tableHBS +
                 "</div>" +
-                "{{/if}}"
+                "</div>"
             );
-        }.property('_showNoContentView', 'stickyHeaderActive'),
+        }.property('_showNoContentView'),
         _cols: function(){
             var cols = this.get('columns') || [],
                 colIdx = 0;
@@ -643,13 +657,27 @@
                 }
             });
         },
-        willInsertElement: function(){
+        _showNoContentViewChanged: function(){
+            var component = this;
+            Em.run.once(function(){
+                component.setupTable();
+                component.get('_table').update();
+            });
+        }.observes('_showNoContentView'),
+        setupTable: function(){
             // call setup on table prior to inserting element into DOM:
-            if(this.get('_headerTable')){
+            if(this.get('_headerTable') && !this.get('_headerTable.isSetup')){
                 this.get('_headerTable').setup();
             }
-            this.get('_table').setup();
-            this.get('_table').update();
+            if(!this.get('_table.isSetup')){
+                this.get('_table').setup();
+            }
+        },
+        willInsertElement: function(){
+            if(!this.get('_showNoContentView')){
+                this.setupTable();
+                this.get('_table').update();
+            }
         },
         didInsertElement: function(){
             if(this.get('infiniteScrollEnabled')){
