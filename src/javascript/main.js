@@ -204,6 +204,14 @@
             });
 
         },
+        updateHeaderCells: function(container){
+            this.removeAllChildren();
+            this.insertHeaderCells(container);
+            var self = this;
+            Em.run.later(function(){
+                self.setHeaderCellWidths();
+            }, 1);
+        },
         didInsertElement: function(){
             var self = this;
             Em.run.later(function(){
@@ -388,6 +396,9 @@
                 this.get('thead').insertHeaderCells(this.container);
             }
             this.set('isSetup', true);
+        },
+        updateColumns: function(){
+            this.get('thead').updateHeaderCells(this.container);
         }
     });
 
@@ -436,6 +447,10 @@
                     }
                 });
             }
+        },
+        updateColumns: function(){
+            this.update();
+            this.calculateColumnWidths();
         }
     });
 
@@ -664,6 +679,12 @@
                 component.get('_table').update();
             });
         }.observes('_showNoContentView'),
+        _columnsChanged: function(){
+            this.get('_table').updateColumns();
+            if(this.get('_headerTable')){
+                this.get('_headerTable').updateColumns();
+            }
+        }.observes('_cols.[]'),
         setupTable: function(){
             // call setup on table prior to inserting element into DOM:
             if(this.get('_headerTable') && !this.get('_headerTable.isSetup')){
