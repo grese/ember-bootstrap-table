@@ -6,12 +6,11 @@
     var get = Em.get;
 
     var DefaultIcons = Em.Object.extend({
-        sortable: 'fa fa-sort',
-        sortAsc: 'fa fa-sort-asc',
-        sortDesc: 'fa fa-sort-desc',
-        detailsClosed: 'fa fa-chevron-right',
-        detailsOpen: 'fa fa-chevron-down',
-        loadingRows: 'fa fa-spinner fa-pulse fa-2x'
+        sortable: '',
+        sortAsc: 'fuji-icons chevron-up',
+        sortDesc: 'fuji-icons chevron-down',
+        detailsClosed: 'fuji-icons chevron-right',
+        detailsOpen: 'fuji-icons chevron-down'
     });
 
     var DefaultColumnConfig = Em.Object.extend({
@@ -95,13 +94,12 @@
             return this.get('_parentView.component');
         }.property(),
         template: function(){
-            var icon = this.get('component._icons.loadingRows'),
-                colspan = this.get('component._colspan');
+            var colspan = this.get('component._colspan');
 
             return Em.Handlebars.compile(
                 "<td class='table-component-loading-cell' colspan='"+ colspan +"'>" +
                 "{{#if view.component._showLoadingRow}}" +
-                "<span class='table-component-loading-icon "+ icon +"'></span>" +
+                    "{{knight-rider class='table-component-loading-icon' container=view.component.container}}" +
                 "{{/if}}" +
                 "</td>"
             );
