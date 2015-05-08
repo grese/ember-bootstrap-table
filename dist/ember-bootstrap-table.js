@@ -7,10 +7,10 @@
 
     var DefaultIcons = Em.Object.extend({
         sortable: '',
-        sortAsc: 'fuji-icons chevron-up',
-        sortDesc: 'fuji-icons chevron-down',
-        detailsClosed: 'fuji-icons chevron-right',
-        detailsOpen: 'fuji-icons chevron-down'
+        sortAsc: 'fuji-icons caret-up',
+        sortDesc: 'fuji-icons caret-down',
+        detailsClosed: 'fuji-icons caret-up',
+        detailsOpen: 'fuji-icons caret-down'
     });
 
     var DefaultColumnConfig = Em.Object.extend({
@@ -99,7 +99,11 @@
             return Em.Handlebars.compile(
                 "<td class='table-component-loading-cell' colspan='"+ colspan +"'>" +
                 "{{#if view.component._showLoadingRow}}" +
-                    "{{knight-rider class='table-component-loading-icon' container=view.component.container}}" +
+                    "<span class='table-component-loading-icon Knight-Rider-loader animate'>" +
+                        "<span class='Knight-Rider-bar'></span>" +
+                        "<span class='Knight-Rider-bar'></span>" +
+                        "<span class='Knight-Rider-bar'></span>" +
+                    "</span>" +
                 "{{/if}}" +
                 "</td>"
             );
