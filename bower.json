@@ -1,33 +1,23 @@
 {
-  "name": "ember-bootstrap-table",
-  "version": "1.0.0",
-  "homepage": "https://github.com/grese/ember-bootstrap-table",
-  "authors": [
-    "grese <grese@yahoo-inc.com>"
-  ],
-  "description": "An ember table component to help create dynamic bootstrap tables in ember.",
-  "main": [
-    "dist/ember-bootstrap-table.min.js",
-    "dist/ember-bootstrap-table.css"
-  ],
-  "license": "MIT",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "tests",
-    "build",
-    "Gruntfile.js",
-    "karma.conf.js",
-    "package.json"
-  ],
+  "name": "ember-cli-bootstrap-table",
   "dependencies": {
-    "ember": "~1.8.1",
-    "bootstrap": ">=3.0",
-    "fuji-icons": "git@git.corp.yahoo.com:web-fuji-design/iconography#>=1.1.0"
+    "ember": ">=1.8.0",
+    "bootstrap": ">3.0.0",
+    "fuji-icons": "git@git.corp.yahoo.com:web-fuji-design/iconography#1.1.0"
   },
   "devDependencies": {
-    "qunit": "~1.16.0",
-    "ember-qunit-builds": "git://github.com/rwjblue/ember-qunit-builds.git"
+    "sinonjs": "~1.14.1",
+    "ember-cli-shims": "ember-cli/ember-cli-shims#0.0.3",
+    "ember-cli-test-loader": "ember-cli-test-loader#0.1.3",
+    "ember-data": "1.0.0-beta.16.1",
+    "ember-load-initializers": "ember-cli/ember-load-initializers#0.1.4",
+    "ember-resolver": "~0.1.15",
+    "jquery": "^1.11.1",
+    "loader.js": "ember-cli/loader.js#3.2.0",
+    "ember-mocha": "~0.7.0",
+    "blanket": "~1.1.5"
+  },
+  "resolutions": {
+    "ember": "1.12.0-beta.1"
   }
 }

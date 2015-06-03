@@ -1,0 +1,21 @@
+{{#if stickyHeader}}
+    <div {{bind-attr class=":table-component-sticky-header-container stickyHeaderActive:sticky"}}>
+        <div class="container table-component-sticky-header-inner">
+        {{#if _stickyTable}}
+            {{view _stickyTable}}
+        {{/if}}
+        </div>
+    </div>
+{{/if}}
+
+{{#if _showNoContentView}}
+    {{view noContentView}}
+{{/if}}
+
+<div {{bind-attr class=":table-component-table-container _showNoContentView:hidden"}}>
+    <div {{bind-attr class='responsive:table-responsive'}}>
+        {{#if _table}}
+            {{view _table}}
+        {{/if}}
+    </div>
+</div>

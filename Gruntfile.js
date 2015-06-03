@@ -1,75 +1,105 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
+    'use strict';
 
-  grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
-    copy: {
-      css: {
-        files: [
-          {src: ['src/stylesheets/*.css'], dest: 'dist/<%= pkg.name.replace(".css", "") %>.css'}
-        ]
-      }
-    },
-    concat: {
-      options: {
-        separator: "\n\n"
-      },
-      build: {
-        src: [
-          'src/javascript/**/*.js'
-        ],
-        dest: 'build/javascript.js'
-      },
-      dist: {
-        src: [
-          'build/**/*.js'
-        ],
-        dest: 'dist/<%= pkg.name.replace(".js", "") %>.js'
-      }
-    },
-    karma: {
-      unit: {
-        configFile: 'karma.conf.js'  
-      }
-    },
-    jshint: {
-      files: [
-        'src/**/*.js',
-        'tests/spec/**/*.js'
-      ],
-      options: {
-        jshintrc: '.jshintrc'
-      }
-    },
-    uglify: {
-      dist: {
-        files: {
-          'dist/<%= pkg.name.replace(".js", "") %>.min.js': ['<%= concat.dist.dest %>']
+    var path = require('path');
+
+    grunt.loadNpmTasks('grunt-banner');
+    grunt.loadNpmTasks('grunt-broccoli');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-release-it');
+    grunt.loadNpmTasks('grunt-text-replace');
+
+    // TODO(azirbel): We should register Ember Table, with its version, to Ember.Libraries
+
+    // Project configuration.
+    grunt.initConfig({
+        pkg: grunt.file.readJSON('package.json'),
+        banner: '/*!\n* <%=pkg.name %> v<%=pkg.version%>\n*/',
+
+        broccoli: {
+            dist: {
+                dest: 'dist',
+                config: 'packaging/Brocfile.js'
+            }
+        },
+
+        clean: ['tmp', 'ember-dist', 'node_modules', 'bower_components'],
+
+        replace: {
+            // The VERSION file for easy reference of the current version
+            global_version: {
+                src: ['VERSION'],
+                overwrite: true,
+                replacements: [{
+                    from: /.*\..*\..*/,
+                    to: '<%=pkg.version%>'
+                }]
+            },
+            // On the project homepage, there is a reference to the CHANGELOG and
+            // listing of the project's current version.
+            overview_page: {
+                src: ['tests/dummy/app/templates/overview.hbs'],
+                overwrite: true,
+                replacements: [{
+                    from: /The current version is .*\..*\..*\./,
+                    to: "The current version is <%=pkg.version%>."
+                }]
+            }
+        },
+
+        uglify: {
+            file: {
+                options: {
+                    preserveComments: false,
+                    beautify: false,
+                    mangle: true,
+                    report: 'min'
+                },
+
+                files: {
+                    './dist/ember-cli-bootstrap-table.min.js': ['./dist/ember-cli-bootstrap-table.js']
+                }
+            }
+        },
+
+        // Add a banner to dist files which includes version & year of release
+        usebanner: {
+            js: {
+                options: {
+                    banner: '<%=banner%>'
+                },
+                files: {
+                    src: ['dist/*.js']
+                }
+            },
+            css: {
+                options: {
+                    banner: '<%=banner%>'
+                },
+                files: {
+                    src: ['dist/*.css']
+                }
+            }
+        },
+
+        'release-it': {
+            options: {
+                'pkgFiles': ['package.json', 'bower.json'],
+                'commitMessage': 'Release %s',
+                'tagName': 'v%s',
+                'tagAnnotation': 'Release %s',
+                'increment': 'patch',
+                'buildCommand': 'grunt dist && ember build --environment="gh-pages"',
+                'distRepo': '-b gh-pages git@git.corp.yahoo.com:media-publishing/ember-cli-bootstrap-table',
+                'distStageDir': '.stage',
+                'distBase': 'ember-dist',
+                'distFiles': ['**/*'],
+                'publish': false
+            }
         }
-      }
-    },
-    emberTemplates: {
-      options: {
-        templateName: function(sourceFile) {
-          var template = sourceFile.replace('src/templates/', '').replace('/', '-');
-          return 'ember-bootstrap-table-template-' + template;
-        }
-      },
-      'build/templates.js': ["src/**/*.hbs"]
-    },
-    clean: ['build', 'dist']
-  });
+    });
 
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-qunit');
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-ember-templates');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-karma');
-
-  // default task just builds & dists the package.
-  grunt.registerTask('default', ['jshint', 'clean', 'emberTemplates', 'concat:build', 'concat:dist', 'uglify', 'copy:css']);
-  // test task builds, tests, and then dists the package.
-  grunt.registerTask('test', ['jshint', 'clean', 'emberTemplates', 'concat:build', 'karma', 'concat:dist', 'uglify', 'copy:css']);
+    grunt.registerTask("dist", ["broccoli:dist:build", "uglify", "usebanner"]);
+    grunt.registerTask("default", ["dist"]);
 };

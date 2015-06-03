@@ -1,6 +1,18 @@
-/vendor
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/tmp
+
+# dependencies
 /node_modules
-/build
-/artifacts
+/bower_components
+
+# misc
+/coverage.json
+/.sass-cache
+/connect.lock
+/coverage/*
+/libpeerconnection.log
+npm-debug.log
+testem.log
 /.idea
-/*.esproj

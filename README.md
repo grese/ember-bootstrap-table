@@ -1,20 +1,8 @@
-# ember-bootstrap-table
+# Ember-cli-bootstrap-table
+
 An ember table component to help create dynamic bootstrap tables in ember.
 
-## Dependencies:
-* Ember
-* Bootstrap v3
-* fontawesome (just for icons)
-
-## Installation:
-* This component is available as a bower dependency:  `bower install --save ember-bootstrap-table`
-* Alternatively, you can just download it as a zip file and manually include the contents of the 'dist' folder in your project.
-
 ## Usage:
-#### Files:
-You'll need to include the following files in your project:
-* dist/ember-bootstrap-table.min.js
-* dist/ember-bootstrap-table.css
 
 #### Parameters:
 * columns: [] *// *REQUIRED (array of column configs)*
@@ -28,14 +16,10 @@ You'll need to include the following files in your project:
 * customSortAction: "[Action Name]" *// (The action that will fire when a user has clicked a sortable column header.  Set this parameter to override the default sorting behavior of the table.  The action will be fired with two parameters:  'columnIndex', and 'isAscending'  When specified, this will make the .sort property on your column configs inactive.)*
 * sortIndex: "[Property to Sort On]" *// (only active if customSortAction is null)*
 * sortAscending: (true || false) *// (only active if customSortAction is null)*
-* rowDetailViewClass: (null || [Instance of Ember.View]) *// (Defines a custom view for the detail rows - only used when hasDetailRows is true)*
-* hasDetailRows:  (true || false) *// (enabled/disables detail rows)*
-* useDefaultDetailRowToggle: (true || false) *// (when true, an extra column will be added to the table to allow the user to show and hide the detail rows.  If false, you must provide your own mechanism for showing/hiding the detail rows)*
 * infiniteScrollEnabled: (true || false) *// (whether or not infinite scroll should be enabled)*
 * isLoadingRows: (true || false) *// (a flag to bind to for showing/hiding the table's loading indicator - only used when infiniteScrollEnabled is true)*
 * loadMoreAction: "[Action Name]" *// (the action that should be fired when user scrolls to bottom of page - only used when infiniteScrollEnabled is true, and isLoadingRows is false)*
 * noContentView: [Instance of Em.View] *// (this view will be rendered instead of the table if there are no rows.)*
-* useRenderingIndicator: (true || false) *// (True by default.  When true, this will disable the adding of a rendering indicator to the table when the table is taking a while to render)*
 * disableSortDirection: (true || false) *// (False by default.) When true, the sortAscending property will not change when the user clicks a column header (The sortAscending property will remain unchanged)*
 * stickyHeaders: (true || false) *//(False by default). When true, the headers will be rendered into their own table, which will become sticky when the window scrolls to the position specified by "stickyHeaderActivatePosition".*
 * stickyHeaderActivatePosition: int value *//(90 by defualt). stickyHeaders will become active when the user scrolls to this y position.  disabled when stickyHeaders is false.*
@@ -60,7 +44,6 @@ Here are the options for configuring columns:
 ```javascript
 import CustomHeaderCell from 'app/views/custom-header-view';
 import CustomCell from 'app/views/custom-cell-view';
-import DetailRow from 'app/views/detail-row-view';
 
 export default Ember.Controller.extend({
   columns: function(){
@@ -85,9 +68,6 @@ export default Ember.Controller.extend({
   rows: function(){
     return this.get('model') || [];
   }.property('model.[]'),
-  detailRowViewClass: function(){
-    return DetailRow;
-  }.property(),
   isLoadingData: false,
   actions: {
     loadMore: function(){
@@ -117,9 +97,6 @@ export default Ember.Controller.extend({
   responsive=true
   bordered=false
   striped=true
-  hasDetailRows=true
-  rowDetailViewClass=detailRowViewClass
-  useDefaultDetailRowToggle=true
   infiniteScrollEnabled=true
   isLoadingRows=isLoadingData
   loadMoreAction='loadMore'
@@ -130,3 +107,30 @@ export default Ember.Controller.extend({
   stickyHeaderActivatePosition=100
 }}
 ```
+
+## Installation (Development)
+
+* `git clone` this repository
+* `npm install`
+* `bower install`
+
+## Running  (Development)
+
+* `ember server`
+* Visit your app at http://localhost:4200.
+
+## Running Tests  (Development)
+
+* `ember test`
+* `ember test --server`
+
+## Building  (Development)
+
+* `ember build`
+
+## Dist
+Before submitting a PR for this repo, please run the following grunt command to ensure that your changes will also
+be available for those who are using the globals version of this project.
+* `grunt dist`
+
+For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
