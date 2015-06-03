@@ -1,5 +1,5 @@
 /*!
-* ember-cli-bootstrap-table v0.0.0
+* ember-bootstrap-table v2.0.0
 */
 (function(){;
 var define, requireModule, require, requirejs;
@@ -195,8 +195,8 @@ var define, requireModule, require, requirejs;
   };
 })();
 
-;define("ember-cli-bootstrap-table/components/table-component", 
-  ["ember","ember-cli-bootstrap-table/templates/components/table-component","ember-cli-bootstrap-table/views/table-table","ember-cli-bootstrap-table/views/table-sticky","ember-cli-bootstrap-table/models/table-icons","ember-cli-bootstrap-table/views/table-no-content","ember-cli-bootstrap-table/models/table-column","ember-cli-bootstrap-table/models/table-row","exports"],
+;define("ember-bootstrap-table/components/table-component", 
+  ["ember","ember-bootstrap-table/templates/components/table-component","ember-bootstrap-table/views/table-table","ember-bootstrap-table/views/table-sticky","ember-bootstrap-table/models/table-icons","ember-bootstrap-table/views/table-no-content","ember-bootstrap-table/models/table-column","ember-bootstrap-table/models/table-row","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __exports__) {
     "use strict";
     var Em = __dependency1__["default"];
@@ -369,7 +369,7 @@ var define, requireModule, require, requirejs;
 
     });
   });
-;define("ember-cli-bootstrap-table/templates/components/table-component", 
+;define("ember-bootstrap-table/templates/components/table-component", 
   ["ember","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -441,8 +441,8 @@ var define, requireModule, require, requirejs;
       
     });
   });
-;define("ember-cli-bootstrap-table/views/table-table", 
-  ["ember","ember-cli-bootstrap-table/views/table-thead","ember-cli-bootstrap-table/views/table-tbody","ember-cli-bootstrap-table/views/table-tfoot","exports"],
+;define("ember-bootstrap-table/views/table-table", 
+  ["ember","ember-bootstrap-table/views/table-thead","ember-bootstrap-table/views/table-tbody","ember-bootstrap-table/views/table-tfoot","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
     var Em = __dependency1__["default"];
@@ -521,8 +521,8 @@ var define, requireModule, require, requirejs;
         }
     });
   });
-;define("ember-cli-bootstrap-table/views/table-thead", 
-  ["ember","ember-cli-bootstrap-table/views/table-tr","ember-cli-bootstrap-table/views/table-header-cell","exports"],
+;define("ember-bootstrap-table/views/table-thead", 
+  ["ember","ember-bootstrap-table/views/table-tr","ember-bootstrap-table/views/table-header-cell","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
     var Em = __dependency1__["default"];
@@ -566,7 +566,7 @@ var define, requireModule, require, requirejs;
         }
     });
   });
-;define("ember-cli-bootstrap-table/views/table-tr", 
+;define("ember-bootstrap-table/views/table-tr", 
   ["ember","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -575,8 +575,8 @@ var define, requireModule, require, requirejs;
         tagName: 'tr'
     });
   });
-;define("ember-cli-bootstrap-table/views/table-header-cell", 
-  ["ember","ember-cli-bootstrap-table/views/table-th","ember-cli-bootstrap-table/templates/views/table-header-cell","exports"],
+;define("ember-bootstrap-table/views/table-header-cell", 
+  ["ember","ember-bootstrap-table/views/table-th","ember-bootstrap-table/templates/views/table-header-cell","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
     var Em = __dependency1__["default"];
@@ -610,7 +610,7 @@ var define, requireModule, require, requirejs;
         }
     });
   });
-;define("ember-cli-bootstrap-table/views/table-th", 
+;define("ember-bootstrap-table/views/table-th", 
   ["ember","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -620,7 +620,7 @@ var define, requireModule, require, requirejs;
         tagName: 'th'
     });
   });
-;define("ember-cli-bootstrap-table/templates/views/table-header-cell", 
+;define("ember-bootstrap-table/templates/views/table-header-cell", 
   ["ember","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -668,8 +668,8 @@ var define, requireModule, require, requirejs;
       
     });
   });
-;define("ember-cli-bootstrap-table/views/table-tbody", 
-  ["ember","ember-cli-bootstrap-table/views/table-row","exports"],
+;define("ember-bootstrap-table/views/table-tbody", 
+  ["ember","ember-bootstrap-table/views/table-row","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
     var Em = __dependency1__["default"];
@@ -695,8 +695,8 @@ var define, requireModule, require, requirejs;
         }
     });
   });
-;define("ember-cli-bootstrap-table/views/table-row", 
-  ["ember-cli-bootstrap-table/views/table-tr","ember-cli-bootstrap-table/views/table-cell","exports"],
+;define("ember-bootstrap-table/views/table-row", 
+  ["ember-bootstrap-table/views/table-tr","ember-bootstrap-table/views/table-cell","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
     var TRView = __dependency1__["default"];
@@ -721,8 +721,8 @@ var define, requireModule, require, requirejs;
         }
     });
   });
-;define("ember-cli-bootstrap-table/views/table-cell", 
-  ["ember","ember-cli-bootstrap-table/views/table-td","ember-cli-bootstrap-table/templates/views/table-cell","exports"],
+;define("ember-bootstrap-table/views/table-cell", 
+  ["ember","ember-bootstrap-table/views/table-td","ember-bootstrap-table/templates/views/table-cell","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
     var Em = __dependency1__["default"];
@@ -756,7 +756,7 @@ var define, requireModule, require, requirejs;
         })
     });
   });
-;define("ember-cli-bootstrap-table/views/table-td", 
+;define("ember-bootstrap-table/views/table-td", 
   ["ember","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -766,7 +766,7 @@ var define, requireModule, require, requirejs;
         attributeBindings: ['colspan', 'rowspan']
     });
   });
-;define("ember-cli-bootstrap-table/templates/views/table-cell", 
+;define("ember-bootstrap-table/templates/views/table-cell", 
   ["ember","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -785,8 +785,8 @@ var define, requireModule, require, requirejs;
       
     });
   });
-;define("ember-cli-bootstrap-table/views/table-tfoot", 
-  ["ember","ember-cli-bootstrap-table/views/table-tr","ember-cli-bootstrap-table/views/table-loading","exports"],
+;define("ember-bootstrap-table/views/table-tfoot", 
+  ["ember","ember-bootstrap-table/views/table-tr","ember-bootstrap-table/views/table-loading","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
     var Em = __dependency1__["default"];
@@ -816,8 +816,8 @@ var define, requireModule, require, requirejs;
         }
     });
   });
-;define("ember-cli-bootstrap-table/views/table-loading", 
-  ["ember","ember-cli-bootstrap-table/views/table-td","ember-cli-bootstrap-table/templates/views/table-loading","exports"],
+;define("ember-bootstrap-table/views/table-loading", 
+  ["ember","ember-bootstrap-table/views/table-td","ember-bootstrap-table/templates/views/table-loading","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
     var Em = __dependency1__["default"];
@@ -832,7 +832,7 @@ var define, requireModule, require, requirejs;
         })
     });
   });
-;define("ember-cli-bootstrap-table/templates/views/table-loading", 
+;define("ember-bootstrap-table/templates/views/table-loading", 
   ["ember","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -856,8 +856,8 @@ var define, requireModule, require, requirejs;
       
     });
   });
-;define("ember-cli-bootstrap-table/views/table-sticky", 
-  ["ember","ember-cli-bootstrap-table/views/table-thead","exports"],
+;define("ember-bootstrap-table/views/table-sticky", 
+  ["ember","ember-bootstrap-table/views/table-thead","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
     var Em = __dependency1__["default"];
@@ -890,7 +890,7 @@ var define, requireModule, require, requirejs;
         }
     });
   });
-;define("ember-cli-bootstrap-table/models/table-icons", 
+;define("ember-bootstrap-table/models/table-icons", 
   ["ember","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -903,8 +903,8 @@ var define, requireModule, require, requirejs;
         detailsOpen: 'fuji-icons caret-down'
     });
   });
-;define("ember-cli-bootstrap-table/views/table-no-content", 
-  ["ember","ember-cli-bootstrap-table/templates/views/table-no-content","exports"],
+;define("ember-bootstrap-table/views/table-no-content", 
+  ["ember","ember-bootstrap-table/templates/views/table-no-content","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
     var Em = __dependency1__["default"];
@@ -915,7 +915,7 @@ var define, requireModule, require, requirejs;
         template: template
     });
   });
-;define("ember-cli-bootstrap-table/templates/views/table-no-content", 
+;define("ember-bootstrap-table/templates/views/table-no-content", 
   ["ember","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -931,7 +931,7 @@ var define, requireModule, require, requirejs;
       
     });
   });
-;define("ember-cli-bootstrap-table/models/table-column", 
+;define("ember-bootstrap-table/models/table-column", 
   ["ember","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -988,7 +988,7 @@ var define, requireModule, require, requirejs;
         })
     });
   });
-;define("ember-cli-bootstrap-table/models/table-row", 
+;define("ember-bootstrap-table/models/table-row", 
   ["ember","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -1002,50 +1002,50 @@ var define, requireModule, require, requirejs;
 });
 
 window.Ember.Table = Ember.Namespace.create();
-window.Ember.TEMPLATES['components/table-component'] = require('ember-cli-bootstrap-table/templates/components/table-component')['default'];
-window.Ember.TEMPLATES['views/table-cell'] = require('ember-cli-bootstrap-table/templates/views/table-cell')['default'];
-window.Ember.TEMPLATES['views/table-header-cell'] = require('ember-cli-bootstrap-table/templates/views/table-header-cell')['default'];
-window.Ember.TEMPLATES['views/table-loading'] = require('ember-cli-bootstrap-table/templates/views/table-loading')['default'];
-window.Ember.TEMPLATES['views/table-no-content'] = require('ember-cli-bootstrap-table/templates/views/table-no-content')['default'];
-window.Ember.Table.TableComponent = require('ember-cli-bootstrap-table/components/table-component')['default'];
-window.Ember.Table.Column = require('ember-cli-bootstrap-table/models/table-column')['default'];
-window.Ember.Table.Row = require('ember-cli-bootstrap-table/models/table-row')['default'];
-window.Ember.Table.Icons = require('ember-cli-bootstrap-table/models/table-icons')['default'];
-window.Ember.Table.CellView = require('ember-cli-bootstrap-table/views/table-cell')['default'];
-window.Ember.Table.HeaderCellView = require('ember-cli-bootstrap-table/views/table-header-cell')['default'];
-window.Ember.Table.LoadingView = require('ember-cli-bootstrap-table/views/table-loading')['default'];
-window.Ember.Table.NoContentView = require('ember-cli-bootstrap-table/views/table-no-content')['default'];
-window.Ember.Table.RowView = require('ember-cli-bootstrap-table/views/table-row')['default'];
-window.Ember.Table.StickyView = require('ember-cli-bootstrap-table/views/table-sticky')['default'];
-window.Ember.Table.TableView = require('ember-cli-bootstrap-table/views/table-table')['default'];
-window.Ember.Table.TBodyView = require('ember-cli-bootstrap-table/views/table-tbody')['default'];
-window.Ember.Table.TDView = require('ember-cli-bootstrap-table/views/table-td')['default'];
-window.Ember.Table.TFootView = require('ember-cli-bootstrap-table/views/table-tfoot')['default'];
-window.Ember.Table.THView = require('ember-cli-bootstrap-table/views/table-th')['default'];
-window.Ember.Table.THeadView = require('ember-cli-bootstrap-table/views/table-thead')['default'];
-window.Ember.Table.TRView = require('ember-cli-bootstrap-table/views/table-tr')['default'];
+window.Ember.TEMPLATES['components/table-component'] = require('ember-bootstrap-table/templates/components/table-component')['default'];
+window.Ember.TEMPLATES['views/table-cell'] = require('ember-bootstrap-table/templates/views/table-cell')['default'];
+window.Ember.TEMPLATES['views/table-header-cell'] = require('ember-bootstrap-table/templates/views/table-header-cell')['default'];
+window.Ember.TEMPLATES['views/table-loading'] = require('ember-bootstrap-table/templates/views/table-loading')['default'];
+window.Ember.TEMPLATES['views/table-no-content'] = require('ember-bootstrap-table/templates/views/table-no-content')['default'];
+window.Ember.Table.TableComponent = require('ember-bootstrap-table/components/table-component')['default'];
+window.Ember.Table.Column = require('ember-bootstrap-table/models/table-column')['default'];
+window.Ember.Table.Row = require('ember-bootstrap-table/models/table-row')['default'];
+window.Ember.Table.Icons = require('ember-bootstrap-table/models/table-icons')['default'];
+window.Ember.Table.CellView = require('ember-bootstrap-table/views/table-cell')['default'];
+window.Ember.Table.HeaderCellView = require('ember-bootstrap-table/views/table-header-cell')['default'];
+window.Ember.Table.LoadingView = require('ember-bootstrap-table/views/table-loading')['default'];
+window.Ember.Table.NoContentView = require('ember-bootstrap-table/views/table-no-content')['default'];
+window.Ember.Table.RowView = require('ember-bootstrap-table/views/table-row')['default'];
+window.Ember.Table.StickyView = require('ember-bootstrap-table/views/table-sticky')['default'];
+window.Ember.Table.TableView = require('ember-bootstrap-table/views/table-table')['default'];
+window.Ember.Table.TBodyView = require('ember-bootstrap-table/views/table-tbody')['default'];
+window.Ember.Table.TDView = require('ember-bootstrap-table/views/table-td')['default'];
+window.Ember.Table.TFootView = require('ember-bootstrap-table/views/table-tfoot')['default'];
+window.Ember.Table.THView = require('ember-bootstrap-table/views/table-th')['default'];
+window.Ember.Table.THeadView = require('ember-bootstrap-table/views/table-thead')['default'];
+window.Ember.Table.TRView = require('ember-bootstrap-table/views/table-tr')['default'];
 Ember.onLoad('Ember.Application', function(Application) {
 Application.initializer({
-name: 'ember-cli-bootstrap-table',
+name: 'ember-bootstrap-table',
 initialize: function(container) {
-container.register('component:table-component', require('ember-cli-bootstrap-table/components/table-component')['default']);
-container.register('view:table-cell', require('ember-cli-bootstrap-table/views/table-cell')['default']);
-container.register('view:table-header-cell', require('ember-cli-bootstrap-table/views/table-header-cell')['default']);
-container.register('view:table-loading', require('ember-cli-bootstrap-table/views/table-loading')['default']);
-container.register('view:table-no-content', require('ember-cli-bootstrap-table/views/table-no-content')['default']);
-container.register('view:table-row', require('ember-cli-bootstrap-table/views/table-row')['default']);
-container.register('view:table-sticky', require('ember-cli-bootstrap-table/views/table-sticky')['default']);
-container.register('view:table-table', require('ember-cli-bootstrap-table/views/table-table')['default']);
-container.register('view:table-tbody', require('ember-cli-bootstrap-table/views/table-tbody')['default']);
-container.register('view:table-td', require('ember-cli-bootstrap-table/views/table-td')['default']);
-container.register('view:table-tfoot', require('ember-cli-bootstrap-table/views/table-tfoot')['default']);
-container.register('view:table-th', require('ember-cli-bootstrap-table/views/table-th')['default']);
-container.register('view:table-thead', require('ember-cli-bootstrap-table/views/table-thead')['default']);
-container.register('view:table-tr', require('ember-cli-bootstrap-table/views/table-tr')['default']);
+container.register('component:table-component', require('ember-bootstrap-table/components/table-component')['default']);
+container.register('view:table-cell', require('ember-bootstrap-table/views/table-cell')['default']);
+container.register('view:table-header-cell', require('ember-bootstrap-table/views/table-header-cell')['default']);
+container.register('view:table-loading', require('ember-bootstrap-table/views/table-loading')['default']);
+container.register('view:table-no-content', require('ember-bootstrap-table/views/table-no-content')['default']);
+container.register('view:table-row', require('ember-bootstrap-table/views/table-row')['default']);
+container.register('view:table-sticky', require('ember-bootstrap-table/views/table-sticky')['default']);
+container.register('view:table-table', require('ember-bootstrap-table/views/table-table')['default']);
+container.register('view:table-tbody', require('ember-bootstrap-table/views/table-tbody')['default']);
+container.register('view:table-td', require('ember-bootstrap-table/views/table-td')['default']);
+container.register('view:table-tfoot', require('ember-bootstrap-table/views/table-tfoot')['default']);
+container.register('view:table-th', require('ember-bootstrap-table/views/table-th')['default']);
+container.register('view:table-thead', require('ember-bootstrap-table/views/table-thead')['default']);
+container.register('view:table-tr', require('ember-bootstrap-table/views/table-tr')['default']);
 }
 });
 });
 Ember.Table.TableComponent.reopen({
-layoutName: 'components/ember-cli-bootstrap-table'
+layoutName: 'components/ember-bootstrap-table'
 });
 Ember.Handlebars.helper('table-component', Ember.Table.TableComponent);})();

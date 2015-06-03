@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { describe, it, beforeEach } from 'mocha';
 import Em from 'ember';
-import TableColumn from 'ember-cli-bootstrap-table/models/table-column';
+import TableColumn from 'ember-bootstrap-table/models/table-column';
 
 describe('Table Column', function(){
 

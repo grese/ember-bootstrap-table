@@ -15,12 +15,12 @@ var globals = require('./globals');
 
 var addonTree = pickFiles('addon', {
     srcDir: '/',
-    destDir: 'ember-cli-bootstrap-table'
+    destDir: 'ember-bootstrap-table'
 });
 
 // Compile templates
 var templateTree = templateCompiler('addon/templates', { module: true });
-templateTree = pickFiles(templateTree, {srcDir: '/', destDir: 'ember-cli-bootstrap-table/templates'});
+templateTree = pickFiles(templateTree, {srcDir: '/', destDir: 'ember-bootstrap-table/templates'});
 
 var sourceTree = mergeTrees([templateTree, addonTree], {overwrite: true});
 
@@ -29,7 +29,7 @@ var sourceTree = mergeTrees([templateTree, addonTree], {overwrite: true});
 //   - Register all templates on Ember.TEMPLATES
 //   - Register views and components with the container so they can be looked up
 // Output goes into globals-output.js
-var globalExports = globals(pickFiles(sourceTree, {srcDir: '/ember-cli-bootstrap-table', destDir: '/'}));
+var globalExports = globals(pickFiles(sourceTree, {srcDir: '/ember-bootstrap-table', destDir: '/'}));
 
 // Require.js module loader
 var loader = pickFiles('bower_components', {srcDir: '/loader.js', destDir: '/'});
@@ -40,9 +40,9 @@ var jsTree = mergeTrees([sourceTree, globalExports, loader]);
 var compiled = compileES6(jsTree, {
     wrapInEval: false,
     loaderFile: 'loader.js',
-    inputFiles: ['ember-cli-bootstrap-table/**/*.js'],
+    inputFiles: ['ember-bootstrap-table/**/*.js'],
     ignoredModules: ['ember'],
-    outputFile: '/ember-cli-bootstrap-table.js',
+    outputFile: '/ember-bootstrap-table.js',
     legacyFilesToAppend: ['globals-output.js']
 });
 
@@ -52,7 +52,7 @@ compiled = wrap(compiled);
 // Compile LESS
 var lessTree = pickFiles('addon/styles', { srcDir: '/', destDir: '/' });
 var lessMain = 'addon.less';
-var lessOutput = 'ember-cli-bootstrap-table.css';
+var lessOutput = 'ember-bootstrap-table.css';
 lessTree = less(lessTree, lessMain, lessOutput);
 
 module.exports = mergeTrees([es3Safe(compiled), lessTree]);

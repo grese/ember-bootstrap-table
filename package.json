@@ -1,6 +1,6 @@
 {
-  "name": "ember-cli-bootstrap-table",
-  "version": "0.0.0",
+  "name": "ember-bootstrap-table",
+  "version": "2.0.0",
   "description": "Bootstrap table for EmberCLI (with shim for EAK & Globals)",
   "directories": {
     "doc": "doc",
@@ -11,7 +11,7 @@
     "build": "ember build",
     "test": "ember test"
   },
-  "repository": "git@git.corp.yahoo.com:media-publishing/ember-cli-bootstrap-table.git",
+  "repository": "git@git.corp.yahoo.com:media-publishing/ember-bootstrap-table.git",
   "engines": {
     "node": ">= 0.10.0"
   },

@@ -1,7 +1,7 @@
 /*globals blanket, module */
 var options = {
-    modulePrefix: "ember-cli-bootstrap-table",
-    filter: "//.*ember-cli-bootstrap-table/.*/",
+    modulePrefix: "ember-bootstrap-table",
+    filter: "//.*ember-bootstrap-table/.*/",
     antifilter: "//.*(tests|template).*/",
     loaderExclusions: [],
     enableCoverage: true,

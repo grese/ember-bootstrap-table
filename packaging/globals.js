@@ -11,30 +11,30 @@ var Globals = function (inputTree) {
         return new Globals(inputTree, options);
     }
     this.inputTree = inputTree;
-    this.outputPrefix = 'ember-cli-bootstrap-table';
+    this.outputPrefix = 'ember-bootstrap-table';
 
     // The old global names aren't consistent: some are on Ember.Table, some on
     // Ember.AddeparMixins, and some just on Ember. For backwards-compatibility
     // we need to maintain the same old names.
     this.globalNameMapping = {
-        'ember-cli-bootstrap-table/components/table-component': 'Ember.Table.TableComponent',
-        'ember-cli-bootstrap-table/models/table-column': 'Ember.Table.Column',
-        'ember-cli-bootstrap-table/models/table-row': 'Ember.Table.Row',
-        'ember-cli-bootstrap-table/models/table-icons': 'Ember.Table.Icons',
+        'ember-bootstrap-table/components/table-component': 'Ember.Table.TableComponent',
+        'ember-bootstrap-table/models/table-column': 'Ember.Table.Column',
+        'ember-bootstrap-table/models/table-row': 'Ember.Table.Row',
+        'ember-bootstrap-table/models/table-icons': 'Ember.Table.Icons',
 
-        'ember-cli-bootstrap-table/views/table-cell': 'Ember.Table.CellView',
-        'ember-cli-bootstrap-table/views/table-header-cell': 'Ember.Table.HeaderCellView',
-        'ember-cli-bootstrap-table/views/table-loading': 'Ember.Table.LoadingView',
-        'ember-cli-bootstrap-table/views/table-no-content': 'Ember.Table.NoContentView',
-        'ember-cli-bootstrap-table/views/table-row': 'Ember.Table.RowView',
-        'ember-cli-bootstrap-table/views/table-sticky': 'Ember.Table.StickyView',
-        'ember-cli-bootstrap-table/views/table-table': 'Ember.Table.TableView',
-        'ember-cli-bootstrap-table/views/table-tbody': 'Ember.Table.TBodyView',
-        'ember-cli-bootstrap-table/views/table-td': 'Ember.Table.TDView',
-        'ember-cli-bootstrap-table/views/table-tfoot': 'Ember.Table.TFootView',
-        'ember-cli-bootstrap-table/views/table-th': 'Ember.Table.THView',
-        'ember-cli-bootstrap-table/views/table-thead': 'Ember.Table.THeadView',
-        'ember-cli-bootstrap-table/views/table-tr': 'Ember.Table.TRView'
+        'ember-bootstrap-table/views/table-cell': 'Ember.Table.CellView',
+        'ember-bootstrap-table/views/table-header-cell': 'Ember.Table.HeaderCellView',
+        'ember-bootstrap-table/views/table-loading': 'Ember.Table.LoadingView',
+        'ember-bootstrap-table/views/table-no-content': 'Ember.Table.NoContentView',
+        'ember-bootstrap-table/views/table-row': 'Ember.Table.RowView',
+        'ember-bootstrap-table/views/table-sticky': 'Ember.Table.StickyView',
+        'ember-bootstrap-table/views/table-table': 'Ember.Table.TableView',
+        'ember-bootstrap-table/views/table-tbody': 'Ember.Table.TBodyView',
+        'ember-bootstrap-table/views/table-td': 'Ember.Table.TDView',
+        'ember-bootstrap-table/views/table-tfoot': 'Ember.Table.TFootView',
+        'ember-bootstrap-table/views/table-th': 'Ember.Table.THView',
+        'ember-bootstrap-table/views/table-thead': 'Ember.Table.THeadView',
+        'ember-bootstrap-table/views/table-tr': 'Ember.Table.TRView'
     };
 };
 
@@ -66,7 +66,7 @@ Globals.prototype.write = function(readTree, destDir) {
             });
             templateFiles.forEach(function(filename) {
                 // Add ember-table namespace and remove .js extension
-                var filePath = 'ember-cli-bootstrap-table/' + filename.slice(0, -3);
+                var filePath = 'ember-bootstrap-table/' + filename.slice(0, -3);
                 var parts = filePath.split(path.sep);
                 output.push("window.Ember.TEMPLATES['" +
                     parts.slice(2).join('/') + "']" +
@@ -102,7 +102,7 @@ Globals.prototype.write = function(readTree, destDir) {
             _this.addLinesToOutput(output, [
                 "Ember.onLoad('Ember.Application', function(Application) {",
                 "Application.initializer({",
-                "name: 'ember-cli-bootstrap-table',",
+                "name: 'ember-bootstrap-table',",
                 "initialize: function(container) {"
             ]);
             _this.addLinesToOutput(output, toRegister.map(function(item) {
@@ -120,7 +120,7 @@ Globals.prototype.write = function(readTree, destDir) {
             // actually renders
             _this.addLinesToOutput(output, [
                 "Ember.Table.TableComponent.reopen({",
-                "layoutName: 'components/ember-cli-bootstrap-table'",
+                "layoutName: 'components/ember-bootstrap-table'",
                 "});"
             ]);
 

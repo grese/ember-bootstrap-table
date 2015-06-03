@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import Em from 'ember';
-import TableIcons from 'ember-cli-bootstrap-table/models/table-icons';
+import TableIcons from 'ember-bootstrap-table/models/table-icons';
 
 describe('Table Icons', function(){
 

@@ -2,5 +2,5 @@
 'use strict';
 
 module.exports = {
-    name: 'ember-cli-bootstrap-table'
+    name: 'ember-bootstrap-table'
 };

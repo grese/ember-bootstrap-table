@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import Em from 'ember';
-import TableRow from 'ember-cli-bootstrap-table/models/table-row';
+import TableRow from 'ember-bootstrap-table/models/table-row';
 
 describe('Table Row', function(){
 

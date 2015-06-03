@@ -58,7 +58,7 @@ module.exports = function (grunt) {
                 },
 
                 files: {
-                    './dist/ember-cli-bootstrap-table.min.js': ['./dist/ember-cli-bootstrap-table.js']
+                    './dist/ember-bootstrap-table.min.js': ['./dist/ember-bootstrap-table.js']
                 }
             }
         },
@@ -91,7 +91,7 @@ module.exports = function (grunt) {
                 'tagAnnotation': 'Release %s',
                 'increment': 'patch',
                 'buildCommand': 'grunt dist && ember build --environment="gh-pages"',
-                'distRepo': '-b gh-pages git@git.corp.yahoo.com:media-publishing/ember-cli-bootstrap-table',
+                'distRepo': '-b gh-pages git@git.corp.yahoo.com:media-publishing/ember-bootstrap-table',
                 'distStageDir': '.stage',
                 'distBase': 'ember-dist',
                 'distFiles': ['**/*'],
