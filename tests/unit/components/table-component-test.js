@@ -277,11 +277,12 @@ describeComponent('table-component', 'Table Component', {
         expect(spy.calledWith('loadMoreAction')).to.be.ok;
     });
 
-    it('table should re-render when rows array changes', function(){
+    it('table should re-render, and should trigger _handleRowVisibility when rows array changes', function(done){
         var component = this.subject({
             columns: mockColumns,
             rows: mockRows
         });
+        var spy = sinon.spy(component, '_handleRowVisibility');
         this.render();
 
         var $component = component.$();
@@ -296,6 +297,10 @@ describeComponent('table-component', 'Table Component', {
         });
         $rows = $component.find('table.table-component-table tbody tr');
         expect($rows.length).to.eq(mockRows.length);
+        Em.run.later(function(){
+            expect(spy.called).to.be.ok;
+            done();
+        }, 10);
     });
 
     it('should initialize tooltip for each header cell if showTooltips is true, and the columns have headerCellInfo', function(){
