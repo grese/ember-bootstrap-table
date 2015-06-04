@@ -95,7 +95,9 @@ export default Em.Component.extend({
         var visibilityPadding = 100; // provides a little padding to top & bottom of viewport for smooth scrolling.
         var scrollTop = Em.$(window).scrollTop();
         var windowBottom = Em.$(window).height();
-        this.get('_table').toggleRowVisibility(scrollTop - visibilityPadding, scrollTop + windowBottom + visibilityPadding);
+        if(this.get('_table')){
+            this.get('_table').toggleRowVisibility(scrollTop - visibilityPadding, scrollTop + windowBottom + visibilityPadding);
+        }
     },
     _handleInfiniteScroll: function(){
         if(Em.$(window).scrollTop() === Em.$(document).height() - Em.$(window).height()){
