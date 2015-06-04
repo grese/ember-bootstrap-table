@@ -81,7 +81,7 @@ export default Em.Component.extend({
             });
         });
     }),
-    _rowsChanged: Em.observer('rows.[]', function(){
+    _rowsChanged: Em.observer('_rows.[]', function(){
         this.get('_table').update();
     }),
     _icons: Em.computed('icons', function(){
@@ -95,8 +95,13 @@ export default Em.Component.extend({
         var visibilityPadding = 100; // provides a little padding to top & bottom of viewport for smooth scrolling.
         var scrollTop = Em.$(window).scrollTop();
         var windowBottom = Em.$(window).height();
+        var viewportTop = scrollTop - visibilityPadding,
+            viewportBottom = scrollTop + windowBottom + visibilityPadding;
+        if(viewportTop < 0){
+            viewportTop = 0;
+        }
         if(this.get('_table')){
-            this.get('_table').toggleRowVisibility(scrollTop - visibilityPadding, scrollTop + windowBottom + visibilityPadding);
+            this.get('_table').toggleRowVisibility(viewportTop, viewportBottom);
         }
     },
     _handleInfiniteScroll: function(){
@@ -160,6 +165,10 @@ export default Em.Component.extend({
         if(this.get('infiniteScrollEnabled') || this.get('stickyHeader')){
             this._attachWindowScrollListener();
         }
+        var self = this;
+        Em.run.later(function(){
+            self._handleRowVisibility();
+        }, 1);
     },
     actions: {
         _sort: function(columnIdx){

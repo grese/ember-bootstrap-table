@@ -56,8 +56,9 @@ describeComponent('table-component', 'Table Component', {
         tooltipSpy.restore();
     });
 
-    it('should render a div, table, thead, tbody, and tfoot', function() {
+    it('should render a div, table, thead, tbody, and tfoot, and should trigger _handleRowVisibility on didInsertElement', function(done) {
         var component = this.subject();
+        var spy = sinon.spy(component, '_handleRowVisibility');
         this.render();
         var $component = component.$();
         var tag = $component.prop('tagName');
@@ -71,6 +72,10 @@ describeComponent('table-component', 'Table Component', {
         expect($thead.length).to.eq(1);
         expect($tbody.length).to.eq(1);
         expect($tfoot.length).to.eq(1);
+        Em.run.later(function(){
+            expect(spy.called).to.be.ok;
+            done();
+        }, 10);
     });
 
     it('should render sortable headers with a sort button, and that button should fire the sort action when clicked.', function(){

@@ -4,10 +4,6 @@ export default Em.Controller.extend({
         this._super();
         var rows = this.generateRandomRows(100);
         this.set('model', rows);
-        var self = this;
-        Em.run.later(function(){
-            self.send('loadMore');
-        }, 2000);
     },
     randomVal: function(min, max){
         return Math.random() * (max - min) + min;
