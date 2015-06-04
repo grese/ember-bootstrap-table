@@ -62,6 +62,16 @@ export default Em.ContainerView.extend({
             self.set('columnWidths', widths);
         }
     },
+    toggleRowVisibility: function(viewportTop, viewportBottom){
+        this.get('tbody').forEach(function(row){
+            var pos = row.$().position();
+            if(viewportTop > pos.top || viewportBottom < pos.top){
+                row.set('visible', false);
+            }else{
+                row.set('visible', true);
+            }
+        });
+    },
     updateColumns: function(){
         this.update();
         if(!this.get('component.stickyHeader')){

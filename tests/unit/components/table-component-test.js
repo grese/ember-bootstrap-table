@@ -303,4 +303,44 @@ describeComponent('table-component', 'Table Component', {
         expect(tooltipSpy.callCount).to.eq(mockColumns.length);
     });
 
+    it('#_handleRowVisibility should call toggleRowVisibility on the table view.', function(){
+        var component = this.subject({
+            columns: mockColumns,
+            rows: mockRows
+        });
+        this.render();
+        var table = component.get('_table');
+        var spy = sinon.stub(table, 'toggleRowVisibility');
+        Em.run(function(){
+            component._handleRowVisibility();
+        });
+        expect(spy.called).to.be.ok;
+    });
+
+    it('should toggle the visiblity of rows when toggleRowVisibility is called on the table view', function(){
+        var component = this.subject({
+            columns: mockColumns,
+            rows: mockRows
+        });
+        this.render();
+        var table = component.get('_table');
+        Em.run(function(){
+            table.toggleRowVisibility(100, 500);
+        });
+        table.get('tbody').forEach(function(row){
+            var $row = row.$();
+            expect(row.get('visible')).not.to.be.ok;
+            expect($row.hasClass('invisible')).to.be.ok;
+        });
+
+        Em.run(function(){
+            table.toggleRowVisibility(0, 500);
+        });
+        table.get('tbody').forEach(function(row){
+            var $row = row.$();
+            expect(row.get('visible')).to.be.ok;
+            expect($row.hasClass('invisible')).not.to.be.ok;
+        });
+    });
+
 });

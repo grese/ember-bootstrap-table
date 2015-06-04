@@ -292,6 +292,12 @@ var define, requireModule, require, requirejs;
         _showNoContentView: Em.computed('rows.length', function(){
             return this.get('rows.length') === 0;
         }),
+        _handleRowVisibility: function(){
+            var visibilityPadding = 100; // provides a little padding to top & bottom of viewport for smooth scrolling.
+            var scrollTop = Em.$(window).scrollTop();
+            var windowBottom = Em.$(window).height();
+            this.get('_table').toggleRowVisibility(scrollTop - visibilityPadding, scrollTop + windowBottom + visibilityPadding);
+        },
         _handleInfiniteScroll: function(){
             if(Em.$(window).scrollTop() === Em.$(document).height() - Em.$(window).height()){
                 this._loadMoreRows();
@@ -325,6 +331,7 @@ var define, requireModule, require, requirejs;
             if(this.get('infiniteScrollEnabled')){
                 this._handleInfiniteScroll();
             }
+            this._handleRowVisibility();
         },
         _loadMoreRows: function(){
             if(this.get('loadMoreAction') && !this.get('isLoadingRows')){
@@ -508,6 +515,16 @@ var define, requireModule, require, requirejs;
                 });
                 self.set('columnWidths', widths);
             }
+        },
+        toggleRowVisibility: function(viewportTop, viewportBottom){
+            this.get('tbody').forEach(function(row){
+                var pos = row.$().position();
+                if(viewportTop > pos.top || viewportBottom < pos.top){
+                    row.set('visible', false);
+                }else{
+                    row.set('visible', true);
+                }
+            });
         },
         updateColumns: function(){
             this.update();
@@ -703,8 +720,10 @@ var define, requireModule, require, requirejs;
     var CellView = __dependency2__["default"];
     __exports__["default"] = TRView.extend({
         classNames: ['table-component-row'],
+        classNameBindings: ['visible::invisible'],
         component: null,
         rowData: null,
+        visible: true,
         insertCells: function(){
             var self = this;
             var cellViews = [];

@@ -2,7 +2,7 @@ import Em from 'ember';
 export default Em.Controller.extend({
     init: function(){
         this._super();
-        var rows = this.generateRandomRows(50);
+        var rows = this.generateRandomRows(100);
         this.set('model', rows);
         var self = this;
         Em.run.later(function(){
