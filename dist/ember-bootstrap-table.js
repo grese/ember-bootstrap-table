@@ -1,5 +1,5 @@
 /*!
-* ember-bootstrap-table v2.0.0
+* ember-bootstrap-table v2.0.1
 */
 (function(){;
 var define, requireModule, require, requirejs;
@@ -1032,6 +1032,13 @@ var define, requireModule, require, requirejs;
     __exports__["default"] = Em.ObjectProxy.extend({
         _rowIndex: null
     });
+  });
+;define("ember-bootstrap-table/index", 
+  ["ember-bootstrap-table/components/table-component","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+     var TableComponent = __dependency1__["default"];
+     __exports__["default"] = TableComponent.extend();
   });
 ;define('ember', ['exports'], function(__exports__) {
   __exports__['default'] = window.Ember;
