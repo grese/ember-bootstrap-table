@@ -141,7 +141,9 @@ export default Em.Component.extend({
         if(this.get('infiniteScrollEnabled')){
             this._handleInfiniteScroll();
         }
+        /*
         this._handleRowVisibility();
+        */
     },
     _loadMoreRows: function(){
         if(this.get('loadMoreAction') && !this.get('isLoadingRows')){
@@ -169,10 +171,12 @@ export default Em.Component.extend({
         if(this.get('infiniteScrollEnabled') || this.get('stickyHeader')){
             this._attachWindowScrollListener();
         }
+        /*
         var self = this;
         Em.run.later(function(){
             self._handleRowVisibility();
         }, 1);
+        */
     },
     actions: {
         _sort: function(columnIdx){
