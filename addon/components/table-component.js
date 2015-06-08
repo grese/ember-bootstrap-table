@@ -141,9 +141,7 @@ export default Em.Component.extend({
         if(this.get('infiniteScrollEnabled')){
             this._handleInfiniteScroll();
         }
-        /*
-        this._handleRowVisibility();
-        */
+        //this._handleRowVisibility();
     },
     _loadMoreRows: function(){
         if(this.get('loadMoreAction') && !this.get('isLoadingRows')){
