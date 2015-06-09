@@ -1,5 +1,5 @@
 /*!
-* ember-bootstrap-table v2.0.1
+* ember-bootstrap-table v2.0.2
 */
 (function(){;
 var define, requireModule, require, requirejs;

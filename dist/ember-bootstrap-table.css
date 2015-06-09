@@ -1,5 +1,5 @@
 /*!
-* ember-bootstrap-table v2.0.1
+* ember-bootstrap-table v2.0.2
 */
 .table-component tbody tr td {
   vertical-align: middle;
@@ -53,7 +53,7 @@
   top: 60px;
   left: 0;
   background-color: #fff;
-  z-index: 10000;
+  z-index: 1031;
   box-shadow: 0px 2px 2px #ddd;
 }
 .table-component .table-component-sticky-header-container.sticky .table-component-sticky-header-inner.container {
