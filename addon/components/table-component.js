@@ -84,9 +84,11 @@ export default Em.Component.extend({
     _rowsChanged: Em.observer('_rows.[]', function(){
         this.get('_table').update();
         var self = this;
+        /*
         Em.run.later(function(){
             self._handleRowVisibility();
         }, 1);
+        */
     }),
     _icons: Em.computed('icons', function(){
         var icons = this.get('icons') || {};
