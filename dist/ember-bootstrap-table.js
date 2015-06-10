@@ -1,5 +1,5 @@
 /*!
-* ember-bootstrap-table v2.0.2
+* ember-bootstrap-table v2.0.4
 */
 (function(){;
 var define, requireModule, require, requirejs;
@@ -284,12 +284,6 @@ var define, requireModule, require, requirejs;
         }),
         _rowsChanged: Em.observer('_rows.[]', function(){
             this.get('_table').update();
-            var self = this;
-            /*
-            Em.run.later(function(){
-                self._handleRowVisibility();
-            }, 1);
-            */
         }),
         _icons: Em.computed('icons', function(){
             var icons = this.get('icons') || {};
@@ -298,19 +292,6 @@ var define, requireModule, require, requirejs;
         _showNoContentView: Em.computed('rows.length', function(){
             return this.get('rows.length') === 0;
         }),
-        _handleRowVisibility: function(){
-            var visibilityPadding = 100; // provides a little padding to top & bottom of viewport for smooth scrolling.
-            var scrollTop = Em.$(window).scrollTop();
-            var windowBottom = Em.$(window).height();
-            var viewportTop = scrollTop - visibilityPadding,
-                viewportBottom = scrollTop + windowBottom + visibilityPadding;
-            if(viewportTop < 0){
-                viewportTop = 0;
-            }
-            if(this.get('_table')){
-                this.get('_table').toggleRowVisibility(viewportTop, viewportBottom);
-            }
-        },
         _handleInfiniteScroll: function(){
             if(Em.$(window).scrollTop() === Em.$(document).height() - Em.$(window).height()){
                 this._loadMoreRows();
@@ -319,21 +300,24 @@ var define, requireModule, require, requirejs;
         _handleStickyHeader: function(){
             var stickyHeaderPos = this.get('stickyHeaderActivatePosition');
             var $table = this.get('_table').$();
-            var pos = Em.$(window).scrollTop();
-            var tableBottom = ($table.position().top + $table.outerHeight(true) + 20);
-            if(pos <= tableBottom){
-                if(pos >= stickyHeaderPos){
-                    if(!this.get('stickyHeaderActive')){
-                        this.set('stickyHeaderActive', true);
+            var pos, tableBottom;
+            if($table){
+                pos = Em.$(window).scrollTop();
+                tableBottom = ($table.position().top + $table.outerHeight(true) + 20);
+                if(pos <= tableBottom){
+                    if(pos >= stickyHeaderPos){
+                        if(!this.get('stickyHeaderActive')){
+                            this.set('stickyHeaderActive', true);
+                        }
+                    }else{
+                        if(this.get('stickyHeaderActive')){
+                            this.set('stickyHeaderActive', false);
+                        }
                     }
                 }else{
                     if(this.get('stickyHeaderActive')){
                         this.set('stickyHeaderActive', false);
                     }
-                }
-            }else{
-                if(this.get('stickyHeaderActive')){
-                    this.set('stickyHeaderActive', false);
                 }
             }
         },
@@ -344,7 +328,6 @@ var define, requireModule, require, requirejs;
             if(this.get('infiniteScrollEnabled')){
                 this._handleInfiniteScroll();
             }
-            //this._handleRowVisibility();
         },
         _loadMoreRows: function(){
             if(this.get('loadMoreAction') && !this.get('isLoadingRows')){
@@ -372,12 +355,6 @@ var define, requireModule, require, requirejs;
             if(this.get('infiniteScrollEnabled') || this.get('stickyHeader')){
                 this._attachWindowScrollListener();
             }
-            /*
-            var self = this;
-            Em.run.later(function(){
-                self._handleRowVisibility();
-            }, 1);
-            */
         },
         actions: {
             _sort: function(columnIdx){
@@ -739,10 +716,8 @@ var define, requireModule, require, requirejs;
     var CellView = __dependency2__["default"];
     __exports__["default"] = TRView.extend({
         classNames: ['table-component-row'],
-        classNameBindings: ['visible::invisible'],
         component: null,
         rowData: null,
-        visible: true,
         insertCells: function(){
             var self = this;
             var cellViews = [];

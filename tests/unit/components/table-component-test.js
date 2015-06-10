@@ -272,12 +272,11 @@ describeComponent('table-component', 'Table Component', {
         expect(spy.calledWith('loadMoreAction')).to.be.ok;
     });
 
-    it('table should re-render, and should trigger _handleRowVisibility when rows array changes', function(done){
+    it('table should re-render when rows array changes', function(){
         var component = this.subject({
             columns: mockColumns,
             rows: mockRows
         });
-        var spy = sinon.spy(component, '_handleRowVisibility');
         this.render();
 
         var $component = component.$();
@@ -292,10 +291,6 @@ describeComponent('table-component', 'Table Component', {
         });
         $rows = $component.find('table.table-component-table tbody tr');
         expect($rows.length).to.eq(mockRows.length);
-        Em.run.later(function(){
-            expect(spy.called).to.be.ok;
-            done();
-        }, 10);
     });
 
     it('should initialize tooltip for each header cell if showTooltips is true, and the columns have headerCellInfo', function(){
@@ -306,46 +301,6 @@ describeComponent('table-component', 'Table Component', {
         });
         this.render();
         expect(tooltipSpy.callCount).to.eq(mockColumns.length);
-    });
-
-    it('#_handleRowVisibility should call toggleRowVisibility on the table view.', function(){
-        var component = this.subject({
-            columns: mockColumns,
-            rows: mockRows
-        });
-        this.render();
-        var table = component.get('_table');
-        var spy = sinon.stub(table, 'toggleRowVisibility');
-        Em.run(function(){
-            component._handleRowVisibility();
-        });
-        expect(spy.called).to.be.ok;
-    });
-
-    it('should toggle the visiblity of rows when toggleRowVisibility is called on the table view', function(){
-        var component = this.subject({
-            columns: mockColumns,
-            rows: mockRows
-        });
-        this.render();
-        var table = component.get('_table');
-        Em.run(function(){
-            table.toggleRowVisibility(100, 500);
-        });
-        table.get('tbody').forEach(function(row){
-            var $row = row.$();
-            expect(row.get('visible')).not.to.be.ok;
-            expect($row.hasClass('invisible')).to.be.ok;
-        });
-
-        Em.run(function(){
-            table.toggleRowVisibility(0, 500);
-        });
-        table.get('tbody').forEach(function(row){
-            var $row = row.$();
-            expect(row.get('visible')).to.be.ok;
-            expect($row.hasClass('invisible')).not.to.be.ok;
-        });
     });
 
 });

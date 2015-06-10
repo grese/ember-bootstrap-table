@@ -2,10 +2,8 @@ import TRView from './table-tr';
 import CellView from './table-cell';
 export default TRView.extend({
     classNames: ['table-component-row'],
-    classNameBindings: ['visible::invisible'],
     component: null,
     rowData: null,
-    visible: true,
     insertCells: function(){
         var self = this;
         var cellViews = [];
