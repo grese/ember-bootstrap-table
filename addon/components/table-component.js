@@ -83,12 +83,6 @@ export default Em.Component.extend({
     }),
     _rowsChanged: Em.observer('_rows.[]', function(){
         this.get('_table').update();
-        var self = this;
-        /*
-        Em.run.later(function(){
-            self._handleRowVisibility();
-        }, 1);
-        */
     }),
     _icons: Em.computed('icons', function(){
         var icons = this.get('icons') || {};
@@ -97,19 +91,6 @@ export default Em.Component.extend({
     _showNoContentView: Em.computed('rows.length', function(){
         return this.get('rows.length') === 0;
     }),
-    _handleRowVisibility: function(){
-        var visibilityPadding = 100; // provides a little padding to top & bottom of viewport for smooth scrolling.
-        var scrollTop = Em.$(window).scrollTop();
-        var windowBottom = Em.$(window).height();
-        var viewportTop = scrollTop - visibilityPadding,
-            viewportBottom = scrollTop + windowBottom + visibilityPadding;
-        if(viewportTop < 0){
-            viewportTop = 0;
-        }
-        if(this.get('_table')){
-            this.get('_table').toggleRowVisibility(viewportTop, viewportBottom);
-        }
-    },
     _handleInfiniteScroll: function(){
         if(Em.$(window).scrollTop() === Em.$(document).height() - Em.$(window).height()){
             this._loadMoreRows();
@@ -143,7 +124,6 @@ export default Em.Component.extend({
         if(this.get('infiniteScrollEnabled')){
             this._handleInfiniteScroll();
         }
-        //this._handleRowVisibility();
     },
     _loadMoreRows: function(){
         if(this.get('loadMoreAction') && !this.get('isLoadingRows')){
@@ -171,12 +151,6 @@ export default Em.Component.extend({
         if(this.get('infiniteScrollEnabled') || this.get('stickyHeader')){
             this._attachWindowScrollListener();
         }
-        /*
-        var self = this;
-        Em.run.later(function(){
-            self._handleRowVisibility();
-        }, 1);
-        */
     },
     actions: {
         _sort: function(columnIdx){
