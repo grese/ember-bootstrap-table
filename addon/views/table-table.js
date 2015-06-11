@@ -21,7 +21,7 @@ export default Em.ContainerView.extend({
         });
         this.pushObjects([this.get('thead'), this.get('tbody'), this.get('tfoot')]);
     },
-    tagName: 'table',
+    tagName: 'div',
     classNames: ['table-component-table', 'table'],
     classNameBindings: [
         'component.condensed:table-condensed',

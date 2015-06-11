@@ -63,10 +63,10 @@ describeComponent('table-component', 'Table Component', {
         var tag = $component.prop('tagName');
         expect(tag).to.eq('DIV');
 
-        var $table = $component.find('table'),
-            $thead = $table.find('thead'),
-            $tbody = $table.find('tbody'),
-            $tfoot = $table.find('tfoot');
+        var $table = $component.find('.table-component-table'),
+            $thead = $table.find('.table-component-thead'),
+            $tbody = $table.find('.table-component-tbody'),
+            $tfoot = $table.find('.table-component-tfoot');
         expect($table.length).to.eq(1);
         expect($thead.length).to.eq(1);
         expect($tbody.length).to.eq(1);
@@ -83,7 +83,7 @@ describeComponent('table-component', 'Table Component', {
         });
         this.render();
         var $component = component.$();
-        var $headerCells = $component.find('table.table-component-table thead th');
+        var $headerCells = $component.find('.table-component-table .table-component-thead .table-component-th');
         var $cell0Sort = $headerCells.eq(0).find('button'),
             $cell1Sort = $headerCells.eq(1).find('button'),
             $cell2Sort = $headerCells.eq(2).find('button'),
@@ -124,7 +124,7 @@ describeComponent('table-component', 'Table Component', {
         });
         this.render();
         var $component = component.$();
-        var $headerCells = $component.find('.table-component-table thead th.header-cell');
+        var $headerCells = $component.find('.table-component-table .table-component-thead .table-component-header-cell');
         expect($headerCells.length).to.eq(mockColumns.length);
         mockColumns.forEach(function(col, idx){
             var $cell = Em.$($headerCells[idx]);
@@ -140,8 +140,8 @@ describeComponent('table-component', 'Table Component', {
         });
         this.render();
         var $component = component.$();
-        var $stickyHeaderCells = $component.find('.table-component-sticky-header-table thead th.header-cell');
-        var $headerCells = $component.find('.table-component-table thead th.header-cell');
+        var $stickyHeaderCells = $component.find('.table-component-sticky-header-table .table-component-thead .table-component-header-cell');
+        var $headerCells = $component.find('.table-component-table .table-component-thead .table-component-header-cell');
         expect($headerCells.length).to.eq(0);
         expect($stickyHeaderCells.length).to.eq(mockColumns.length);
         mockColumns.forEach(function(col, idx){
@@ -183,12 +183,12 @@ describeComponent('table-component', 'Table Component', {
         this.render();
 
         var $component = component.$();
-        var $rows = $component.find('table.table-component-table tbody tr');
+        var $rows = $component.find('.table-component-table .table-component-tbody .table-component-tr');
         expect($rows.length).to.eq(mockRows.length);
 
         mockRows.forEach(function(mockRow, idx){
             var $row = Em.$($rows[idx]);
-            var $cells = $row.find('td'),
+            var $cells = $row.find('.table-component-td'),
                 $idCell = $cells.eq(0),
                 $valueCell = $cells.eq(1),
                 $dateCell = $cells.eq(2);
@@ -217,9 +217,8 @@ describeComponent('table-component', 'Table Component', {
         this.render();
 
         var $component = component.$();
-        var $loadingCell = $component.find('table.table-component-table tfoot tr.table-component-loading-row td');
+        var $loadingCell = $component.find('.table-component-table .table-component-tfoot .table-component-loading-row .table-component-td');
         expect($loadingCell.length).to.eq(1);
-        expect($loadingCell.attr('colspan')).to.eq(mockColumns.length.toString());
 
         var $loadingIcon = $loadingCell.find('.table-component-loading-icon');
         expect($loadingIcon.length).to.eq(1);
@@ -237,8 +236,8 @@ describeComponent('table-component', 'Table Component', {
             component.set('columns', newCols);
         });
         var $component = component.$();
-        var $headers = $component.find('table.table-component-table thead th');
-        var $row0Cells = $component.find('table.table-component-table tbody tr').eq(0).find('td');
+        var $headers = $component.find('.table-component-table .table-component-thead .table-component-th');
+        var $row0Cells = $component.find('.table-component-table .table-component-tbody .table-component-tr').eq(0).find('.table-component-td');
         expect($headers.length).to.eq(1);
         expect($row0Cells.length).to.eq(1);
     });
@@ -256,8 +255,8 @@ describeComponent('table-component', 'Table Component', {
             component.set('columns', newCols);
         });
         var $component = component.$();
-        var $headers = $component.find('.table-component-sticky-header-container table thead th');
-        var $row0Cells = $component.find('table.table-component-table tbody tr').eq(0).find('td');
+        var $headers = $component.find('.table-component-sticky-header-container .table-component-sticky-header-table .table-component-thead .table-component-th');
+        var $row0Cells = $component.find('.table-component-table .table-component-tbody .table-component-tr').eq(0).find('.table-component-td');
         expect($headers.length).to.eq(1);
         expect($row0Cells.length).to.eq(1);
     });
@@ -280,7 +279,7 @@ describeComponent('table-component', 'Table Component', {
         this.render();
 
         var $component = component.$();
-        var $rows = $component.find('table.table-component-table tbody tr');
+        var $rows = $component.find('.table-component-table .table-component-tbody .table-component-tr');
         expect($rows.length).to.eq(mockRows.length);
 
         Em.run(function(){
@@ -289,7 +288,7 @@ describeComponent('table-component', 'Table Component', {
             component.set('rows', mockRows);
             component.notifyPropertyChange('rows');
         });
-        $rows = $component.find('table.table-component-table tbody tr');
+        $rows = $component.find('.table-component-table .table-component-tbody .table-component-tr');
         expect($rows.length).to.eq(mockRows.length);
     });
 

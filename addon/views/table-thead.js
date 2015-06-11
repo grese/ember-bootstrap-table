@@ -2,7 +2,7 @@ import Em from 'ember';
 import TRView from './table-tr';
 import HeaderCellView from './table-header-cell';
 export default Em.ContainerView.extend({
-    tagName: 'thead',
+    tagName: 'div',
     classNames: ['table-component-thead'],
     component: null,
     insertHeaderCells: function(){

@@ -9,7 +9,7 @@ export default Em.ContainerView.extend({
         }));
         this.pushObject(this.get('thead'));
     },
-    tagName: 'table',
+    tagName: 'div',
     classNames: ['table-component-sticky-header-table', 'table'],
     component: null,
     thead: null,

@@ -2,7 +2,7 @@ import Em from 'ember';
 import TRView from './table-tr';
 import LoadingCell from './table-loading';
 export default Em.ContainerView.extend({
-    tagName: 'tfoot',
+    tagName: 'div',
     classNames: ['table-component-tfoot'],
     component: null,
     init: function(){

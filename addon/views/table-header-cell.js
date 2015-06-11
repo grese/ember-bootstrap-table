@@ -3,8 +3,8 @@ import THView from './table-th';
 import template from '../templates/views/table-header-cell';
 export default THView.extend({
     template: template,
-    tagName: 'th',
-    classNames: ['table-component-header-cell'],
+    tagName: 'div',
+    classNames: ['table-component-header-cell', 'table-component-th'],
     classNameBindings: ['colConfig.headerCellClassName'],
     attributeBindings: ['colspan', 'rowspan', 'width'],
     component: null,

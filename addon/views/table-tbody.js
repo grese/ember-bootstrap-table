@@ -2,7 +2,7 @@ import Em from 'ember';
 import RowView from './table-row';
 
 export default Em.ContainerView.extend({
-    tagName: 'tbody',
+    tagName: 'div',
     classNames: ['table-component-tbody'],
     component: null,
     insertRows: function(){

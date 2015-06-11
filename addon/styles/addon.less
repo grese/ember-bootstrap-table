@@ -5,7 +5,25 @@
 @table-header-font-size: 12px;
 @table-header-text-align: left;
 .table-component{
-    tbody tr td{
+    // make the divs a table:
+    .table-component-table{
+        display: table;
+    }
+    .table-component-thead,
+    .table-component-tbody,
+    .table-component-tfoot{
+        display: table-row-group;
+    }
+    .table-component-tr{
+        display: table-row;
+    }
+    .table-component-td,
+    .table-component-th{
+        display: table-cell;
+    }
+
+    // style the 'table':
+    .table-component-tbody .table-component-td{
         vertical-align: middle;
     }
     button.table-cell-button{

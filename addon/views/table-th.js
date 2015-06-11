@@ -1,5 +1,6 @@
 import Em from 'ember';
 
 export default Em.View.extend({
-    tagName: 'th'
+    tagName: 'div',
+    classNames: ['table-component-th']
 });

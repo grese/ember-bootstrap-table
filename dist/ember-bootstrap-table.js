@@ -471,7 +471,7 @@ var define, requireModule, require, requirejs;
             });
             this.pushObjects([this.get('thead'), this.get('tbody'), this.get('tfoot')]);
         },
-        tagName: 'table',
+        tagName: 'div',
         classNames: ['table-component-table', 'table'],
         classNameBindings: [
             'component.condensed:table-condensed',
@@ -542,7 +542,7 @@ var define, requireModule, require, requirejs;
     var TRView = __dependency2__["default"];
     var HeaderCellView = __dependency3__["default"];
     __exports__["default"] = Em.ContainerView.extend({
-        tagName: 'thead',
+        tagName: 'div',
         classNames: ['table-component-thead'],
         component: null,
         insertHeaderCells: function(){
@@ -585,7 +585,8 @@ var define, requireModule, require, requirejs;
     "use strict";
     var Em = __dependency1__["default"];
     __exports__["default"] = Em.ContainerView.extend({
-        tagName: 'tr'
+        tagName: 'div',
+        classNames: ['table-component-tr']
     });
   });
 ;define("ember-bootstrap-table/views/table-header-cell", 
@@ -597,8 +598,8 @@ var define, requireModule, require, requirejs;
     var template = __dependency3__["default"];
     __exports__["default"] = THView.extend({
         template: template,
-        tagName: 'th',
-        classNames: ['table-component-header-cell'],
+        tagName: 'div',
+        classNames: ['table-component-header-cell', 'table-component-th'],
         classNameBindings: ['colConfig.headerCellClassName'],
         attributeBindings: ['colspan', 'rowspan', 'width'],
         component: null,
@@ -630,7 +631,8 @@ var define, requireModule, require, requirejs;
     var Em = __dependency1__["default"];
 
     __exports__["default"] = Em.View.extend({
-        tagName: 'th'
+        tagName: 'div',
+        classNames: ['table-component-th']
     });
   });
 ;define("ember-bootstrap-table/templates/views/table-header-cell", 
@@ -689,7 +691,7 @@ var define, requireModule, require, requirejs;
     var RowView = __dependency2__["default"];
 
     __exports__["default"] = Em.ContainerView.extend({
-        tagName: 'tbody',
+        tagName: 'div',
         classNames: ['table-component-tbody'],
         component: null,
         insertRows: function(){
@@ -775,8 +777,8 @@ var define, requireModule, require, requirejs;
     "use strict";
     var Em = __dependency1__["default"];
     __exports__["default"] = Em.View.extend({
-        tagName: 'td',
-        attributeBindings: ['colspan', 'rowspan']
+        tagName: 'div',
+        classNames: ['table-component-td']
     });
   });
 ;define("ember-bootstrap-table/templates/views/table-cell", 
@@ -806,7 +808,7 @@ var define, requireModule, require, requirejs;
     var TRView = __dependency2__["default"];
     var LoadingCell = __dependency3__["default"];
     __exports__["default"] = Em.ContainerView.extend({
-        tagName: 'tfoot',
+        tagName: 'div',
         classNames: ['table-component-tfoot'],
         component: null,
         init: function(){
@@ -884,7 +886,7 @@ var define, requireModule, require, requirejs;
             }));
             this.pushObject(this.get('thead'));
         },
-        tagName: 'table',
+        tagName: 'div',
         classNames: ['table-component-sticky-header-table', 'table'],
         component: null,
         thead: null,
