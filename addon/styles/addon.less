@@ -24,6 +24,20 @@
     }
 
     // style the 'table':
+    .table{
+        margin-bottom: 0; // bootstrap puts 20px margin on bottom.
+        > .table-component-thead > .table-component-tr> .table-component-th,
+        > .table-component-tbody > .table-component-tr > .table-component-th,
+        > .table-component-tfoot > .table-component-tr > .table-component-th,
+        > .table-component-thead > .table-component-tr > .table-component-td,
+        > .table-component-tbody > .table-component-tr > .table-component-td,
+        > .table-component-tfoot > .table-component-tr > .table-component-td {
+            padding: 6px;
+            line-height: 1.42857143;
+            vertical-align: top;
+            border-top: 1px solid @table-border-color;
+        }
+    }
     .table-component-tbody .table-component-td{
         vertical-align: middle;
     }
