@@ -1,6 +1,7 @@
 
 
 @table-header-font-color: #878c91;
+@table-border-color: #f1f1f1;
 @table-header-font-weight: 500;
 @table-header-font-size: 12px;
 @table-header-text-align: left;
@@ -45,6 +46,9 @@
     .table-component-sort-icon-container{
         display: table-cell;
     }
+    .table-component-header-cell .table-component-header-text{
+        float: none;
+    }
     .table-component-sort-icon-container{
         padding-left: 5px;
         vertical-align: middle;
@@ -80,5 +84,14 @@
     }
     .table-component-sticky-header-container.sticky .table-component-sticky-header-inner.container{
         margin: 0 auto;
+    }
+
+    .table-component-tbody .table-component-tr .table-component-td{
+        vertical-align: middle;
+    }
+
+    .table-component-thead .table-component-tr .table-component-th{
+        vertical-align: middle;
+        border-bottom: 1px solid @table-border-color;
     }
 }

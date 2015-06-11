@@ -38,6 +38,9 @@
 .table-component .table-component-sort-icon-container {
   display: table-cell;
 }
+.table-component .table-component-header-cell .table-component-header-text {
+  float: none;
+}
 .table-component .table-component-sort-icon-container {
   padding-left: 5px;
   vertical-align: middle;
@@ -73,4 +76,11 @@
 }
 .table-component .table-component-sticky-header-container.sticky .table-component-sticky-header-inner.container {
   margin: 0 auto;
+}
+.table-component .table-component-tbody .table-component-tr .table-component-td {
+  vertical-align: middle;
+}
+.table-component .table-component-thead .table-component-tr .table-component-th {
+  vertical-align: middle;
+  border-bottom: 1px solid #f1f1f1;
 }
