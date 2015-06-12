@@ -28,7 +28,6 @@
 .table-component .table > .table-component-tfoot > .table-component-tr > .table-component-td {
   padding: 6px;
   line-height: 1.42857143;
-  vertical-align: top;
   border-top: 1px solid #f1f1f1;
 }
 .table-component button.table-cell-button {
@@ -95,4 +94,12 @@
 .table-component .table-component-thead .table-component-tr .table-component-th {
   vertical-align: middle;
   border-bottom: 1px solid #f1f1f1;
+}
+.table-component .table-component-tfoot {
+  display: table-caption;
+  caption-side: bottom;
+}
+.table-component .table-component-tfoot .table-component-loading-row,
+.table-component .table-component-tfoot .table-component-loading-cell {
+  display: block;
 }

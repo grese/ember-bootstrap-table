@@ -35,7 +35,6 @@
         > .table-component-tfoot > .table-component-tr > .table-component-td {
             padding: 6px;
             line-height: 1.42857143;
-            vertical-align: top;
             border-top: 1px solid @table-border-color;
         }
     }
@@ -105,5 +104,17 @@
     .table-component-thead .table-component-tr .table-component-th{
         vertical-align: middle;
         border-bottom: 1px solid @table-border-color;
+    }
+
+    // Currently using footer as the loading indicator container.
+    // because we are using CSS to build the table, there is no colspan,
+    // so we have to display this as table-caption.
+    .table-component-tfoot{
+        display: table-caption;
+        caption-side: bottom;
+        .table-component-loading-row,
+        .table-component-loading-cell{
+            display: block;
+        }
     }
 }
