@@ -15,6 +15,7 @@
 .table-component .table-component-td,
 .table-component .table-component-th {
   display: table-cell;
+  vertical-align: middle;
 }
 .table-component .table {
   margin-bottom: 0;
@@ -29,9 +30,6 @@
   line-height: 1.42857143;
   vertical-align: top;
   border-top: 1px solid #f1f1f1;
-}
-.table-component .table-component-tbody .table-component-td {
-  vertical-align: middle;
 }
 .table-component button.table-cell-button {
   background: none;
