@@ -56,7 +56,7 @@ export default Em.ContainerView.extend({
             firstRow.get('childViews').forEach(function(cell){
                 var $cell = cell.$();
                 if($cell){
-                    widths.push($cell.outerWidth());
+                    widths.push($cell.width());
                 }
             });
             self.set('columnWidths', widths);
