@@ -20,7 +20,6 @@
 .table-component .table {
   margin-bottom: 0;
 }
-.table-component .table > .table-component-thead > .table-component-tr > .table-component-th,
 .table-component .table > .table-component-tbody > .table-component-tr > .table-component-th,
 .table-component .table > .table-component-tfoot > .table-component-tr > .table-component-th,
 .table-component .table > .table-component-thead > .table-component-tr > .table-component-td,
@@ -40,7 +39,7 @@
 .table-component .table-component-header-text,
 .table-component .table-component-sort-icon-container,
 .table-component .table-component-header-cell {
-  color: #878c91;
+  color: #444444;
   font-weight: 500;
   font-size: 12px;
   text-align: left;
@@ -55,6 +54,11 @@
 .table-component .table-component-sort-icon-container {
   padding-left: 5px;
   vertical-align: middle;
+}
+.table-component .table-component-sort-icon {
+  width: 10px;
+  vertical-align: middle;
+  padding-left: 5px;
 }
 .table-component .table-component-loading-row .table-component-loading-cell {
   text-align: center;
@@ -73,8 +77,9 @@
   -webkit-transition: background-color 0.25s, top 0.1s;
   transition: background-color 0.25s, top 0.1s;
 }
-.table-component .table-component-sticky-header-container thead th.table-component-header-cell {
+.table-component .table-component-sticky-header-container .table-component-header-cell {
   border-bottom: none;
+  text-align: left;
 }
 .table-component .table-component-sticky-header-container.sticky {
   position: fixed;
@@ -88,12 +93,8 @@
 .table-component .table-component-sticky-header-container.sticky .table-component-sticky-header-inner.container {
   margin: 0 auto;
 }
-.table-component .table-component-tbody .table-component-tr .table-component-td {
-  vertical-align: middle;
-}
-.table-component .table-component-thead .table-component-tr .table-component-th {
-  vertical-align: middle;
-  border-bottom: 1px solid #f1f1f1;
+.table-component .table-component-sticky-header-inner {
+  padding-left: 0;
 }
 .table-component .table-component-tfoot {
   display: table-caption;
