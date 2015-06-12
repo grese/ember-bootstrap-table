@@ -20,7 +20,6 @@
 .table-component .table {
   margin-bottom: 0;
 }
-.table-component .table > .table-component-thead > .table-component-tr > .table-component-th,
 .table-component .table > .table-component-tbody > .table-component-tr > .table-component-th,
 .table-component .table > .table-component-tfoot > .table-component-tr > .table-component-th,
 .table-component .table > .table-component-thead > .table-component-tr > .table-component-td,
