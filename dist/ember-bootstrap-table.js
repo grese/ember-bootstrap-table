@@ -506,7 +506,7 @@ var define, requireModule, require, requirejs;
                 firstRow.get('childViews').forEach(function(cell){
                     var $cell = cell.$();
                     if($cell){
-                        widths.push($cell.width());
+                        widths.push($cell.outerWidth());
                     }
                 });
                 self.set('columnWidths', widths);
