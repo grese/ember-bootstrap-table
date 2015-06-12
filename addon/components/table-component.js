@@ -166,6 +166,10 @@ export default Em.Component.extend({
             }else{
                 this.set('sortIndex', columnIdx);
             }
+
+            if(this.get('customSortAction') !== null){
+                this.send(this.get('customSortAction'), this.get('sortIndex'), this.get('sortAscending'));
+            }
         }
     }
 
