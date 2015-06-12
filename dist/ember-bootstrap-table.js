@@ -550,8 +550,7 @@ var define, requireModule, require, requirejs;
                 self = this;
 
             this.get('component._cols').forEach(function(col){
-                var CellView = col.get('headerCellCustomViewClass') || HeaderCellView;
-                cells.push(CellView.create({
+                cells.push(HeaderCellView.create({
                     colConfig: col,
                     component: self.get('component'),
                     container: self.get('component.container')
@@ -601,12 +600,8 @@ var define, requireModule, require, requirejs;
         tagName: 'div',
         classNames: ['table-component-header-cell', 'table-component-th'],
         classNameBindings: ['colConfig.headerCellClassName'],
-        attributeBindings: ['colspan', 'rowspan', 'width'],
         component: null,
         colConfig: null,
-        width: Em.computed('colConfig.columnWidth', function(){
-            return this.get('colConfig.columnWidth');
-        }),
         sortIconClass: Em.computed('component.sortIndex', 'component.sortAscending', function(){
             var currentIdx = this.get('component.sortIndex'),
                 thisIdx = this.get('colConfig._columnIndex');
@@ -617,7 +612,18 @@ var define, requireModule, require, requirejs;
                 return this.get('component._icons.sortable');
             }
         }),
+        updateWidth: function(){
+            if(this.get('colConfig.columnWidth') !== null){
+                this.$().css({
+                    width: this.get('colConfig.columnWidth')
+                });
+            }
+        },
+        widthChanged: Em.observer(function(){
+            this.updateWidth();
+        }, 'colConfig.columnWidth'),
         didInsertElement: function(){
+            this.updateWidth();
             if(this.get('component.showTooltips') && this.get('colConfig.headerCellInfo')){
                 this.$().find("[data-toggle='tooltip']").tooltip();
             }
@@ -648,21 +654,13 @@ var define, requireModule, require, requirejs;
 
     function program1(depth0,data) {
       
-      var buffer = '', stack1;
-      data.buffer.push("\n    <button ");
-      data.buffer.push(escapeExpression(helpers.action.call(depth0, "_sort", "view.colConfig._columnIndex", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0],types:["STRING","ID"],data:data})));
-      data.buffer.push(" class=\"table-cell-button table-component-header-cell-sort\"\n            data-toggle=\"tooltip\" ");
-      data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-        'title': ("view.colConfig.headerCellInfo")
-      },hashTypes:{'title': "STRING"},hashContexts:{'title': depth0},contexts:[],types:[],data:data})));
-      data.buffer.push(">\n        <span class=\"table-component-header-text\">");
-      stack1 = helpers._triageMustache.call(depth0, "view.colConfig.headerCellName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-      data.buffer.push("</span>\n        <span class=\"table-component-sort-icon-container\">\n            <span ");
-      data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-        'class': (":table-component-sort-icon view.sortIconClass")
-      },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},contexts:[],types:[],data:data})));
-      data.buffer.push("></span>\n        </span>\n    </button>\n");
+      var buffer = '';
+      data.buffer.push("\n    ");
+      data.buffer.push(escapeExpression(helpers.view.call(depth0, "view.colConfig.headerCellCustomViewClass", {hash:{
+        'colConfig': ("view.colConfig"),
+        'component': ("view.component")
+      },hashTypes:{'colConfig': "ID",'component': "ID"},hashContexts:{'colConfig': depth0,'component': depth0},contexts:[depth0],types:["ID"],data:data})));
+      data.buffer.push("\n");
       return buffer;
       }
 
@@ -670,13 +668,42 @@ var define, requireModule, require, requirejs;
       
       var buffer = '', stack1;
       data.buffer.push("\n    ");
-      stack1 = helpers._triageMustache.call(depth0, "view.colConfig.headerCellName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      stack1 = helpers['if'].call(depth0, "view.colConfig.sortable", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(6, program6, data),fn:self.program(4, program4, data),contexts:[depth0],types:["ID"],data:data});
       if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
       data.buffer.push("\n");
       return buffer;
       }
+    function program4(depth0,data) {
+      
+      var buffer = '', stack1;
+      data.buffer.push("\n        <button ");
+      data.buffer.push(escapeExpression(helpers.action.call(depth0, "_sort", "view.colConfig._columnIndex", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0],types:["STRING","ID"],data:data})));
+      data.buffer.push(" class=\"table-cell-button table-component-header-cell-sort\"\n                                                               data-toggle=\"tooltip\" ");
+      data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+        'title': ("view.colConfig.headerCellInfo")
+      },hashTypes:{'title': "STRING"},hashContexts:{'title': depth0},contexts:[],types:[],data:data})));
+      data.buffer.push(">\n            <span class=\"table-component-header-text\">");
+      stack1 = helpers._triageMustache.call(depth0, "view.colConfig.headerCellName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</span>\n        <span class=\"table-component-sort-icon-container\">\n            <span ");
+      data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+        'class': (":table-component-sort-icon view.sortIconClass")
+      },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},contexts:[],types:[],data:data})));
+      data.buffer.push("></span>\n        </span>\n        </button>\n    ");
+      return buffer;
+      }
 
-      stack1 = helpers['if'].call(depth0, "view.colConfig.sortable", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
+    function program6(depth0,data) {
+      
+      var buffer = '', stack1;
+      data.buffer.push("\n        ");
+      stack1 = helpers._triageMustache.call(depth0, "view.colConfig.headerCellName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("\n    ");
+      return buffer;
+      }
+
+      stack1 = helpers['if'].call(depth0, "view.colConfig.headerCellCustomViewClass", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
       if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
       data.buffer.push("\n");
       return buffer;
@@ -724,8 +751,7 @@ var define, requireModule, require, requirejs;
             var self = this;
             var cellViews = [];
             this.get('component._cols').forEach(function(col){
-                var CellViewClass = col.get('cellCustomViewClass') || CellView;
-                cellViews.push(CellViewClass.create({
+                cellViews.push(CellView.create({
                     component: self.get('component'),
                     container: self.get('component.container'),
                     row: self.get('rowData.content'),
@@ -750,12 +776,8 @@ var define, requireModule, require, requirejs;
         template: template,
         classNames: ['table-component-cell'],
         classNameBindings: ['colConfig.cellClassName'],
-        attributeBindings: ['width'],
         colConfig: null,
         row: null,
-        width: Em.computed('colConfig.columnWidth', function(){
-            return this.get('colConfig.columnWidth');
-        }),
         cellContent: Em.computed('row', function(){
             var content = '',
                 getCellContent = this.get('colConfig.getCellContent'),
@@ -768,7 +790,20 @@ var define, requireModule, require, requirejs;
                 }
             }
             return content.toString();
-        })
+        }),
+        widthChanged: Em.observer(function(){
+            this.updateWidth();
+        }, 'colConfig.columnWidth'),
+        updateWidth: function(){
+            if(this.get('colConfig.columnWidth') !== null){
+                this.$().css({
+                    width: this.get('colConfig.columnWidth')
+                });
+            }
+        },
+        didInsertElement: function(){
+            this.updateWidth();
+        }
     });
   });
 ;define("ember-bootstrap-table/views/table-td", 
@@ -790,12 +825,34 @@ var define, requireModule, require, requirejs;
     /**/) {
     this.compilerInfo = [4,'>= 1.0.0'];
     helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+      var buffer = '', stack1, escapeExpression=this.escapeExpression, self=this;
+
+    function program1(depth0,data) {
+      
+      var buffer = '';
+      data.buffer.push("\n    ");
+      data.buffer.push(escapeExpression(helpers.view.call(depth0, "view.colConfig.cellCustomViewClass", {hash:{
+        'component': ("view.component"),
+        'row': ("view.row"),
+        'colConfig': ("view.colConfig")
+      },hashTypes:{'component': "ID",'row': "ID",'colConfig': "ID"},hashContexts:{'component': depth0,'row': depth0,'colConfig': depth0},contexts:[depth0],types:["ID"],data:data})));
+      data.buffer.push("\n");
+      return buffer;
+      }
+
+    function program3(depth0,data) {
+      
       var buffer = '', stack1;
-
-
+      data.buffer.push("\n    ");
       stack1 = helpers._triageMustache.call(depth0, "view.cellContent", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
       if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
       data.buffer.push("\n");
+      return buffer;
+      }
+
+      stack1 = helpers['if'].call(depth0, "view.colConfig.cellCustomViewClass", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("\n\n");
       return buffer;
       
     });

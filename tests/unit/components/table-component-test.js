@@ -128,7 +128,7 @@ describeComponent('table-component', 'Table Component', {
         expect($headerCells.length).to.eq(mockColumns.length);
         mockColumns.forEach(function(col, idx){
             var $cell = Em.$($headerCells[idx]);
-            expect($cell.attr('width')).to.eq(col.get('columnWidth'));
+            expect($cell.css('width')).to.eq(col.get('columnWidth'));
         });
     });
 
@@ -146,8 +146,27 @@ describeComponent('table-component', 'Table Component', {
         expect($stickyHeaderCells.length).to.eq(mockColumns.length);
         mockColumns.forEach(function(col, idx){
             var $cell = Em.$($stickyHeaderCells[idx]);
-            expect($cell.attr('width')).to.eq(col.get('columnWidth'));
+            expect($cell.css('width')).to.eq(col.get('columnWidth'));
         });
+    });
+
+    it('should render the header cells with a custom view in the cell if headerCellCustomViewClass is present.', function(){
+        var mockView = Em.View.extend({
+            classNames: ['custom-header-cell']
+        });
+        mockColumns[0].set('headerCellCustomViewClass', mockView);
+        var component = this.subject({
+            columns: mockColumns,
+            rows: mockRows
+        });
+        this.render();
+        var $component = component.$();
+        var $headerCells = $component.find('.table-component-table .table-component-thead .table-component-header-cell');
+        expect($headerCells.length).to.eq(mockColumns.length);
+
+        var $firstCell = Em.$($headerCells[0]),
+            $customView = $firstCell.find('.custom-header-cell');
+        expect($customView.length).to.eq(1);
     });
 
     it('should render a noContentView, and hides the table when there are no rows, and should do the reverse when there ' +
@@ -205,6 +224,29 @@ describeComponent('table-component', 'Table Component', {
             expect(value).to.eq(mockRow.get('value').toString());
             expect(date).to.eq(mockRow.get('date').toString());
         });
+    });
+
+    it('should render columns with custom view inside cell if the column has cellCustomViewClass.', function(){
+        var mockView = Em.View.extend({
+            classNames: ['table-custom-cell-view']
+        });
+        mockColumns[0].set('cellCustomViewClass', mockView);
+        var component = this.subject({
+            columns: mockColumns,
+            rows: mockRows
+        });
+        this.render();
+
+        var $component = component.$();
+        var $rows = $component.find('.table-component-table .table-component-tbody .table-component-tr');
+        expect($rows.length).to.eq(mockRows.length);
+
+        var $row = Em.$($rows[0]);
+        var $cells = $row.find('.table-component-td'),
+            $cell = $cells.eq(0),
+            $customView = $cell.find('.table-custom-cell-view');
+
+        expect($customView.length).to.eq(1);
     });
 
     it('should render a loading row, and loading cell in the table footer infiniteScrollEnabled is true', function(){

@@ -16,6 +16,20 @@
 .table-component .table-component-th {
   display: table-cell;
 }
+.table-component .table {
+  margin-bottom: 0;
+}
+.table-component .table > .table-component-thead > .table-component-tr > .table-component-th,
+.table-component .table > .table-component-tbody > .table-component-tr > .table-component-th,
+.table-component .table > .table-component-tfoot > .table-component-tr > .table-component-th,
+.table-component .table > .table-component-thead > .table-component-tr > .table-component-td,
+.table-component .table > .table-component-tbody > .table-component-tr > .table-component-td,
+.table-component .table > .table-component-tfoot > .table-component-tr > .table-component-td {
+  padding: 6px;
+  line-height: 1.42857143;
+  vertical-align: top;
+  border-top: 1px solid #f1f1f1;
+}
 .table-component .table-component-tbody .table-component-td {
   vertical-align: middle;
 }

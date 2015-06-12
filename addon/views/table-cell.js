@@ -8,12 +8,8 @@ export default TDView.extend({
     template: template,
     classNames: ['table-component-cell'],
     classNameBindings: ['colConfig.cellClassName'],
-    attributeBindings: ['width'],
     colConfig: null,
     row: null,
-    width: Em.computed('colConfig.columnWidth', function(){
-        return this.get('colConfig.columnWidth');
-    }),
     cellContent: Em.computed('row', function(){
         var content = '',
             getCellContent = this.get('colConfig.getCellContent'),
@@ -26,5 +22,18 @@ export default TDView.extend({
             }
         }
         return content.toString();
-    })
+    }),
+    widthChanged: Em.observer(function(){
+        this.updateWidth();
+    }, 'colConfig.columnWidth'),
+    updateWidth: function(){
+        if(this.get('colConfig.columnWidth') !== null){
+            this.$().css({
+                width: this.get('colConfig.columnWidth')
+            });
+        }
+    },
+    didInsertElement: function(){
+        this.updateWidth();
+    }
 });

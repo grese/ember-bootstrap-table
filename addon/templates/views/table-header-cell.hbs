@@ -1,11 +1,15 @@
-{{#if view.colConfig.sortable}}
-    <button {{action '_sort' view.colConfig._columnIndex}} class="table-cell-button table-component-header-cell-sort"
-            data-toggle="tooltip" {{bind-attr title='view.colConfig.headerCellInfo'}}>
-        <span class="table-component-header-text">{{view.colConfig.headerCellName}}</span>
+{{#if view.colConfig.headerCellCustomViewClass}}
+    {{view view.colConfig.headerCellCustomViewClass colConfig=view.colConfig component=view.component}}
+{{else}}
+    {{#if view.colConfig.sortable}}
+        <button {{action '_sort' view.colConfig._columnIndex}} class="table-cell-button table-component-header-cell-sort"
+                                                               data-toggle="tooltip" {{bind-attr title='view.colConfig.headerCellInfo'}}>
+            <span class="table-component-header-text">{{view.colConfig.headerCellName}}</span>
         <span class="table-component-sort-icon-container">
             <span {{bind-attr class=':table-component-sort-icon view.sortIconClass'}}></span>
         </span>
-    </button>
-{{else}}
-    {{view.colConfig.headerCellName}}
+        </button>
+    {{else}}
+        {{view.colConfig.headerCellName}}
+    {{/if}}
 {{/if}}

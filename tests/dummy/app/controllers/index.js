@@ -1,4 +1,6 @@
 import Em from 'ember';
+import CustomCell from 'dummy/views/custom-cell';
+import CustomHeaderCell from 'dummy/views/custom-header-cell';
 export default Em.Controller.extend({
     init: function(){
         this._super();
@@ -28,7 +30,9 @@ export default Em.Controller.extend({
             Em.Object.create({
                 headerCellName: 'ID',
                 columnWidth: '100px',
-                cellValuePath: 'value',
+                cellValuePath: 'id',
+                cellCustomViewClass: CustomCell,
+                headerCellCustomViewClass: CustomHeaderCell,
                 sortable: true
             }),
             Em.Object.create({

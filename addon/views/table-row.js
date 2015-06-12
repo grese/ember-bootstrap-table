@@ -8,8 +8,7 @@ export default TRView.extend({
         var self = this;
         var cellViews = [];
         this.get('component._cols').forEach(function(col){
-            var CellViewClass = col.get('cellCustomViewClass') || CellView;
-            cellViews.push(CellViewClass.create({
+            cellViews.push(CellView.create({
                 component: self.get('component'),
                 container: self.get('component.container'),
                 row: self.get('rowData.content'),

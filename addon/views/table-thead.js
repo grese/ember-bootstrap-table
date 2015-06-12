@@ -10,8 +10,7 @@ export default Em.ContainerView.extend({
             self = this;
 
         this.get('component._cols').forEach(function(col){
-            var CellView = col.get('headerCellCustomViewClass') || HeaderCellView;
-            cells.push(CellView.create({
+            cells.push(HeaderCellView.create({
                 colConfig: col,
                 component: self.get('component'),
                 container: self.get('component.container')
