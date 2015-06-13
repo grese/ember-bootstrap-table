@@ -1,5 +1,5 @@
 /*!
-* ember-bootstrap-table v2.0.4
+* ember-bootstrap-table v2.0.7
 */
 (function(){;
 var define, requireModule, require, requirejs;
@@ -273,15 +273,33 @@ var define, requireModule, require, requirejs;
                 return config;
             });
         }),
-        _rows: Em.computed('rows.[]', function(){
+        _rows: Em.computed('rows', function(){
+            var rows = this.get('rows') || [];
+            if(this.get('_useNativeSort')){
+                rows = this._performNativeSort(rows);
+            }
             var i = 0;
-            return this.get('rows').map(function(row){
+            return rows.map(function(row){
                 return RowObject.create({
                     _rowIndex: i++,
                     content: row
                 });
             });
         }),
+        _useNativeSort: Em.computed('customSortAction', function(){
+            return this.get('customSortAction') === null;
+        }),
+        _performNativeSort: function(rows){
+            var sortAsc = this.get('sortAscending'),
+                colConfig = this.get('_cols')[this.get('sortIndex')],
+                sort;
+            if(colConfig && colConfig.get('sortable')){
+                sort = colConfig.get('sort');
+                return sort(colConfig, rows, sortAsc);
+            }else{
+                return rows;
+            }
+        },
         _rowsChanged: Em.observer('_rows.[]', function(){
             this.get('_table').update();
         }),
@@ -368,7 +386,9 @@ var define, requireModule, require, requirejs;
                     this.set('sortIndex', columnIdx);
                 }
 
-                if(this.get('customSortAction') !== null){
+                if(this.get('_useNativeSort')){
+                    this.notifyPropertyChange('rows');
+                }else{
                     this.send(this.get('customSortAction'), this.get('sortIndex'), this.get('sortAscending'));
                 }
             }

@@ -56,8 +56,11 @@ describeComponent('table-component', 'Table Component', {
         tooltipSpy.restore();
     });
 
-    it('should render a div, table, thead, tbody, and tfoot, and should trigger _handleRowVisibility on didInsertElement', function() {
-        var component = this.subject();
+    it('should render a div, table, thead, tbody, and tfoot', function() {
+        var component = this.subject({
+            columns: mockColumns,
+            rows: mockRows
+        });
         this.render();
         var $component = component.$();
         var tag = $component.prop('tagName');
@@ -78,6 +81,7 @@ describeComponent('table-component', 'Table Component', {
         mockColumns[1].set('sortable', true);
         var component = this.subject({
             columns: mockColumns,
+            rows: mockRows,
             sortIndex: 1,
             sortAscending: false
         });
@@ -181,7 +185,7 @@ describeComponent('table-component', 'Table Component', {
         var $ncv = $component.find('.mock-no-content-view');
         var $tableContainer = $component.find('.table-component-table-container');
         expect($ncv.length).to.eq(1);
-        expect($tableContainer.hasClass('hidden')).to.be.ok;
+        expect($tableContainer.length).to.eq(0);
 
         // NoContentView removed when rows exist, and table visible.
         Em.run(function(){
@@ -191,7 +195,7 @@ describeComponent('table-component', 'Table Component', {
         $ncv = $component.find('.mock-no-content-view');
         $tableContainer = $component.find('.table-component-table-container');
         expect($ncv.length).to.eq(0);
-        expect($tableContainer.hasClass('hidden')).not.to.be.ok;
+        expect($tableContainer.length).to.eq(1);
     });
 
     it('should render a row for each object in the rows array, and each row should have the correct cell content & configuration', function(){

@@ -32,20 +32,23 @@ export default Em.Controller.extend({
                 columnWidth: '100px',
                 cellValuePath: 'id',
                 cellCustomViewClass: CustomCell,
-                headerCellCustomViewClass: CustomHeaderCell,
-                sortable: true
+                headerCellCustomViewClass: CustomHeaderCell
             }),
             Em.Object.create({
                 headerCellName: 'VALUE',
                 columnWidth: '200px',
                 getCellContent: function(row){
                     return row.get('value');
-                }
+                },
+                sortable: true,
+                sortOn: 'cellValuePath',
+                cellValuePath: 'value'
             })
         ];
     }),
     actions: {
         loadMore: function(){
+            Em.Logger.debug('LOAD MORE FIRED');
             var currentRows = this.get("model");
             var newRows = this.generateRandomRows(25);
             this.set('model', currentRows.concat(newRows));
