@@ -273,7 +273,7 @@ var define, requireModule, require, requirejs;
                 return config;
             });
         }),
-        _rows: Em.computed('rows', function(){
+        _rows: Em.computed('rows.[]', function(){
             var rows = this.get('rows') || [];
             if(this.get('_useNativeSort')){
                 rows = this._performNativeSort(rows);
