@@ -1,5 +1,5 @@
 /*!
-* ember-bootstrap-table v2.0.7
+* ember-bootstrap-table v2.0.8
 */
 (function(){;
 var define, requireModule, require, requirejs;
@@ -872,10 +872,11 @@ var define, requireModule, require, requirejs;
 
     function program3(depth0,data) {
       
-      var buffer = '', stack1;
+      var buffer = '';
       data.buffer.push("\n    ");
-      stack1 = helpers._triageMustache.call(depth0, "view.cellContent", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "view.cellContent", {hash:{
+        'unescaped': ("true")
+      },hashTypes:{'unescaped': "STRING"},hashContexts:{'unescaped': depth0},contexts:[depth0],types:["ID"],data:data})));
       data.buffer.push("\n");
       return buffer;
       }

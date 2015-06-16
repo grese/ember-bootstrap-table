@@ -38,7 +38,7 @@ export default Em.Controller.extend({
                 headerCellName: 'VALUE',
                 columnWidth: '200px',
                 getCellContent: function(row){
-                    return row.get('value');
+                    return "<div>" + row.get('value') + "</div>";
                 },
                 sortable: true,
                 sortOn: 'cellValuePath',
