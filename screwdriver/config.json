@@ -2,7 +2,6 @@
     "version": 3,
     "shared": {
         "notification_email": "no-reply@yahoo-inc.com",
-        "build_container": "node12",
         "notify_developers": false,
         "test_results_type": "tap",
         "build": {
