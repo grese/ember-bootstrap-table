@@ -16,3 +16,6 @@
 npm-debug.log
 testem.log
 /.idea
+/build
+/vendor
+.DS_Store

@@ -10,11 +10,12 @@
             </div>
         </div>
     {{/if}}
-    <div {{bind-attr class=":table-component-table-container _showNoContentView:hidden"}}>
-        <div {{bind-attr class='responsive:table-responsive'}}>
-            {{#if _table}}
-                {{view _table}}
-            {{/if}}
-        </div>
-    </div>
 {{/if}}
+
+<div {{bind-attr class=":table-component-table-container _showNoContentView:hidden"}}>
+    <div {{bind-attr class='responsive:table-responsive'}}>
+        {{#if _table}}
+            {{view _table}}
+        {{/if}}
+    </div>
+</div>

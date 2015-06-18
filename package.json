@@ -1,6 +1,6 @@
 {
   "name": "ember-bootstrap-table",
-  "version": "2.0.10",
+  "version": "2.0.11",
   "description": "Bootstrap table for EmberCLI (with shim for EAK & Globals)",
   "directories": {
     "doc": "doc",
