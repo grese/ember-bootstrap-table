@@ -1,4 +1,5 @@
 # Ember-bootstrap-table
+[![Build Status](http://api.screwdriver.corp.yahoo.com:4080/badge/40272/component/icon)](http://api.screwdriver.corp.yahoo.com:4080/badge/40272/component/target)
 
 An ember table component to help create dynamic bootstrap tables in ember.
 
