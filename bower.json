@@ -1,10 +1,8 @@
 {
   "name": "ember-bootstrap-table",
-  "version": "2.0.11",
+  "version": "2.0.12",
   "dependencies": {
-    "ember": ">=1.8.0",
-    "bootstrap": ">3.0.0",
-    "fuji-icons": "git@git.corp.yahoo.com:web-fuji-design/iconography#1.1.0"
+    "ember": ">=1.8.0"
   },
   "devDependencies": {
     "sinonjs": "~1.14.1",
