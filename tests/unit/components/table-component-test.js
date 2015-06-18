@@ -185,7 +185,7 @@ describeComponent('table-component', 'Table Component', {
         var $ncv = $component.find('.mock-no-content-view');
         var $tableContainer = $component.find('.table-component-table-container');
         expect($ncv.length).to.eq(1);
-        expect($tableContainer.length).to.eq(0);
+        expect($tableContainer.hasClass('hidden')).to.be.ok;
 
         // NoContentView removed when rows exist, and table visible.
         Em.run(function(){
@@ -195,7 +195,7 @@ describeComponent('table-component', 'Table Component', {
         $ncv = $component.find('.mock-no-content-view');
         $tableContainer = $component.find('.table-component-table-container');
         expect($ncv.length).to.eq(0);
-        expect($tableContainer.length).to.eq(1);
+        expect($tableContainer.hasClass('hidden')).not.to.be.ok;
     });
 
     it('should render a row for each object in the rows array, and each row should have the correct cell content & configuration', function(){
