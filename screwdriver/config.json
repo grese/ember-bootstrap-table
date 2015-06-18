@@ -1,0 +1,54 @@
+{
+    "version": 3,
+    "shared": {
+        "notification_email": "no-reply@yahoo-inc.com",
+        "build_container": "node12",
+        "notify_developers": false,
+        "test_results_type": "tap",
+        "build": {
+            "init": {
+                "task": "init",
+                "npm_install_excludes": ["*/**/package.json"],
+                "before": [{
+                    "task": "script",
+                    "command": "ynpm install --registry=http://registry.npmjs.org --cache=${NPM_CACHE_DIR}"
+                }]
+            }
+        }
+    },
+    "jobs": {
+        "component": {
+            "manhattan_instance": "trunk.development.manhattan.gq1.yahoo.com",
+            "build": {
+                "lint": {
+                    "task": "none"
+                },
+                "test": {
+                    "task": "npm-test",
+                    "line_coverage_threshold": 0,
+                    "name": "Run tests using our runner",
+                    "before": ["ynpm run-script bower"],
+                    "after": [
+                        {
+                            "task": "script",
+                            "command": "mkdir -p ${COVERAGE_DIR}/lcov-report && genhtml ${SRC_DIR}/lcov.dat -o ${COVERAGE_DIR}/lcov-report --no-source && cp ${SRC_DIR}/lcov.dat ${COVERAGE_DIR}/lcov.info"
+                        },
+                        {
+                            "task": "script",
+                            "command": "mv ${SRC_DIR}/results.tap ${TEST_RESULTS_DIR}/"
+                        }
+                    ]
+                },
+                "docs": {
+                    "task": "none"
+                },
+                "publish": {
+                    "task": "none"
+                },
+                "deploy": {
+                    "task": "none"
+                }
+            }
+        }
+    }
+}
