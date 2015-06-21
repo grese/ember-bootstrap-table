@@ -1,6 +1,6 @@
 {
   "name": "ember-bootstrap-table",
-  "version": "2.0.12",
+  "version": "2.0.13",
   "dependencies": {
     "ember": ">=1.8.0"
   },
