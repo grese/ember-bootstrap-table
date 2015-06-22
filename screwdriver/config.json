@@ -10,7 +10,7 @@
                 "npm_install_excludes": ["*/**/package.json"],
                 "before": [{
                     "task": "script",
-                    "command": "ynpm install --registry=http://registry.npmjs.org --cache=${NPM_CACHE_DIR}"
+                    "command": "ynpm install"
                 }]
             }
         }
