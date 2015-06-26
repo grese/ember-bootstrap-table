@@ -16,7 +16,8 @@ export default Em.Controller.extend({
         for(i=0; i<count; i++){
             rows.push(Em.Object.create({
                 id: i,
-                value: this.randomVal(0, 1000)
+                value: this.randomVal(0, 1000),
+                clicks: Math.round(this.randomVal(100, 500))
             }));
         }
         return rows;
@@ -43,6 +44,11 @@ export default Em.Controller.extend({
                 sortable: true,
                 sortOn: 'cellValuePath',
                 cellValuePath: 'value'
+            }),
+            Em.Object.create({
+                headerCellName: 'CLICKS',
+                cellValuePath: 'clicks',
+                headerCellInfo: 'Shows the number of clicks!'
             })
         ];
     }),

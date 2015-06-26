@@ -10,6 +10,8 @@
         </span>
         </button>
     {{else}}
-        {{view.colConfig.headerCellName}}
+        <span class="table-component-header-text" data-toggle="tooltip" {{bind-attr title='view.colConfig.headerCellInfo'}}>
+            {{view.colConfig.headerCellName}}
+        </span>
     {{/if}}
 {{/if}}
