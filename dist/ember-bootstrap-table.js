@@ -1,5 +1,5 @@
 /*!
-* ember-bootstrap-table v2.0.12
+* ember-bootstrap-table v2.0.14
 */
 (function(){;
 var define, requireModule, require, requirejs;
@@ -726,10 +726,14 @@ var define, requireModule, require, requirejs;
     function program6(depth0,data) {
       
       var buffer = '', stack1;
-      data.buffer.push("\n        ");
+      data.buffer.push("\n        <span class=\"table-component-header-text\" data-toggle=\"tooltip\" ");
+      data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+        'title': ("view.colConfig.headerCellInfo")
+      },hashTypes:{'title': "STRING"},hashContexts:{'title': depth0},contexts:[],types:[],data:data})));
+      data.buffer.push(">\n            ");
       stack1 = helpers._triageMustache.call(depth0, "view.colConfig.headerCellName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
       if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-      data.buffer.push("\n    ");
+      data.buffer.push("\n        </span>\n    ");
       return buffer;
       }
 
