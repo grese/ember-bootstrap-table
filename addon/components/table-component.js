@@ -6,6 +6,9 @@ import DefaultIcons from '../models/table-icons';
 import NoContent from '../views/table-no-content';
 import Column from '../models/table-column';
 import RowObject from '../models/table-row';
+
+var scrollEventKey = 'scroll.table-component';
+
 export default Em.Component.extend({
     // [BEGIN] User-Defined Options:
     rows: [], // array of rows
@@ -152,7 +155,7 @@ export default Em.Component.extend({
         }
     },
     _attachWindowScrollListener: function(){
-        Em.$(window).scroll(Em.run.bind(this, this._handleWindowScroll));
+        Em.$(window).on(scrollEventKey, Em.run.bind(this, this._handleWindowScroll));
     },
     _columnsChanged: Em.observer('_cols.[]', function(){
         if(this.get('_table')){
@@ -163,7 +166,7 @@ export default Em.Component.extend({
         }
     }),
     willDestroyElement: function(){
-        Em.$(window).off('scroll', Em.run.bind(this, this._handleWindowScroll));
+        Em.$(window).off(scrollEventKey);
     },
     willInsertElement: function(){
         this.setupTable();
