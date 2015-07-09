@@ -348,4 +348,22 @@ describeComponent('table-component', 'Table Component', {
         expect(tooltipSpy.callCount).to.eq(mockColumns.length);
     });
 
+    it('#_retainScrollPosition should scroll the user back to their original scrolling position', function(done){
+        var component = this.subject({
+            _userScrollPosition: window.scrollY
+        });
+        component._retainUserScrollPosition();
+        Em.run.later(function(){
+            expect(window.scrollY).to.eq(component.get('_userScrollPosition'));
+            done();
+        }, 10);
+    });
+
+    it('#_updateUserScrollPosition should set the _userScrollPosition to the browser\'s current scrollTop.', function(){
+        var component = this.subject();
+        var top = Em.$(window).scrollTop();
+        component._updateUserScrollPosition();
+        expect(component.get('_userScrollPosition')).to.eq(top);
+    });
+
 });

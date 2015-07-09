@@ -207,6 +207,9 @@ var define, requireModule, require, requirejs;
     var NoContent = __dependency6__["default"];
     var Column = __dependency7__["default"];
     var RowObject = __dependency8__["default"];
+
+    var scrollEventKey = 'scroll.table-component';
+
     __exports__["default"] = Em.Component.extend({
         // [BEGIN] User-Defined Options:
         rows: [], // array of rows
@@ -301,7 +304,9 @@ var define, requireModule, require, requirejs;
             }
         },
         _rowsChanged: Em.observer('_rows.[]', function(){
+            this._updateUserScrollPosition();
             this.get('_table').update();
+            this._retainUserScrollPosition();
         }),
         _icons: Em.computed('icons', function(){
             var icons = this.get('icons') || {};
@@ -353,7 +358,7 @@ var define, requireModule, require, requirejs;
             }
         },
         _attachWindowScrollListener: function(){
-            Em.$(window).scroll(Em.run.bind(this, this._handleWindowScroll));
+            Em.$(window).on(scrollEventKey, Em.run.bind(this, this._handleWindowScroll));
         },
         _columnsChanged: Em.observer('_cols.[]', function(){
             if(this.get('_table')){
@@ -364,7 +369,7 @@ var define, requireModule, require, requirejs;
             }
         }),
         willDestroyElement: function(){
-            Em.$(window).off('scroll', Em.run.bind(this, this._handleWindowScroll));
+            Em.$(window).off(scrollEventKey);
         },
         willInsertElement: function(){
             this.setupTable();
@@ -372,6 +377,22 @@ var define, requireModule, require, requirejs;
         didInsertElement: function(){
             if(this.get('infiniteScrollEnabled') || this.get('stickyHeader')){
                 this._attachWindowScrollListener();
+            }
+        },
+        _userScrollPosition: null,
+        _updateUserScrollPosition: function(){
+            // A method to remember the user's last scroll position...
+            this.set('_userScrollPosition', Em.$(window).scrollTop());
+        },
+        _retainUserScrollPosition: function(){
+            // A hack to fix the issue where user is scrolled back to the top of the page when rows are removed from the
+            // table during infinite scroll.  We are just setting the user's scroll position to where it was before
+            // the rows were removed.
+            var component = this;
+            if(this.get('_userScrollPosition') !== null){
+                Em.run.later(function(){
+                    window.scrollTo(0, component.get('_userScrollPosition'));
+                }, 1);
             }
         },
         actions: {
