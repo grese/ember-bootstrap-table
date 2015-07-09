@@ -103,7 +103,9 @@ export default Em.Component.extend({
         }
     },
     _rowsChanged: Em.observer('_rows.[]', function(){
+        this._updateUserScrollPosition();
         this.get('_table').update();
+        this._retainUserScrollPosition();
     }),
     _icons: Em.computed('icons', function(){
         var icons = this.get('icons') || {};
@@ -174,6 +176,22 @@ export default Em.Component.extend({
     didInsertElement: function(){
         if(this.get('infiniteScrollEnabled') || this.get('stickyHeader')){
             this._attachWindowScrollListener();
+        }
+    },
+    _userScrollPosition: null,
+    _updateUserScrollPosition: function(){
+        // A method to remember the user's last scroll position...
+        this.set('_userScrollPosition', Em.$(window).scrollTop());
+    },
+    _retainUserScrollPosition: function(){
+        // A hack to fix the issue where user is scrolled back to the top of the page when rows are removed from the
+        // table during infinite scroll.  We are just setting the user's scroll position to where it was before
+        // the rows were removed.
+        var component = this;
+        if(this.get('_userScrollPosition') !== null){
+            Em.run.later(function(){
+                window.scrollTo(0, component.get('_userScrollPosition'));
+            }, 1);
         }
     },
     actions: {
