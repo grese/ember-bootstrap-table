@@ -4,8 +4,8 @@ import CustomHeaderCell from 'dummy/views/custom-header-cell';
 export default Em.Controller.extend({
     init: function(){
         this._super();
-        var rows = this.generateRandomRows(100);
-        this.set('model', rows);
+        var self = this;
+        this.set('model', self.set('model', self.generateRandomRows(100)));
     },
     randomVal: function(min, max){
         return Math.random() * (max - min) + min;
