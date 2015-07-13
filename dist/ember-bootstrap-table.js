@@ -1,5 +1,5 @@
 /*!
-* ember-bootstrap-table v2.0.16
+* ember-bootstrap-table v2.0.17
 */
 (function(){;
 var define, requireModule, require, requirejs;
@@ -605,7 +605,7 @@ var define, requireModule, require, requirejs;
                 row.get('childViews').forEach(function(cell, idx){
                     var $cell = cell.$();
                     var width = colWidths[idx];
-                    if(width !== undefined){
+                    if($cell && (width !== undefined)){
                         $cell.css({width: width});
                     }
                 });
