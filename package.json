@@ -12,7 +12,10 @@
     "test": "ember test ci | tee results.tap",
     "bower": "rm -rf .bower-*; node_modules/bower/bin/bower install"
   },
-  "repository": "git@git.corp.yahoo.com:media-publishing/ember-bootstrap-table.git",
+  "repository": {
+    "type": "git",
+    "url": "git@git.corp.yahoo.com:media-publishing/ember-bootstrap-table.git"
+  },
   "engines": {
     "node": ">= 0.10.0"
   },
@@ -70,5 +73,21 @@
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
+  },
+  "main": "index.js",
+  "yhint": {
+    "node": true,
+    "json": true
+  },
+  "yahoo": {
+    "bugzilla": {
+      "product": "",
+      "component": ""
+    },
+    "custodian": {
+      "name": "John Grese",
+      "email": "grese@yahoo-inc.com"
+    },
+    "screwdriver": {}
   }
 }
