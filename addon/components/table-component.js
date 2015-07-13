@@ -112,7 +112,7 @@ export default Em.Component.extend({
         return DefaultIcons.create(icons);
     }),
     _showNoContentView: Em.computed('rows.length', function(){
-        return this.get('rows.length') === 0;
+        return !this.get('rows.length');
     }),
     _handleInfiniteScroll: function(){
         if(Em.$(window).scrollTop() === Em.$(document).height() - Em.$(window).height()){
