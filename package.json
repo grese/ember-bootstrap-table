@@ -77,12 +77,14 @@
   "main": "index.js",
   "yhint": {
     "node": true,
-    "json": true
+    "json": true,
+    "excludes": [],
+    "config": "./.jshintrc"
   },
   "yahoo": {
     "bugzilla": {
-      "product": "",
-      "component": ""
+      "product": "ember-bootstrap-table",
+      "component": "ember-bootstrap-table"
     },
     "custodian": {
       "name": "John Grese",
