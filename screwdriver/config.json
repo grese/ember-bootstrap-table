@@ -37,15 +37,6 @@
                             "command": "mv ${SRC_DIR}/results.tap ${TEST_RESULTS_DIR}/"
                         }
                     ]
-                },
-                "docs": {
-                    "task": "none"
-                },
-                "publish": {
-                    "task": "none"
-                },
-                "deploy": {
-                    "task": "none"
                 }
             }
         }
