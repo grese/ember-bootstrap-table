@@ -88,6 +88,9 @@
       "name": "John Grese",
       "email": "grese@yahoo-inc.com"
     },
-    "screwdriver": {}
+    "screwdriver": {
+      "project_id": 40272,
+      "config": "screwdriver/config.json"
+    }
   }
 }
