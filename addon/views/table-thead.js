@@ -26,7 +26,7 @@ export default Em.ContainerView.extend({
             row.get('childViews').forEach(function(cell, idx){
                 var $cell = cell.$();
                 var width = colWidths[idx];
-                if(width !== undefined){
+                if($cell && (width !== undefined)){
                     $cell.css({width: width});
                 }
             });
