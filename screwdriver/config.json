@@ -19,9 +19,6 @@
         "component": {
             "manhattan_instance": "trunk.development.manhattan.gq1.yahoo.com",
             "build": {
-                "lint": {
-                    "task": "none"
-                },
                 "test": {
                     "task": "npm-test",
                     "line_coverage_threshold": 0,
