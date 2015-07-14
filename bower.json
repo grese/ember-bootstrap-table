@@ -1,8 +1,8 @@
 {
   "name": "ember-bootstrap-table",
-  "version": "2.0.17",
+  "version": "2.0.18",
   "dependencies": {
-    "ember": ">=1.8.0"
+    "ember": "~1.12.0"
   },
   "devDependencies": {
     "sinonjs": "~1.14.1",
@@ -15,8 +15,5 @@
     "loader.js": "ember-cli/loader.js#3.2.0",
     "ember-mocha": "~0.7.0",
     "blanket": "~1.1.5"
-  },
-  "resolutions": {
-    "ember": "1.12.0-beta.1"
   }
 }
