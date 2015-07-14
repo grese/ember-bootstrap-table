@@ -182,7 +182,7 @@ describeComponent('table-component', 'Table Component', {
         });
         this.render();
         var $component = component.$();
-        var $ncv = $component.find('.mock-no-content-view');
+        var $ncv = $component.find('.table-no-content-container .mock-no-content-view');
         var $tableContainer = $component.find('.table-component-table-container');
         expect($ncv.length).to.eq(1);
         expect($tableContainer.hasClass('hidden')).to.be.ok;
@@ -192,9 +192,9 @@ describeComponent('table-component', 'Table Component', {
             component.set('rows', mockRows);
         });
         $component = component.$();
-        $ncv = $component.find('.mock-no-content-view');
+        $ncv = $component.find('.table-no-content-container.hidden .mock-no-content-view');
         $tableContainer = $component.find('.table-component-table-container');
-        expect($ncv.length).to.eq(0);
+        expect($ncv.length).to.eq(1);
         expect($tableContainer.hasClass('hidden')).not.to.be.ok;
     });
 
