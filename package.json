@@ -78,7 +78,7 @@
   "yhint": {
     "node": true,
     "json": true,
-    "excludes": ["dist", "bower_components", "node_modules"],
+    "excludes": ["dist", "bower_components", "node_modules", "tmp"],
     "config": "./screwdriver/jshint.json"
   },
   "yahoo": {
