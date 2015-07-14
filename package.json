@@ -78,9 +78,10 @@
   "yhint": {
     "node": true,
     "json": true,
-    "excludes": [],
-    "config": "./.jshintrc"
+    "excludes": ["dist"],
+    "config": "./config/jshint.json"
   },
+  "yhintConfig" : "./.jshintrc",
   "yahoo": {
     "bugzilla": {
       "product": "ember-bootstrap-table",

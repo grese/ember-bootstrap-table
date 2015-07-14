@@ -31,8 +31,8 @@ var app = new EmberAddon({
         patterns: [{
             match: /@@{([^}]*)}/g,
             replacement: function(matchedText) {
-                filename = matchedText.slice(3, -1);
-                fullFilename = './tests/dummy/app/' + filename;
+                var filename = matchedText.slice(3, -1),
+                fullFilename = './tests/dummy/app/' + filename,
                 fileContents = fs.readFileSync(fullFilename, 'utf8');
                 return escapeHtml(fileContents).replace(/\n/g, '\\n');
             }

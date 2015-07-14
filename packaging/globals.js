@@ -6,7 +6,7 @@ var walk = require('walk-sync');
 
 // TODO(azirbel): Log ember version and register with Ember.libraries?
 var Globals = function (inputTree) {
-    options = {};
+    var options = {};
     if (!(this instanceof Globals)) {
         return new Globals(inputTree, options);
     }
@@ -81,13 +81,13 @@ Globals.prototype.write = function(readTree, destDir) {
             var toRegister = [];
 
             // Define globals and register on the container
-            for (key in _this.globalNameMapping) {
+            for (var key in _this.globalNameMapping) {
                 // Define the global object, like Ember.Table.EmberTableComponent = ...
                 output.push("window." + _this.globalNameMapping[key] +
                     " = require('" + key + "')['default'];");
                 // Register on the container. We only need to register views and
                 // components.
-                var type = key.split('/')[1].replace(/s$/, '')
+                var type = key.split('/')[1].replace(/s$/, '');
                 if (type === 'view' || type === 'component') {
                     toRegister.push({
                         type: type,

@@ -2,6 +2,9 @@
   "predef": [
     "document",
     "window",
+    "asda",
+    "sinon",
+    "$",
     "-Promise"
   ],
   "browser": true,
