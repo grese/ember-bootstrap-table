@@ -81,7 +81,6 @@
     "excludes": ["dist"],
     "config": "./screwdriver/jshint.json"
   },
-  "yhintConfig" : "./.jshintrc",
   "yahoo": {
     "bugzilla": {
       "product": "ember-bootstrap-table",
