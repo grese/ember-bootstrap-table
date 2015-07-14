@@ -1,8 +1,6 @@
 module.exports = function (grunt) {
     'use strict';
 
-    var path = require('path');
-
     grunt.loadNpmTasks('grunt-banner');
     grunt.loadNpmTasks('grunt-broccoli');
     grunt.loadNpmTasks('grunt-contrib-clean');

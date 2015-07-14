@@ -78,8 +78,8 @@
   "yhint": {
     "node": true,
     "json": true,
-    "excludes": [],
-    "config": "./.jshintrc"
+    "excludes": ["dist"],
+    "config": "./screwdriver/jshint.json"
   },
   "yahoo": {
     "bugzilla": {
