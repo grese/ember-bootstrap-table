@@ -53,6 +53,7 @@
     "ember-try": "0.0.4",
     "glob": "^4.0.5",
     "grunt": "~0.4.1",
+    "grunt-cli": "~0.1.9",
     "grunt-banner": "~0.2.2",
     "grunt-broccoli": "~0.4.0",
     "grunt-broccoli-build": "~0.6.0",
