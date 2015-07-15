@@ -1,5 +1,6 @@
 {
     "version": 3,
+    "coverage": false,
     "shared": {
         "notification_email": "no-reply@yahoo-inc.com",
         "notify_developers": false,
@@ -22,7 +23,6 @@
             "build": {
                 "test": {
                     "task": "npm-test",
-                    "line_coverage_threshold": 0,
                     "name": "Run tests using our runner",
                     "before": ["ynpm run-script bower"],
                     "after": [
