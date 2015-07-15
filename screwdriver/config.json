@@ -4,6 +4,7 @@
         "notification_email": "no-reply@yahoo-inc.com",
         "notify_developers": false,
         "test_results_type": "tap",
+        "coverage_type": "lcov",
         "build": {
             "init": {
                 "task": "init",
