@@ -28,7 +28,7 @@
                     "after": [
                         {
                             "task": "script",
-                            "command": "mkdir -p ${COVERAGE_DIR}/lcov-report && genhtml ${SRC_DIR}/lcov.dat -o ${COVERAGE_DIR}/lcov-report --no-source && cp ${SRC_DIR}/lcov.dat ${COVERAGE_DIR}/lcov.info && grunt lcovToJson"
+                            "command": "mkdir -p ${COVERAGE_DIR}/lcov-report && genhtml ${SRC_DIR}/lcov.dat -o ${COVERAGE_DIR}/lcov-report --no-source && cp ${SRC_DIR}/lcov.dat ${COVERAGE_DIR}/lcov.info && cd {COVERAGE_DIR} && grunt lcovToJson"
                         },
                         {
                             "task": "script",
