@@ -105,7 +105,7 @@ module.exports = function (grunt) {
         console.log('converting lcov.dat to lcov.json');
         var done = this.async();
         var root = path.normalize(path.join(__dirname));
-        var lcovFile = root + '/lcov.dat';
+        var lcovFile = root + '/lcov.info';
         var jsonFile = root + '/lcov.json';
         lcovParse(lcovFile, function(err, data) {
             if(err){
