@@ -106,15 +106,22 @@ module.exports = function (grunt) {
         var done = this.async();
         var root = path.normalize(path.join(__dirname));
         var lcovFile = root + '/lcov.info';
-        var jsonFile = root + '/lcov.json';
-        lcovParse(lcovFile, function(err, data) {
-            if(err){
-                console.log('ERROR occurred while parsing lcov data...');
+        var jsonFile = root + '/coverage.json';
+
+        fs.exists(lcovFile, function (exists) {
+            if (!exists) {
+                console.log('ERROR: lcov.info file not found: ', lcovFile);
                 return false;
             }
-            var jsonString = JSON.stringify(data, null, 2);
-            fs.writeFileSync(jsonFile, jsonString);
-            done();
+            lcovParse(lcovFile, function(err, data) {
+                if(err){
+                    console.log('ERROR occurred while parsing lcov data...');
+                    return false;
+                }
+                var jsonString = JSON.stringify(data, null, 2);
+                fs.writeFileSync(jsonFile, jsonString);
+                done();
+            });
         });
     });
 
