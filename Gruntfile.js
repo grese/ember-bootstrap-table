@@ -105,8 +105,8 @@ module.exports = function (grunt) {
         console.log('converting lcov.dat to lcov.json');
         var done = this.async();
         var root = path.normalize(path.join(__dirname));
-        var lcovFile = root + '/lcov.info';
-        var jsonFile = root + '/coverage.json';
+        var lcovFile = root + '/artifacts/test/coverage' + '/lcov.info';
+        var jsonFile = root + '/artifacts/test/coverage' + '/coverage.json';
 
         fs.exists(lcovFile, function (exists) {
             if (!exists) {
