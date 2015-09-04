@@ -5,21 +5,18 @@ import TFoot from './table-tfoot';
 export default Em.ContainerView.extend({
     init: function(){
         this._super();
+
         this.setProperties({
-            thead: THead.create({
-                container: this.get('component.container'),
+            thead: this.createChildView(THead, {
                 component: this.get('component')
             }),
-            tbody: TBody.create({
-                container: this.get('component.container'),
+            tbody: this.createChildView(TBody, {
                 component: this.get('component')
             }),
-            tfoot: TFoot.create({
-                container: this.get('component.container'),
+            tfoot: this.createChildView(TFoot, {
                 component: this.get('component')
             })
         });
-        this.pushObjects([this.get('thead'), this.get('tbody'), this.get('tfoot')]);
     },
     tagName: 'div',
     classNames: ['table-component-table', 'table'],
@@ -49,6 +46,7 @@ export default Em.ContainerView.extend({
         }
     }),
     _calculateColumnWidths: function(){
+        /*
         var self = this,
             firstRow = this.get('tbody').objectAt(0),
             widths = [];
@@ -61,6 +59,7 @@ export default Em.ContainerView.extend({
             });
             self.set('columnWidths', widths);
         }
+         */
     },
     toggleRowVisibility: function(viewportTop, viewportBottom){
         this.get('tbody').forEach(function(row){

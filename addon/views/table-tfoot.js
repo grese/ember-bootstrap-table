@@ -7,20 +7,16 @@ export default Em.ContainerView.extend({
     component: null,
     init: function(){
         this._super();
-        var loadingRow, loadingCell;
+        var loadingRow;
         if(this.get('component.infiniteScrollEnabled')){
-            loadingRow = TRView.create({
+            loadingRow = this.createChildView(TRView, {
                 classNames: ['table-component-loading-row'],
-                component: this.get('component'),
-                container: this.get('component.container')
+                component: this.get('component')
             });
-            loadingCell = LoadingCell.create({
-                component: this.get('component'),
-                container: this.get('component.container')
+            loadingRow.createChildView(LoadingCell, {
+                component: this.get('component')
             });
-            loadingRow.pushObject(loadingCell);
             this.set('loadingRow', loadingRow);
-            this.pushObject(this.get('loadingRow'));
         }
     }
 });

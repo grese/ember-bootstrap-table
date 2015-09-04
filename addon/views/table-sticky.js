@@ -3,11 +3,9 @@ import THead from './table-thead';
 export default Em.ContainerView.extend({
     init: function(){
         this._super();
-        this.set('thead', THead.create({
-            container: this.get('component.container'),
+        this.set('thead', this.createChildView(THead, {
             component: this.get('component')
         }));
-        this.pushObject(this.get('thead'));
     },
     tagName: 'div',
     classNames: ['table-component-sticky-header-table', 'table'],

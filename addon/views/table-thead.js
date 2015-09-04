@@ -6,18 +6,15 @@ export default Em.ContainerView.extend({
     classNames: ['table-component-thead'],
     component: null,
     insertHeaderCells: function(){
-        var cells = [],
-            self = this;
+        var self = this;
 
+        var row = this.createChildView(TRView, {});
         this.get('component._cols').forEach(function(col){
-            cells.push(HeaderCellView.create({
+            row.createChildView(HeaderCellView, {
                 colConfig: col,
-                component: self.get('component'),
-                container: self.get('component.container')
-            }));
+                component: self.get('component')
+            });
         });
-
-        this.pushObject(TRView.create().pushObjects(cells));
     },
     updateColumnWidths: function(){
         var colWidths = this.get('component._table.columnWidths');

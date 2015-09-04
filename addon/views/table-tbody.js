@@ -7,16 +7,12 @@ export default Em.ContainerView.extend({
     component: null,
     insertRows: function(){
         var self = this;
-        var rowViews = [];
         this.get('component._rows').forEach(function(row){
-            var rowView = RowView.create({
+            var row = self.createChildView(RowView, {
                 component: self.get('component'),
-                container: self.get('component.container'),
                 rowData: row
             });
-            rowView.insertCells();
-            rowViews.push(rowView);
+            row.insertCells();
         });
-        this.pushObjects(rowViews);
     }
 });
