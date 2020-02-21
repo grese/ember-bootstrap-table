@@ -3,6 +3,9 @@
 
 An ember table component to help create dynamic bootstrap tables in ember.
 
+## EOL
+This repo has reached the end of its life. Should no longer be used.
+
 ## Usage:
 
 #### Parameters:
